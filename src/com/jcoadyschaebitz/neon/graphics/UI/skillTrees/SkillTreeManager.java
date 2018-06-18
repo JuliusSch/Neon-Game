@@ -1,0 +1,119 @@
+package com.jcoadyschaebitz.neon.graphics.UI.skillTrees;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jcoadyschaebitz.neon.Game;
+import com.jcoadyschaebitz.neon.entity.Shield;
+import com.jcoadyschaebitz.neon.entity.MobileShield;
+import com.jcoadyschaebitz.neon.entity.mob.Player;
+import com.jcoadyschaebitz.neon.graphics.Screen;
+import com.jcoadyschaebitz.neon.graphics.UI.SkillDescriptionDisplay;
+import com.jcoadyschaebitz.neon.graphics.UI.UIComp;
+import com.jcoadyschaebitz.neon.level.Level;
+
+public class SkillTreeManager implements UIComp {
+
+	Player player;
+	public boolean stationaryShieldUnlocked, shieldReflectUnlocked;
+	public double shieldReflectChance = 0;
+	public int selectedTree = 1;
+	public List<Shield> activeShields = new ArrayList<Shield>();
+	public SkillTree tree1, tree2, tree3;
+	public SkillDescriptionDisplay skillDescriptionDisplay;
+
+	private SkillTree[] trees = new SkillTree[3];
+
+	public SkillTreeManager(Game game, Player player) {
+		this.player = player;
+		SkillTreeNode[] tree1Skills = new SkillTreeNode[10];
+		SkillTreeNode[] tree2Skills = new SkillTreeNode[10];
+		SkillTreeNode[] tree3Skills = new SkillTreeNode[10];
+		
+		tree1Skills[0] = new Health5perLx5(0, 0, 0, player, this);
+		tree1Skills[1] = new ShieldDurationSkill(40, 0, 0, player, this);
+		tree1Skills[2] = new NullSkill(0, 20, 0, player, this);
+		tree1Skills[3] = new DmgReduceWShieldSkill(40, 20, 0, player, this);
+		tree1Skills[4] = new NullSkill(0, 40, 0, player, this);
+		tree1Skills[5] = new ShieldDurationWKillsSkill(20, 40, 0, player, this);
+		tree1Skills[6] = new BulletReflectionSkill(40, 40, 0, player, this);
+		tree1Skills[7] = new NullSkill(20, 60, 0, player, this);
+		tree1Skills[8] = new NullSkill(20, 80, 0, player, this);
+		tree1Skills[9] = new TwinShieldSkill(20, 100, 0, player, this);
+		tree2Skills[0] = new NullSkill(0, 0, 1, player, this);
+		tree2Skills[1] = new NullSkill(40, 0, 1, player, this);
+		tree2Skills[2] = new BulletSpeedSkill(0, 20, 1, player, this);
+		tree2Skills[3] = new NullSkill(40, 20, 1, player, this);
+		tree2Skills[4] = new NullSkill(0, 40, 1, player, this);
+		tree2Skills[5] = new NullSkill(20, 40, 1, player, this);
+		tree2Skills[6] = new NullSkill(40, 40, 1, player, this);
+		tree2Skills[7] = new NullSkill(20, 60, 1, player, this);
+		tree2Skills[8] = new NullSkill(20, 80, 1, player, this);
+		tree2Skills[9] = new StationaryShieldSkill(20, 100, 1, player, this);
+		tree3Skills[0] = new NullSkill(0, 0, 2, player, this);
+		tree3Skills[1] = new NullSkill(40, 0, 1, player, this);
+		tree3Skills[2] = new NullSkill(0, 20, 1, player, this);
+		tree3Skills[3] = new NullSkill(40, 20, 1, player, this);
+		tree3Skills[4] = new NullSkill(0, 40, 1, player, this);
+		tree3Skills[5] = new NullSkill(20, 40, 1, player, this);
+		tree3Skills[6] = new NullSkill(40, 40, 1, player, this);
+		tree3Skills[7] = new NullSkill(20, 60, 1, player, this);
+		tree3Skills[8] = new NullSkill(20, 80, 1, player, this);
+		tree3Skills[9] = new NullSkill(20, 100, 1, player, this);
+		
+		skillDescriptionDisplay = new SkillDescriptionDisplay(95, 71, tree1Skills[0]);
+
+		tree1 = new SkillTree(0, "name1", 225, 83, tree1Skills);
+		tree2 = new SkillTree(1, "name2", 225, 83, tree2Skills);
+		tree3 = new SkillTree(2, "name3", 225, 83, tree3Skills);
+		trees[0] = tree1;
+		trees[1] = tree2;
+		trees[2] = tree3;
+		for (SkillTree tree : trees) {
+			for (SkillTreeNode node : tree.skills) {
+				if (node != null) game.addMouseListener(node);
+			}
+		}
+	}
+
+	public void update() {
+		for (SkillTree tree : trees) {
+			if (tree.treeNumber == selectedTree) {
+				tree.update();
+			}
+		}
+		skillDescriptionDisplay.update();
+	}
+
+	public Shield createShield(int x, int y, double direction, int timeLeft, Player player, Level level) {
+		Shield shield;
+		if (stationaryShieldUnlocked) shield = new Shield(x, y, direction, timeLeft, player);
+		else shield = new MobileShield(x, y, direction, timeLeft, player);
+		level.add(shield);
+		activeShields.add(shield);
+		return shield;
+	}
+
+	public void enemyKilled() {
+		for (SkillTree tree : trees) {
+			tree.enemyKilled();
+		}
+	}
+	
+	public void changeTree(int amount) {
+		selectedTree += amount;
+		if (selectedTree > 2) selectedTree = 0;
+		if (selectedTree < 0) selectedTree = 2;
+	}
+	
+
+	public void render(Screen screen) {
+		for (SkillTree tree : trees) {
+			if (tree.treeNumber == selectedTree) {
+				tree.render(screen);
+			}
+		}
+		skillDescriptionDisplay.render(screen);
+	}
+
+}
