@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import com.jcoadyschaebitz.neon.Game;
+import com.jcoadyschaebitz.neon.GameState;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
@@ -23,7 +24,7 @@ public abstract class UIButton implements UIComp, MouseListener {
 		this.width = width;
 		this.height = height;
 		this.label = label;
-		font = new Font(Font.SIZE_8x8, fontColour);
+		font = new Font(Font.SIZE_8x8, fontColour, 1);
 		defaultSprite = Sprite.buttonOutline;
 		highlightedSprite = Sprite.buttonHighlighted;
 	}
@@ -32,7 +33,7 @@ public abstract class UIButton implements UIComp, MouseListener {
 
 	public void update() {
 		double s = Game.getWindowScale();
-		if (Mouse.getX() > (x * s) + Game.getXRenderOffset() && Mouse.getX() < (x + width) * s + Game.getXRenderOffset()) {
+		if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
 				buttonHighlighted = true;
 			} else buttonHighlighted = false;
@@ -45,7 +46,7 @@ public abstract class UIButton implements UIComp, MouseListener {
 
 	public void render(Screen screen) {
 		screen.renderSprite(x, y, defaultSprite, false);
-		if (buttonHighlighted) screen.renderTranslucentSprite(x - 1, y - 1, highlightedSprite, false, 0.2);
+		if (buttonHighlighted) screen.renderTranslucentSprite(x, y, highlightedSprite, false, 0.2);
 		font.render(x + 6, y + 10, 0, label, screen, false);
 	}
 
@@ -56,9 +57,10 @@ public abstract class UIButton implements UIComp, MouseListener {
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (!UIComp.ui.getGame().getState().equals(UIComp.ui.getGame().pauseState)) return;
+		GameState state = UIComp.ui.getGame().getState();
+		if (!state.equals(UIComp.ui.getGame().pauseState) && !state.equals(UIComp.ui.getGame().pausedSceneState)) return;
 		double s = Game.getWindowScale();
-		if (Mouse.getX() > (x * s) + Game.getXRenderOffset() && Mouse.getX() < (x + width) * s + Game.getXRenderOffset()) {
+		if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
 				mousePressedInArea = true;
 			}
@@ -68,7 +70,7 @@ public abstract class UIButton implements UIComp, MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		if (mousePressedInArea) {
 			double s = Game.getWindowScale();
-			if (Mouse.getX() > (x * s) + Game.getXRenderOffset() && Mouse.getX() < (x + width) * s + Game.getXRenderOffset()) {
+			if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
 				if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
 					doFunction();
 				}

@@ -17,7 +17,7 @@ public class SkillTree {
 		this.treeNumber = treeNumber;
 		this.name = name;
 		this.skills = skills;
-		font = new Font(Font.SIZE_8x8, 0xffBAFFDA);
+		font = new Font(Font.SIZE_8x8, 0xffBAFFDA, 1);
 		this.x = x;
 		this.y = y;
 	}

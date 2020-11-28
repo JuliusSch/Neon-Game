@@ -8,7 +8,7 @@ public class SaveButton extends UIButton {
 
 
 	public void doFunction() {
-	
+		System.exit(0);
 	}
 
 }

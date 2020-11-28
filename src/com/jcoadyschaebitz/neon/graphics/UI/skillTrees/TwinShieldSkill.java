@@ -13,12 +13,12 @@ public class TwinShieldSkill extends SkillTreeNode {
 	
 	public void activate() {
 		super.activate();
-		player.getActionSkillManager().twinShieldUnlocked = true;
+//		player.getActionSkillManager().twinShieldUnlocked = true;
 	}
 	
 	public void deactivate() {
 		super.deactivate();
-		player.getActionSkillManager().twinShieldUnlocked = false;
+//		player.getActionSkillManager().twinShieldUnlocked = false;
 	}
 
 	public void playerKilledEnemy() {

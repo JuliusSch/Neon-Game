@@ -1,7 +1,7 @@
 package com.jcoadyschaebitz.neon.entity.weapon;
 
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
-import com.jcoadyschaebitz.neon.entity.particle.MuzzleFlash;
+import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
@@ -40,8 +40,7 @@ public abstract class MeleeWeapon extends Weapon {
 		if (attackCooldown > 0) attackCooldown--;
 	}
 	
-	public void addFlash(int x, int y, double angle) {
-		level.add(new MuzzleFlash(x - 8 + Math.cos(angle) * 5, y + Math.sin(angle) * 5, 2, rotSlashSprite, Sprite.pistolFlashGlow, angle));
+	public void beginPreAttackAnimations() {
 	}
 	
 	public void updateSprite(double dir) {
@@ -51,16 +50,16 @@ public abstract class MeleeWeapon extends Weapon {
 			rotGlow = Sprite.rotateSprite(glow, dir + spriteOffset, glow.getWidth(), glow.getHeight());
 		}
 		else if (dir > 0) {
-			rotSprite = Sprite.flipSprite(Sprite.rotateSprite(sprite, Math.PI - dir + spriteOffset, spriteWidth, spriteHeight));
-			rotGlow = Sprite.flipSprite(Sprite.rotateSprite(glow, Math.PI - dir + spriteOffset, glow.getWidth(), glow.getHeight()));
+			rotSprite = Sprite.mirror(Sprite.rotateSprite(sprite, Math.PI - dir + spriteOffset, spriteWidth, spriteHeight));
+			rotGlow = Sprite.mirror(Sprite.rotateSprite(glow, Math.PI - dir + spriteOffset, glow.getWidth(), glow.getHeight()));
 		}
 		if (dir < 0 && dir >= Math.PI / -2)	{
 			rotSprite = Sprite.rotateSprite(sprite, dir + spriteOffset, spriteWidth, spriteHeight);
 			rotGlow = Sprite.rotateSprite(glow, dir + spriteOffset, glow.getWidth(), glow.getHeight());
 		}
 		else if (dir < 0) {
-			rotSprite = Sprite.flipSprite(Sprite.rotateSprite(sprite, Math.PI - dir + spriteOffset, spriteWidth, spriteHeight));
-			rotGlow = Sprite.flipSprite(Sprite.rotateSprite(glow, Math.PI - dir + spriteOffset, glow.getWidth(), glow.getHeight()));
+			rotSprite = Sprite.mirror(Sprite.rotateSprite(sprite, Math.PI - dir + spriteOffset, spriteWidth, spriteHeight));
+			rotGlow = Sprite.mirror(Sprite.rotateSprite(glow, Math.PI - dir + spriteOffset, glow.getWidth(), glow.getHeight()));
 		}
 	}
 	
@@ -70,6 +69,9 @@ public abstract class MeleeWeapon extends Weapon {
 			screen.renderTranslucentSprite((int) x + xRenderOffset, (int) y + yRenderOffset, rotGlow, true, 0.2);
 		}
 		if (!owned) screen.renderSprite((int) x + xRenderOffset, (int) y + yRenderOffset, rotSprite, true);
+	}
+
+	public void hitReceived(Projectile projectile) {
 	}
 
 }

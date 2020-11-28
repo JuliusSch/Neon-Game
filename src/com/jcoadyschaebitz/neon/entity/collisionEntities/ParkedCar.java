@@ -1,12 +1,12 @@
 package com.jcoadyschaebitz.neon.entity.collisionEntities;
 
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
-import com.jcoadyschaebitz.neon.entity.mob.Mob.Direction;
+import com.jcoadyschaebitz.neon.entity.mob.Mob.Orientation;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class ParkedCar extends CollisionEntity {
 
-	public ParkedCar(int x, int y, Direction dir) {
+	public ParkedCar(int x, int y, Orientation dir) {
 		super(x, y);
 		switch (dir) {
 		case DOWN: 

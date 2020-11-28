@@ -2,7 +2,6 @@ package com.jcoadyschaebitz.neon.entity.weapon;
 
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
-import com.jcoadyschaebitz.neon.sound.SoundClip;
 
 public class LaserSword extends MeleeWeapon {
 
@@ -16,12 +15,11 @@ public class LaserSword extends MeleeWeapon {
 
 	public void attack(double x, double y, double direction) {
 		if (attackCooldown <= 0) {
-			SoundClip.laser_sword_slash.play();
+//			SoundClip.laser_sword_slash.play();
 			attackCooldown = 8;
 			level.getPlayer().hitReceived(this);
-			addFlash((int) x, (int) y, direction);
 			spriteOffset *= -1;
-			slashSprite = Sprite.flipSprite(slashSprite);
+			slashSprite = Sprite.mirror(slashSprite);
 		}
 	}
 

@@ -10,7 +10,7 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 import com.jcoadyschaebitz.neon.input.Mouse;
 import com.jcoadyschaebitz.neon.sound.SoundClip;
-import com.jcoadyschaebitz.neon.util.Vector2i;
+import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public class Crossbow extends PlayerWeapon {
 
@@ -25,42 +25,45 @@ public class Crossbow extends PlayerWeapon {
 	}
 
 	protected void initiateValues() {
-		cooldown = 80;
+		cooldown = 60;
 		xRenderOffset = -7;
 		yRenderOffset = -3;
 		sprite = Sprite.crossbow;
 		slotSprite = Sprite.crossbowSlotSprite;
 		shine = new AnimatedSprite(Spritesheet.crossbowShine, 32, 32, 7, 4);
 		maxAmmo = 48;
-		recoil = 1;
+		standardAmmoBoxAmount = 12;
+		recoil = 0.3;
 	}
 
 	public void attack(double x, double y, double angle, double speed) {
 		SoundClip.crossbow_shot.play();
-		Projectile p = new Bolt(owner, x + xShootOffset, y + 6 + yShootOffset, angle, speed);
+		double xp = Math.cos(direction) * 20;
+		double yp = Math.sin(direction) * 20;
+		Projectile p = new Bolt(owner, x + xShootOffset + xp, y + 6 + yShootOffset + yp, angle, speed);
 		level.add(p);
 		addFlash((int) x, (int) y, angle);
 		shotsFired++;
 	}
 	
 	public void attack(double x, double y, double angle) {
-		this.attack(x, y, angle, 9);
+		this.attack(x, y, angle, 18);
 		addFlash((int) x, (int) y, angle);
 	}
 	
 	public void attack(boolean multiplier, double x, double y, double direction, double bulletSpeedMultiplier) {
-		this.attack(x, y, direction, 18 * bulletSpeedMultiplier);
+		this.attack(x, y, direction, 24 * bulletSpeedMultiplier);
 		addFlash((int) x, (int) y, direction);
 	}
 
 	public void render(Screen screen) {
 		if (owned && player.weapon == this) {
 			screen.renderSprite((int) x + xRenderOffset, (int) y + yRenderOffset, rotSprite, true);
-			int xx = (Mouse.getX() - Game.getWindowWidth() / 2 - Game.getXRenderOffset()) * 10;
+			int xx = (Mouse.getX() - Game.getWindowWidth() / 2 - Game.getXBarsOffset()) * 10;
 			int yy = (Mouse.getY() - Game.getWindowHeight() / 2) * 10;
 			double distance = Math.sqrt((xx * xx) + (yy * yy));
-			Vector2i targetPoint = level.castRay((int) (x + 9 + xShootOffset), (int) (y + 14 + yShootOffset), direction);
-			if (distance > 300) screen.renderLine((int) (x + 9 + xShootOffset), (int) (y + 14 + yShootOffset), targetPoint.getX(), targetPoint.getY(), 0x88ff0000);
+			Vec2i targetPoint = level.castRay((int) (x + 9 + xShootOffset), (int) (y + 14 + yShootOffset), direction);
+			if (distance > 300) screen.renderLine((int) (x + 9 + xShootOffset), (int) (y + 14 + yShootOffset), targetPoint.X(), targetPoint.Y(), 0x88FF002F);
 		}
 		if (!owned){
 			if (shining) rotSprite = Sprite.rotateSprite(shine.getSprite(), direction, 32, 32);

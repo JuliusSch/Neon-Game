@@ -1,5 +1,7 @@
 package com.jcoadyschaebitz.neon.input;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -60,6 +62,15 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
 	public void mouseReleased(MouseEvent e) {
 		mouseB = -1;
+	}
+	
+	public static void move(int x, int y) {
+		try {
+			Robot bot = new Robot();
+			bot.mouseMove(x, y);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 
 //	public static boolean clicked(int x, int y, int width, int height) {

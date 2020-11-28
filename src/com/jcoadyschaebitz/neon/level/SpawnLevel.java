@@ -12,7 +12,7 @@ import com.jcoadyschaebitz.neon.entity.weapon.Shotgun;
 public class SpawnLevel extends Level {
 
 	public SpawnLevel(String path, long seed) {
-		super(path, seed);
+		super(path, "/levels/overlays/lvl_4.png", seed);
 		playerSpawn = new TileCoordinate(5, 5);
 	}
 

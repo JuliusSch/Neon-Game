@@ -7,8 +7,8 @@ import com.jcoadyschaebitz.neon.level.tile.Tile;
 
 public class RainParticle extends Particle {
 
-	public RainParticle(int x, int y, int spriteW, int spriteH, Sprite sprite) {
-		super(x, y, 500, spriteW, spriteH, sprite);
+	public RainParticle(int x, int y, int spriteW, int spriteH, Sprite sprite, int z) {
+		super(x, y, 500, spriteW, spriteH, sprite, z);
 	}
 
 	public void update() {
@@ -16,15 +16,15 @@ public class RainParticle extends Particle {
 		if (y > level.getHeight() * 16) remove();
 		y += 5;
 		x += 0.75;
-		Tile tile = level.getTile(x / 16, y / 16);
-		if (!tile.isSolid() && tile.isOutdoors()) {
+		Tile tile = level.getTile((x + 1) / 16, (y + 1) / 16);
+		if (!tile.blocksProjectiles/* && tile.isOutdoors()*/) {
 			if (random.nextInt(6) == 0 && random.nextInt(6) == 0) {
-				level.add(new ParticleSpawner((int) x, (int) y, 5, 20, level, Sprite.small_rain_particle));
+				level.add(new ParticleSpawner((int) x, (int) y, 5, 20, level, Sprite.smallRainParticle));
 				remove();
 			} 
-		} else if (!tile.isOutdoors()) {
-			remove();
-		}
+		} //else if (!tile.isOutdoors()) {
+//			remove();
+//		}
 	}
 
 	public void render(Screen screen) {

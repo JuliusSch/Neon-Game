@@ -1,34 +1,33 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
-import com.jcoadyschaebitz.neon.entity.mob.Mob.Direction;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.level.Level;
 
 public class StairTile extends FloorTile {
 	
-	private Direction dir;
-
-	public StairTile(Sprite sprite, int colour, boolean canHaveShadow, boolean isOutdoors, Direction dir) {
-		super(sprite, colour, canHaveShadow, isOutdoors);
+	int dir = StairTile.LEFT;
+	public static final int NOT_A_STAIR = 0;
+	public static final int LEFT = 1;
+	public static final int RIGHT = 2;
+	public static final int UP = 3;
+	public static final int DOWN = 4;
+	
+	
+	public StairTile(Sprite sprite, int colour, int dir, Renderer[] renderers) {
+		super(sprite, colour, renderers);
 		this.dir = dir;
 	}
 	
-	public Direction getDir() {
+	public int isStair() {
 		return dir;
 	}
 	
-	public static double changeXa(Level level, double xa, double ya, int x, int y) {
-		Direction dir2;
-		try {
-			dir2 = ((StairTile) level.getTile(x, y)).getDir();
-		} catch (ClassCastException e) {
-			return xa;
-		}
-		switch (dir2) {
+	public static double changeXa(Level level, double xa, double ya, int x, int y, int dir) {
+		switch (dir) {
 		case UP:
 			return xa * 0.7;
 		case DOWN:
-			return xa + 0.7;
+			return xa * 0.7;
 		case LEFT:
 			return xa * 0.7;
 		case RIGHT:
@@ -38,25 +37,18 @@ public class StairTile extends FloorTile {
 		}
 	}
 	
-	public static double changeYa(Level level, double xa, double ya, int x, int y) {
-		Direction dir2;
-		try {
-			dir2 = ((StairTile) level.getTile(x, y)).getDir();
-		} catch (ClassCastException e) {
-			return ya;
-		}
-		switch (dir2) {
+	public static double changeYa(Level level, double xa, double ya, int x, int y, int dir) {
+		switch (dir) {
 		case UP:
 			return ya * 0.7;
 		case DOWN:
 			return ya * 0.7;
-		case LEFT:
-			return (ya + xa) * 0.7;
 		case RIGHT:
-			return (ya - xa) * 0.7;
+			return (ya * 0.5) + (xa * 0.7);
+		case LEFT:
+			return (ya * 0.5) - (xa * 0.7);
 		default:
 			return ya;
 		}
 	}
-
 }

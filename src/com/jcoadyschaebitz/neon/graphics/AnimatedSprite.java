@@ -3,6 +3,7 @@ package com.jcoadyschaebitz.neon.graphics;
 public class AnimatedSprite extends Sprite {
 
 	private Sprite sprite;
+	private Sprite[] sprites;
 	private int rate = 2;
 	public int time = 0;
 	private int frame = 0;
@@ -12,11 +13,16 @@ public class AnimatedSprite extends Sprite {
 	public boolean active = true;
 
 	public AnimatedSprite(Spritesheet sheet, int width, int height, int length, int rate) {
-		super(sheet, width, height);
+		this(sheet.getSprites(), width, height, length, rate);
+	}
+	
+	public AnimatedSprite(Sprite[] sprts, int width, int height, int length, int rate) {
+		super(Spritesheet.x16, width, height);
 		this.rate = rate;
 		animLength = length;
 		totalLength = rate * length;
-		sprite = sheet.getSprites()[0];
+		sprite = sprts[0];
+		sprites = sprts;
 	}
 
 	public void update() {
@@ -27,8 +33,8 @@ public class AnimatedSprite extends Sprite {
 					time = 0;
 					if (frame >= animLength - 1) setFrame(0);
 					else frame++;
-					if (frame >= sheet.getSprites().length) sprite = sheet.getSprites()[sheet.getSprites().length - 1];
-					else sprite = sheet.getSprites()[frame];
+					if (frame >= sprites.length) sprite = sprites[sprites.length - 1];
+					else sprite = sprites[frame];
 				}
 			}
 			if (!playContinuous) {
@@ -40,8 +46,8 @@ public class AnimatedSprite extends Sprite {
 						return;
 					}
 					frame++;
-					if (frame >= sheet.getSprites().length) sprite = sheet.getSprites()[sheet.getSprites().length - 1];
-					else sprite = sheet.getSprites()[frame];
+					if (frame >= sprites.length) sprite = sprites[sprites.length - 1];
+					else sprite = sprites[frame];
 				}
 			}
 		}
@@ -63,7 +69,7 @@ public class AnimatedSprite extends Sprite {
 		playContinuous = false;
 		time = 0;
 		setFrame(0);
-		sprite = sheet.getSprites()[frame];
+		sprite = sprites[frame];
 	}
 
 	public Sprite getSprite() {

@@ -13,7 +13,7 @@ public class Keyboard implements KeyListener {
 		this.game = game;
 	}
 
-	private boolean[] keys = new boolean[120];
+	private boolean[] keys = new boolean[256];
 	public boolean up, down, left, right, F, esc;
 	public boolean[] numbers = new boolean[10];
 	public String[] numbersString = {"zero", "one", "two", "three", "four", "five", "six", "seven", "seven", "eight", "nine"};
@@ -44,7 +44,7 @@ public class Keyboard implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			game.updatePauseStatus();
+			game.togglePause();
 		}
 	}
 

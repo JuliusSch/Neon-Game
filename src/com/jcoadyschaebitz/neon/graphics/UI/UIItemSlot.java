@@ -34,6 +34,10 @@ public class UIItemSlot implements UIComp {
 			screen.renderTranslucentSprite(x, y, Sprite.item_slot_glow, false, 0.2);
 		}
 	}
+	
+	public PlayerWeapon getWeapon() {
+		return weapon;
+	}
 
 	public void addWeapon(PlayerWeapon weapon) {
 		this.weapon = weapon;

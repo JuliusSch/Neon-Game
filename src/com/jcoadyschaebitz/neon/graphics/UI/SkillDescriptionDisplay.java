@@ -14,7 +14,7 @@ public class SkillDescriptionDisplay implements UIComp {
 		this.x = x;
 		this.y = y;
 		this.skill = skill;
-		font = new Font(Font.SIZE_8x8, 0xffBAFFDA);
+		font = new Font(Font.SIZE_8x8, 0xffBAFFDA, 1);
 	}
 
 	public void update() {

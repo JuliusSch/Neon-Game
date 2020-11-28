@@ -19,21 +19,21 @@ public class ShotgunPellet extends Projectile {
 		ny = Math.sin(angle) * speed;
 
 		sprite = Sprite.rotateSprite(Sprite.shotgunPellet, angle, 16, 16);
-		glow = Sprite.rotateSprite(Sprite.shotgunPellet_glow, angle, 32, 32);
+		glow = Sprite.rotateSprite(Sprite.shotgunPelletGlow, angle, 32, 32);
 	}
 
 	public void update() {
-		time++;
 		if (time > life) remove();
 		
 		move(source, nx, ny);
-		speed -= speed / 40;
+		speed -= speed / 30;
+		time++;
 		nx = Math.cos(angle) * speed;
 		ny = Math.sin(angle) * speed;
 	}
 
 	public void collide(int x, int y) { 
-		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 5, 50, level, Sprite.particle_blue));
+		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 5, 50, level, Sprite.particleBlue));
 		remove();
 	}
 	

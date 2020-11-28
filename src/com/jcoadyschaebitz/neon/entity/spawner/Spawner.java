@@ -1,6 +1,7 @@
 package com.jcoadyschaebitz.neon.entity.spawner;
 
 import com.jcoadyschaebitz.neon.entity.Entity;
+import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.level.Level;
 
@@ -18,6 +19,10 @@ public class Spawner extends Entity {
 	}
 
 	public void render(Screen screen) {
+	}
+
+	@Override
+	public void hitReceived(Projectile projectile) {
 	}
 	
 }

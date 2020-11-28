@@ -1,5 +1,6 @@
 package com.jcoadyschaebitz.neon.entity.projectile;
 
+import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.Entity;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.CollisionEntity;
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
@@ -11,7 +12,8 @@ public class Bolt extends Projectile {
 	
 	private boolean impaled = false;
 	private Mob impaleTarget;
-	private int impaleXOffset, impaleYOffset;
+	private int impaleXOffset, impaleYOffset, trailCounter;
+	private double direction;
 
 	public Bolt(Entity source, double x, double y, double angle, double speed) {
 		super(source, x, y, angle);
@@ -22,17 +24,29 @@ public class Bolt extends Projectile {
 		glow = Sprite.bolt;
 		sheet = Spritesheet.bolt;
 		life = random.nextInt(20) + 2000;
+		int[] xCollisionValues = { 8, 8, 8, 8 };
+		int[] yCollisionValues = { 8, 8, 8, 8 };
+		entityBounds = new CollisionBox(xCollisionValues, yCollisionValues);
 
 		nx = Math.cos(angle) * speed;
 		ny = Math.sin(angle) * speed;
 
+		direction = angle;
+		trailCounter = 30;
 		sprite = Sprite.rotateSprite(Sprite.bolt, angle, sprite.getWidth(), sprite.getHeight());
 	}
 	
 	public void update() {
 		time++;
+		if (!(nx == 0 && ny == 0)) {
+//			level.add(new MuzzleFlash(x + nx / 4, y + ny / 4, 20 + trailCounter, Sprite.nullSprite, Sprite.boltTrail, direction, true));
+//			level.add(new MuzzleFlash(x + nx / 2, y + ny / 2, 20 + trailCounter, Sprite.nullSprite, Sprite.boltTrail, direction, true));
+//			level.add(new MuzzleFlash(x + nx * 0.75, y + ny * 0.75, 20 + trailCounter, Sprite.nullSprite, Sprite.boltTrail, direction, true));
+//			level.add(new MuzzleFlash(x + nx, y + ny, 20 + trailCounter, Sprite.nullSprite, Sprite.boltTrail, direction, true));
+		}
 		move(source, nx, ny);
-
+		
+		if (trailCounter > 0) trailCounter--;
 		if (time > life) remove();
 		if (impaled) {
 			nx = 0;
@@ -48,7 +62,7 @@ public class Bolt extends Projectile {
 	}
 	
 	public void collideEntity(int x, int y, Entity e) {
-		if (e instanceof CollisionEntity) {
+		if (e instanceof CollisionEntity && e.getHealth() <= 0) {
 			nx = 0;
 			ny = 0;
 		}
@@ -58,7 +72,7 @@ public class Bolt extends Projectile {
 		impaleTarget = mob;
 		impaleXOffset = mob.getIntX() - (int) x;
 		impaleYOffset = mob.getIntY() - (int) y;
-		impaled = true;	
+		impaled = true;
 	}
 	
 	public void render(Screen screen) {

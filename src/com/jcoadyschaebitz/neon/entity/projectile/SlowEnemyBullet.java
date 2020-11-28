@@ -23,6 +23,7 @@ public class SlowEnemyBullet extends Projectile {
 		this.speed = speed;
 		sprite = Sprite.rotateSprite(Sprite.slowEnemyBullet, angle, 16, 16);
 		glow = Sprite.rotateSprite(Sprite.slowEnemyBulletGlow, angle, 32, 32);
+		particle = Sprite.particleYellow;
 	}
 	
 	public void update() {
@@ -33,7 +34,7 @@ public class SlowEnemyBullet extends Projectile {
 	}
 	
 	public void collide(int x, int y) {
-		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 10, 50, level, Sprite.particle_yellow));
+		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 10, 50, level, Sprite.particleYellow));
 		remove();
 	}
 

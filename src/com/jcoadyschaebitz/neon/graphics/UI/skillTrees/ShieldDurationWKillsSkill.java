@@ -21,7 +21,7 @@ public class ShieldDurationWKillsSkill extends SkillTreeNode {
 
 	public void playerKilledEnemy() {
 		for (int i = 0; i < manager.activeShields.size(); i++) {
-			manager.activeShields.get(i).changeDuration(30);
+			manager.activeShields.get(i).changeDuration(-30);
 		}
 	}
 

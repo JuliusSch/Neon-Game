@@ -10,7 +10,7 @@ public class XPDisplay implements UIComp {
 	private int x, y;
 
 	public XPDisplay(int x, int y, UIManager ui) {
-		font = new Font(Font.SIZE_8x8, 0xff00FFFF);
+		font = new Font(Font.SIZE_12x12, 0xff00FFFF, 1);
 		this.x = x;
 		this.y = y;
 	}

@@ -2,32 +2,31 @@ package com.jcoadyschaebitz.neon.level;
 
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.util.Rect;
 
 public class LevelSubArea {
 
-	private int x1, y1, x2, y2;
-	private Sprite sprite;
+	private Rect borderArea, shadedArea;
+	private Sprite sprite, sprite2;
+	private int sprite2X, sprite2Y;
 	boolean playerInArea;
 	int fadeCounter;
 
-	public LevelSubArea(int x1, int y1, int x2, int y2) {
-		this(x1, y1, x2, y2, new Sprite((x2 - x1 + 1) << 4, (y2 - y1 + 1) << 4, 0xff04070A));
-	}
-
-	public LevelSubArea(int x1, int y1, int x2, int y2, Sprite sprite) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
-		this.sprite = sprite;
+	public LevelSubArea(Rect border, Rect shaded, Sprite sprite2, int x, int y) {
+		borderArea = border;
+		shadedArea = shaded;
+		this.sprite2 = sprite2;
+		sprite = new Sprite((shaded.getWidth()) << 4, (shaded.getHeight()) << 4, 0xff000005);
+		sprite2X = x;
+		sprite2Y = y;
 	}
 
 	public void update(int x, int y) {
 		if (fadeCounter > 0) fadeCounter--;
 		int xp = x >> 4;
 		int yp = y >> 4;
-		if (x1 <= xp && x2 >= xp) {
-			if (y1 <= yp && y2 >= yp) {
+		if (borderArea.getX_L() <= xp && borderArea.getX_R() >= xp) {
+			if (borderArea.getY_T() <= yp && borderArea.getY_B() >= yp) {
 				if (!playerInArea) switchArea();
 			} else if (playerInArea) switchArea();
 		} else if (playerInArea) switchArea();
@@ -41,9 +40,18 @@ public class LevelSubArea {
 
 	public void render(Screen screen) {
 		if (!playerInArea) {
-			if (fadeCounter > 0) screen.renderTranslucentSprite(x1 << 4, y1 << 4, sprite, true, 1 - (double) fadeCounter / 15);
-			else screen.renderSprite(x1 << 4, y1 << 4, sprite, true);
-		} else if (fadeCounter > 0) screen.renderTranslucentSprite(x1 << 4, y1 << 4, sprite, true, (double) fadeCounter / 15);
+			if (fadeCounter > 0) {
+				screen.renderTranslucentSprite(shadedArea.getX_L() << 4, shadedArea.getY_T() << 4, sprite, true, 1 - (double) fadeCounter / 15);
+				screen.renderTranslucentSprite(sprite2X << 4, sprite2Y << 4, sprite2, true, 1 - (double) fadeCounter / 15);
+			}
+			else {
+				screen.renderSprite(shadedArea.getX_L() << 4, shadedArea.getY_T() << 4, sprite, true);
+				screen.renderSprite(sprite2X << 4, sprite2Y << 4, sprite2, true);
+			}
+		} else if (fadeCounter > 0) {
+			screen.renderTranslucentSprite(shadedArea.getX_L() << 4, shadedArea.getY_T() << 4, sprite, true, (double) fadeCounter / 15);
+			screen.renderTranslucentSprite(sprite2X << 4, sprite2Y << 4, sprite2, true, (double) fadeCounter / 15);
+		}
 	}
 
 }

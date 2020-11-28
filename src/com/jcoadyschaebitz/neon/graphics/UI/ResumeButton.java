@@ -7,7 +7,7 @@ public class ResumeButton extends UIButton {
 	}
 
 	public void doFunction() {
-			ui.getGame().updatePauseStatus();
+			ui.getGame().togglePause();
 	}
 
 }

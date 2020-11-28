@@ -13,6 +13,7 @@ public class PlayActiveState implements GameState {
 		ui = Game.getUIManager();
 	}
 
+	@Override
 	public void update() {
 		game.getKeyboard().update();
 		game.getLevel().update();
@@ -21,10 +22,12 @@ public class PlayActiveState implements GameState {
 		}
 	}
 
-	public void render(Screen screen, int xScroll, int yScroll) {
-		game.getLevel().render(xScroll, yScroll, screen, game.getLevel());
+	@Override
+	public void render(Screen screen, double xScroll, double yScroll) {
+		game.getLevel().render((int) xScroll, (int) yScroll, screen, game.getLevel());
 	}
 
+	@Override
 	public boolean canScrollWeapons() {
 		return true;
 	}

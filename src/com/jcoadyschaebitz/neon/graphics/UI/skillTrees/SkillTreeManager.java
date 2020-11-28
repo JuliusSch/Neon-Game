@@ -5,12 +5,10 @@ import java.util.List;
 
 import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.entity.Shield;
-import com.jcoadyschaebitz.neon.entity.MobileShield;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.UI.SkillDescriptionDisplay;
 import com.jcoadyschaebitz.neon.graphics.UI.UIComp;
-import com.jcoadyschaebitz.neon.level.Level;
 
 public class SkillTreeManager implements UIComp {
 
@@ -85,15 +83,6 @@ public class SkillTreeManager implements UIComp {
 		skillDescriptionDisplay.update();
 	}
 
-	public Shield createShield(int x, int y, double direction, int timeLeft, Player player, Level level) {
-		Shield shield;
-		if (stationaryShieldUnlocked) shield = new Shield(x, y, direction, timeLeft, player);
-		else shield = new MobileShield(x, y, direction, timeLeft, player);
-		level.add(shield);
-		activeShields.add(shield);
-		return shield;
-	}
-
 	public void enemyKilled() {
 		for (SkillTree tree : trees) {
 			tree.enemyKilled();
@@ -106,6 +95,9 @@ public class SkillTreeManager implements UIComp {
 		if (selectedTree < 0) selectedTree = 2;
 	}
 	
+	public Shield getShield() {
+		return new Shield(player.getX(), player.getY(), player.getDirection(), player);
+	}
 
 	public void render(Screen screen) {
 		for (SkillTree tree : trees) {

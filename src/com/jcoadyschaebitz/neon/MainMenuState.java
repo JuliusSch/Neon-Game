@@ -13,13 +13,16 @@ public class MainMenuState implements GameState {
 		ui = Game.getUIManager();
 	}
 
+	@Override
 	public void update() {
 		game.getKeyboard().update();
 	}
 
-	public void render(Screen screen, int xScroll, int yScroll) {
+	@Override
+	public void render(Screen screen, double xScroll, double yScroll) {
 	}
 
+	@Override
 	public boolean canScrollWeapons() {
 		return false;
 	}

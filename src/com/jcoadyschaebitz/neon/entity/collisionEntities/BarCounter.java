@@ -8,17 +8,17 @@ public class BarCounter extends CollisionEntity {
 	public BarCounter(int x, int y) {
 		super(x, y);
 		sprite = Sprite.barCounter;
-		shadowSprite = Sprite.down_facing_bin_shadow;
-		int[] xPoints = { 1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 101, 111, 121, 133, 133, 133, 133, 133, 133, 133 };
+		shadowSprite = Sprite.nullSprite;
+		int[] xPoints = { 1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 101, 111, 121, 134, 134, 134, 134, 134, 134, 134 };
 		int[] yPoints = { 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 21, 26, 31, 36, 41, 46 };
 		entityBounds = new CollisionBox(xPoints, yPoints);
-		int[] xCorners = { 1, 133, 1, 133 };
+		int[] xCorners = { 1, 134, 1, 134 };
 		int[] yCorners = { 1, 1, 55, 55 };
 		corners = new CollisionBox(xCorners, yCorners);
 	}
 	
-	public int getSpriteZHeight() {
-		return 60;
+	public int getYAnchor() {
+		return (int) y;
 	}
 
 }

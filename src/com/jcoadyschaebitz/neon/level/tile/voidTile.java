@@ -7,7 +7,8 @@ import com.jcoadyschaebitz.neon.level.Level;
 public class voidTile extends Tile {
 
 	public voidTile(Sprite sprite) {
-		super(sprite, 0, false, 1);
+		super(sprite, 0, 1, null);
+		border = true;
 	}
 
 	public void render(int x, int y, Screen screen, Level level, long seed) {
@@ -17,5 +18,5 @@ public class voidTile extends Tile {
 	public boolean isSolid() {
 		return true;
 	}
-
+	
 }

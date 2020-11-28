@@ -1,7 +1,6 @@
 package com.jcoadyschaebitz.neon.entity.weapon;
 
 import com.jcoadyschaebitz.neon.entity.mob.Player;
-import com.jcoadyschaebitz.neon.entity.particle.MuzzleFlash;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.entity.projectile.ShotgunPellet;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
@@ -26,33 +25,29 @@ public class Shotgun extends PlayerWeapon {
 		slotSprite = Sprite.shotgunSlotSprite;
 		xRenderOffset = -7;
 		yRenderOffset = -2;
-		maxAmmo = 48;
+		maxAmmo = 60;
 		shine = new AnimatedSprite(Spritesheet.shotgunShine, 32, 32, 7, 4);
 		standardAmmoBoxAmount = 12;
-		recoil = 1.2;
+		recoil = 0.8;
 	}
 
 	public void attack(double x, double y, double angle, double speed) {
 		SoundClip.shotgun_shot.play();
+		double xp = Math.cos(direction) * 25;
+		double yp = Math.sin(direction) * 25;
 		for (int i = 0; i < 8; i++) {
-			Projectile p = new ShotgunPellet(owner, x, y + 6, (angle + (random.nextDouble() - 0.5) / 2.2), speed + (random.nextDouble() - 0.5));
+			Projectile p = new ShotgunPellet(owner, x + xp, y + yp + 6, (angle + (random.nextDouble() - 0.5) / 2.2), speed + (random.nextDouble() - 0.5));
 			level.add(p);
 		}
-		addFlash((int) x, (int) y, angle);
 		shotsFired++;
 	}
 	
 	public void attack(double x, double y, double angle) {
-		this.attack(x, y, angle, 8);
-		addFlash((int) x, (int) y, angle);
+		this.attack(x, y, angle, 24);
 	}
 
 	public void attack(boolean multiplier, double x, double y, double angle, double bulletSpeedMultiplier) {
 		this.attack(x, y, angle, 8 * bulletSpeedMultiplier);
-		addFlash((int) x, (int) y, angle);
 	}
-	
-	public void addFlash(int x, int y, double angle) {
-		level.add(new MuzzleFlash(x - 8 + Math.cos(angle) * 25, y + Math.sin(angle) * 25, 2, Sprite.pistolFlash, Sprite.pistolFlashGlow, angle));
-	}
+
 }

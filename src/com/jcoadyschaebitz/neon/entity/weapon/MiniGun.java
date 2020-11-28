@@ -5,7 +5,7 @@ import com.jcoadyschaebitz.neon.entity.projectile.EnemyBullet;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
-public class MiniGun extends MobGun {
+public class MiniGun extends Gun {
 
 	public MiniGun(int x, int y) {
 		super(x, y, 32, 32, Sprite.miniGun);

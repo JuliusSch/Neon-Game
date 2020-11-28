@@ -2,6 +2,7 @@ package com.jcoadyschaebitz.neon.entity.weapon;
 
 import com.jcoadyschaebitz.neon.entity.Item.AmmoBox;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
+import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
@@ -25,6 +26,13 @@ public abstract class PlayerWeapon extends Weapon {
 		rotSprite = Sprite.rotateSprite(sprite, direction, spriteWidth, spriteHeight);
 		shine = new AnimatedSprite(Spritesheet.pistolShine, 32, 32, 5, 4);
 	}
+	
+	public void mouseReleased() {
+	}
+	
+	public void beginPreAttackAnimations() {
+		
+	}
 
 	public PlayerWeapon(int x, int y, int width, int height, Sprite sprite) {
 		this(x, y, width, height, sprite, 0);
@@ -45,12 +53,15 @@ public abstract class PlayerWeapon extends Weapon {
 	public void update() {
 		time++;
 		shine.update();
-		if (!owned) {
-			if (level.isPlayerInRad(this, 20)) {
+		if (owned) {
+			x = player.getX();
+			y = player.getY() + 1;
+		} else {
+			if (level.isPlayerInRad(this, 20) && level.getPlayer().addWeapon(this)) {
 				owned = true;
+				rotSprite = sprite;
 				player = level.getPlayer();
 				owner = player;
-				player.addWeapon(this);
 			}
 			if (time % 180 == 0) {
 				shining = true;
@@ -58,12 +69,9 @@ public abstract class PlayerWeapon extends Weapon {
 			}
 			if (time % 180 == shine.getTotalLength()) {
 				shining = false;
-			}
+			}	
 		}
-		if (owned) {
-			x = player.getX();
-			y = player.getY() + 1;
-		}
+		if (flashTimer > 0) flashTimer--;
 	}
 
 	public void render(Screen screen) {
@@ -86,6 +94,9 @@ public abstract class PlayerWeapon extends Weapon {
 	
 	public abstract void attack(boolean multiplier, double x, double y, double direction, double bulletSpeedMultiplier);
 
+	public void hitReceived(Projectile projectile) {
+	}
+	
 	public void ammoChange(int i) {
 		ammoCount += i;
 		if (ammoCount > maxAmmo) ammoCount = maxAmmo;

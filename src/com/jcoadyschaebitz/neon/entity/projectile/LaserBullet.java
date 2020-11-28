@@ -13,7 +13,7 @@ public class LaserBullet extends Projectile {
 		super(source, x, y, angle);
 		isEnemyBullet = true;
 		damage = 6;
-		speed = 4;
+		speed = 3;
 		sprite = Sprite.rotateSprite(Sprite.fastBulletBlue, angle, 24, 24);
 		glow = Sprite.rotateSprite(Sprite.fastBulletBlueGlow, angle, 24, 24);
 		bulletAnim = new AnimatedSprite(Spritesheet.fast_bullet_anim, 24, 24, 2, 4);
@@ -32,7 +32,7 @@ public class LaserBullet extends Projectile {
 	}
 
 	public void collide(int x, int y) {
-		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 10, 50, level, Sprite.particle_blue));
+		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 10, 50, level, Sprite.particleBlue));
 		remove();
 	}
 	

@@ -8,6 +8,6 @@ public interface GameState {
 	
 	public void update();
 	
-	public void render(Screen screen, int xScroll, int yScroll);
+	public void render(Screen screen, double xScroll, double yScroll);
 	
 }

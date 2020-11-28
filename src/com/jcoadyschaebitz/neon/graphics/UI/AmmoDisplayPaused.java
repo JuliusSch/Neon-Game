@@ -16,7 +16,7 @@ public class AmmoDisplayPaused implements UIComp {
 	public AmmoDisplayPaused(int x, int y, Player player) {
 		this.x = x;
 		this.y = y;
-		font = new Font(Font.SIZE_8x8, 0xffBAFFDA);
+		font = new Font(Font.SIZE_8x8, 0xffBAFFDA, 1);
 		this.player = player;
 		weapon1 = player.slots.get(0).weapon;
 		weapon2 = player.slots.get(1).weapon;

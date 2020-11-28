@@ -9,7 +9,7 @@ import com.jcoadyschaebitz.neon.level.Level;
 
 public abstract class Entity {
 
-	protected double x, y;
+	protected double x, y, centreX, centreY;
 	protected boolean removed = false;
 	protected Level level;
 	protected Sprite sprite;
@@ -19,6 +19,9 @@ public abstract class Entity {
 	public CollisionBox entityBounds, corners;
 
 	public abstract void update();
+	
+	public void updateCutscene() {
+	}
 
 	public abstract void render(Screen screen);
 
@@ -29,24 +32,23 @@ public abstract class Entity {
 	public boolean isRemoved() {
 		return removed;
 	}
-	
-	public CollisionBox getProjectileBounds() {
+
+	public CollisionBox getCollisionBounds() {
 		return entityBounds;
 	}
 
 	public void init(Level level) {
 		this.level = level;
 	}
-	
-	public int getSpriteZHeight() {
-		return getSpriteH();
+
+	public int getYAnchor() {
+		return (int) y + getSpriteH();
 	}
 
 	public int abs(double value) {
 		if (value > 0) return 1;
 		if (value == 0) return 0;
 		else return -1;
-
 	}
 
 	public double getX() {
@@ -56,19 +58,27 @@ public abstract class Entity {
 	public int getIntX() {
 		return (int) x;
 	}
-	
-	public double getHealth() {
-		return health;
-	}
-
-	public int getIntY() {
-		return (int) y;
-	}
 
 	public double getY() {
 		return y;
 	}
 
+	public int getIntY() {
+		return (int) y;
+	}
+	
+	public int getMidX() {
+		return (int) x + spriteWidth / 2;
+	}
+
+	public int getMidY() {
+		return (int) y + spriteHeight / 2;
+	}
+	
+	public double getHealth() {
+		return health;
+	}
+	
 	public int getSpriteW() {
 		if (sprite != null) return sprite.getWidth();
 		else return 0;
@@ -83,6 +93,5 @@ public abstract class Entity {
 		return sprite;
 	}
 
-	public void hitReceived(Projectile projectile) {
-	}
+	public abstract void hitReceived(Projectile projectile);
 }

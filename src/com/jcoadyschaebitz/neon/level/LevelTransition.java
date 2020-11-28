@@ -1,26 +1,52 @@
 package com.jcoadyschaebitz.neon.level;
 
+import com.jcoadyschaebitz.neon.graphics.Screen;
+import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.util.Rect;
+import com.jcoadyschaebitz.neon.util.Vec2i;
+
 public class LevelTransition {
 
-	private int x1, y1, x2, y2;
+	private Vec2i entryPoint;
+	private Rect exitArea;
+	private int switchDelay = 0;
 	private Level levelFrom, levelTo;
+	private final int transitionLength = 30;
 	
-	public LevelTransition(int x1, int y1, int x2, int y2, Level levelFrom, Level levelTo) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
+	public LevelTransition(Rect exitA, Vec2i entryP, Level levelFrom, Level levelTo) {
+		entryPoint = entryP;
+		exitArea = exitA;
 		this.levelFrom = levelFrom;
 		this.levelTo = levelTo;
 	}
 	
-	public void checkForLevelChange(int x, int y) {
+	public void update(int x, int y) {
+		checkForLevelChange(x, y);
+	}
+	
+	private void checkForLevelChange(int x, int y) {
 		int xp = x >> 4;
 		int yp = y >> 4;
-		if (x1 <= xp && x2 >= xp) {
-			if (y1 <= yp && y2 >= yp) {
+		if (exitArea.getX_L() <= xp + 1 && exitArea.getX_R() >= xp + 1) {
+			if (exitArea.getY_T() <= yp && exitArea.getY_B() >= yp) {
+				initLevelChange();
+			}
+		}
+	}
+	
+	private void initLevelChange() {
+		if (switchDelay == 0) switchDelay = 30;
+	}
+	
+	public void render(Screen screen) {
+		if (switchDelay > 0) {
+			screen.renderTranslucentSprite(0, 0, new Sprite(400, 250, 0xff000000), false, 1 - (double) switchDelay / (double) transitionLength);
+			switchDelay--;
+			if (switchDelay == 0) {
+				int playerOffsetX = levelFrom.getPlayer().getIntX() - (exitArea.getX_L() << 4);
+				int playerOffsetY = levelFrom.getPlayer().getIntY() - (exitArea.getY_T() << 4);
 				levelFrom.getPlayer().game.switchToLevel(levelTo);
-				levelFrom.getPlayer().goTo(levelTo.playerSpawn.getX(), levelTo.getPlayerSpawn().getY());
+				levelFrom.getPlayer().goTo(entryPoint.X() + playerOffsetX, entryPoint.Y() + playerOffsetY);
 			}
 		}
 	}

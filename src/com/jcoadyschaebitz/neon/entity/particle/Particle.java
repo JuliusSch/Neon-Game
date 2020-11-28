@@ -1,6 +1,7 @@
 package com.jcoadyschaebitz.neon.entity.particle;
 
 import com.jcoadyschaebitz.neon.entity.Entity;
+import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
@@ -12,8 +13,23 @@ public class Particle extends Entity {
 
 	protected double xx, yy, zz;
 	protected double xa, ya, za;
+	protected int zIndex = 1;
 
 	public Particle(double x, double y, int maxLife, int spriteW, int spriteH, Sprite sprite) {
+		this(x, y, maxLife, spriteW, spriteH, sprite, 0, 0);
+	}
+	
+	public Particle(double x, double y, int maxLife, int spriteW, int spriteH, Sprite sprite, int z) {
+		this(x, y, maxLife, spriteW, spriteH, sprite, 0, 0);
+		zIndex = z;
+	}
+	
+	public Particle(double x, double y, int maxLife, int spriteW, int spriteH, Sprite sprite, double initVelX, double initVelY, int z) { 
+		this(x, y, maxLife, spriteW, spriteH, sprite, initVelX, initVelY);
+		zIndex = z;
+	}
+	
+	public Particle(double x, double y, int maxLife, int spriteW, int spriteH, Sprite sprite, double initVelX, double initVelY) {
 		this.x = x;
 		this.y = y;
 		this.xx = x;
@@ -24,9 +40,13 @@ public class Particle extends Entity {
 		spriteWidth = spriteW;
 		spriteHeight = spriteH;
 
-		xa = random.nextGaussian() / 3;
-		ya = random.nextGaussian() / 3;
+		xa = random.nextGaussian() / 3 + initVelX;
+		ya = random.nextGaussian() / 3 + initVelY;
 		zz = random.nextDouble() * 10;
+	}
+	
+	public int getZ() {
+		return zIndex;
 	}
 
 	public void update() {
@@ -61,13 +81,17 @@ public class Particle extends Entity {
 		for (int c = 0; c < 4; c++) {
 			double xt =  (x + c % 2) / 16;
 			double yt =  (y + c / 2) / 16;
-			if (level.getTile(xt, yt).isSolid()) solid = true;
+			if (level.getTile(xt, yt).blocksProjectiles) solid = true;
 		}
 		return solid;
 	}
 
 	public void render(Screen screen) {
 		screen.renderSprite((int) xx, (int) yy - (int) zz, sprite, true);
+	}
+
+	@Override
+	public void hitReceived(Projectile projectile) {
 	}
 
 }

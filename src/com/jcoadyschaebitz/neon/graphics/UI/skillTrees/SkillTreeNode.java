@@ -34,7 +34,7 @@ public abstract class SkillTreeNode implements MouseListener {
 		activeSprite = Sprite.skillOutlineSelected;
 		hoverSprite = Sprite.skillOutlineHover;
 		this.player = player;
-		font = new Font(Font.SIZE_5x5, 0xffBAFFDA);
+		font = new Font(Font.SIZE_5x5, 0xffBAFFDA, 1);
 		this.tree = tree;
 		description = "There isn't a\ndescription";
 	}
@@ -43,7 +43,7 @@ public abstract class SkillTreeNode implements MouseListener {
 		updateSkill();
 		
 		double s = Game.getWindowScale();
-		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXRenderOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXRenderOffset()) {
+		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXBarsOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (yOffset + spritePositionY) * s && Mouse.getY() < (yOffset + spritePositionY + height) * s) {
 				mouseInBounds = true;
 				manager.skillDescriptionDisplay.updateSkill(this);
@@ -90,7 +90,7 @@ public abstract class SkillTreeNode implements MouseListener {
 		if (!UIComp.ui.getGame().getState().equals(UIComp.ui.getGame().pauseState)) return;
 		if (!(manager.selectedTree == tree)) return;
 		double s = Game.getWindowScale();
-		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXRenderOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXRenderOffset()) {
+		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXBarsOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (yOffset + spritePositionY) * s && Mouse.getY() < (yOffset + spritePositionY + height) * s) {
 				activate();
 			}

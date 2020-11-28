@@ -16,16 +16,19 @@ public class EnemyBullet extends Projectile {
 		spriteHeight = 5;
 		switch (spriteNo) {
 		case 1:
-			sprite = Sprite.rotateSprite(Sprite.enemy_bullet_1, angle, 16, 16);
-			glow = Sprite.rotateSprite(Sprite.enemy_bullet_glow_1, angle, 32, 32);
+			sprite = Sprite.enemy_bullet_1;
+			glow = Sprite.enemy_bullet_glow_1;
+			particle = Sprite.particleOrange;
 			break;
 		case 2:
-			sprite = Sprite.rotateSprite(Sprite.enemy_bullet_2, angle, 16, 16);
-			glow = Sprite.rotateSprite(Sprite.enemy_bullet_glow_2, angle, 32, 32);
+			sprite = Sprite.enemy_bullet_2;
+			glow = Sprite.enemy_bullet_glow_2;
+			particle = Sprite.particleCrimson;
 			break;
 		default:
 			sprite = Sprite.nullSprite;
 			glow = Sprite.nullSprite;
+			particle = Sprite.particleOrange;
 			break;
 		}
 
@@ -33,13 +36,8 @@ public class EnemyBullet extends Projectile {
 		ny = Math.sin(angle) * speed;
 	}
 
-	public void update() {
-		time++;
-		move(source, nx, ny);
-	}
-
 	public void collide(int x, int y) {
-		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 10, 50, level, Sprite.particle_orange));
+		level.add(new ParticleSpawner((int) x + 8, (int) y + 8, 10, 50, level, particle));
 		remove();
 	}
 

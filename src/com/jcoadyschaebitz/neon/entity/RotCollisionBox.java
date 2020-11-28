@@ -30,6 +30,13 @@ public class RotCollisionBox {
 		rotXValues = x;
 		rotYValues = y;
 	}
+	
+	public void offsetPoints(int offsetX, int offsetY) {
+		for (int i = 0; i < rotXValues.length; i++) {
+			rotXValues[i] += offsetX;
+			rotYValues[i] += offsetY;
+		}
+	}
 
 	public void rotPoints(double angle1, int width, int height) {
 		 for (int i = 0; i < origXValues.length; i++) {

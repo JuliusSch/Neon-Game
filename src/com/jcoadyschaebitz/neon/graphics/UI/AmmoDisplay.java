@@ -11,7 +11,7 @@ public class AmmoDisplay implements UIComp {
 	private Player player;
 
 	public AmmoDisplay(Player player) {
-		font = new Font(Font.SIZE_8x8, 0xffADFFFF);
+		font = new Font(Font.SIZE_12x12, 0xffADFFFF, 1);
 		this.player = player;
 	}
 

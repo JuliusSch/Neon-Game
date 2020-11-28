@@ -9,7 +9,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
-public class SoundClip {
+public class SoundClip implements Runnable {
 
 	private Clip clip;
 	public boolean paused, playOnLoop, playing;
@@ -86,5 +86,11 @@ public class SoundClip {
 	public void changeUniversalVolume(float v) {
 		FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
 		volume.setValue(v);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }

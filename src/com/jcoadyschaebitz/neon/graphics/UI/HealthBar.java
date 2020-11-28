@@ -38,11 +38,11 @@ public class HealthBar implements UIComp {
 
 	public void render(Screen screen) {
 		screen.drawRect(true, x - 1, y - 1, width + 2, height + 2, backgroundColour, false);
-		screen.renderSprite(x + width + 2, y - 1, Sprite.healthBarEnd, false);
+		screen.renderSprite(x + width + 1, y - 1, Sprite.healthBarEnd, false);
 		screen.drawRect(true, x, y, width, height, 0xff820031, false);
-		screen.renderSprite(x + width + 1, y, Sprite.healthBarEnd3, false);
+		screen.renderSprite(x + width, y, Sprite.healthBarEnd3, false);
 		if (percentageFilled > 0) screen.drawRect(true, x, y, (int) (percentageFilled * width), height, foregroundColour, false);
-		if (percentageFilled > 0) screen.renderSprite((int) (x + percentageFilled * width + 1), y, Sprite.healthBarEnd2, false);
+		if (percentageFilled > 0) screen.renderSprite((int) (x + percentageFilled * width), y, Sprite.healthBarEnd2, false);
 		screen.renderSprite(4, 6, Sprite.healthIcon, false);
 	}
 

@@ -32,7 +32,7 @@ public class ActionSkillDisplay implements UIComp {
 		height = 20 - (int) ((timeTilUse / totalCooldown) * 20);				//temporary
 		screen.drawRect(true, x, y, 20, 20, backgroundColour, false);
 		if (height == 0) return;
-		screen.drawRect(true, x, y + 20 - height, 20, height, foregroundColour, false);
+		screen.drawRect(true, x, y, 20, height, foregroundColour, false);
 	}
 
 }

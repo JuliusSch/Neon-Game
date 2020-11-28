@@ -5,7 +5,7 @@ import com.jcoadyschaebitz.neon.entity.projectile.EnemyBullet;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
-public class EnemyGun extends MobGun {
+public class EnemyGun extends Gun {
 
 	public EnemyGun(int x, int y) {
 		super(x, y, 32, 32, Sprite.enemyGun);
@@ -26,14 +26,15 @@ public class EnemyGun extends MobGun {
 	}
 	
 	public void attack(double x, double y, double angle, double speed) {
-		Projectile p = new EnemyBullet(owner, x, y + 6, angle, speed, 1);
+		double xp = Math.cos(angle) * 12;
+		double yp = Math.sin(angle) * 12;
+		Projectile p = new EnemyBullet(owner, x + xp, y + yp + 6, angle, speed, 1);
 		level.add(p);
 		addFlash((int) x, (int) y, angle);
 	}
-
+	
 	public void attack(double x, double y, double angle) {
-		attack(x, y, angle, 2);
-		addFlash((int) x, (int) y, angle);
+		this.attack(x, y, angle, 3);
 	}
 	
 	public void addFlash(int x, int y, double angle) {

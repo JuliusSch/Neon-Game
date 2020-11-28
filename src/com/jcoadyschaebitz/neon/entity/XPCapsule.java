@@ -1,5 +1,6 @@
 package com.jcoadyschaebitz.neon.entity;
 
+import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
@@ -26,7 +27,7 @@ public class XPCapsule extends Entity {
 	}
 
 	public void update() {
-		if (speed != 0) spriteDirection += 0.1;
+		if (level.isPlayerInRad(this, 50)) spriteDirection += 0.15;
 		time++;
 		rotSprite = Sprite.rotateSprite(Sprite.xp, spriteDirection, spriteWidth, spriteHeight);
 		rotGlow = Sprite.rotateSprite(Sprite.xpGlow, spriteDirection, spriteWidth, spriteHeight);
@@ -49,9 +50,10 @@ public class XPCapsule extends Entity {
 	}
 
 	public void move() {
-		if (level.getTile((x + 8 + nx) / 16, (y + 8 + ny) / 16).isSolid()) return;
-		else {
+		if (!level.getTile((x + 8 + nx) / 16, (y + 10) / 16).blocksProjectiles) {
 			x += nx * speed;
+		}
+		if (!level.getTile((x + 8) / 16, (y + 10 + ny) / 16).blocksProjectiles) {
 			y += ny * speed;
 		}
 	}
@@ -59,11 +61,16 @@ public class XPCapsule extends Entity {
 	public void render(Screen screen) {
 		screen.renderTranslucentSprite((int) x, (int) y, shadowSprite, true, 0.5);
 		screen.renderTranslucentSprite((int) x, (int) y, rotGlow, true, 0.1);
+//		screen.renderAsLightSource((int) x, (int) y, rotGlow, true);
 		screen.renderSprite((int) x, (int) y, rotSprite, true);
 	}
 	
 	public int getSpriteH() {
 		return 16;
+	}
+
+	@Override
+	public void hitReceived(Projectile projectile) {
 	}
 
 }

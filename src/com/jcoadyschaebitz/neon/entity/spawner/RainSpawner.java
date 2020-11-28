@@ -14,7 +14,7 @@ public class RainSpawner extends Spawner {
 		for (int i = 0; i < 8; i++) {
 		int xx = random.nextInt(level.getWidth() * 16);
 		int yy = level.getPlayer().getIntY() - 16 * 8;
-		level.add(new RainParticle(xx, yy, 2, 4, Sprite.rain_particle));
+		level.add(new RainParticle(xx, yy, 2, 4, Sprite.rainParticle, 2));
 		}
 	}
 

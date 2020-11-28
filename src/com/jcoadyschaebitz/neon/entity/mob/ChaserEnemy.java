@@ -1,10 +1,11 @@
 package com.jcoadyschaebitz.neon.entity.mob;
 
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AIBlackboard;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 
-public class ChaserEnemy extends ShootingEnemy {
+public class ChaserEnemy extends Mob {
 
 //	private List<Node> path;
 //	private int time = 0;
@@ -29,25 +30,10 @@ public class ChaserEnemy extends ShootingEnemy {
 	}
 
 	private void move() {
-
 		xa = 0;
 		ya = 0;
-//		int px = (int) level.getPlayer().getX();
-//		int py = (int) level.getPlayer().getY();
-//		Vector2i start = new Vector2i((int) x >> 4, (int) y >> 4);
-//		Vector2i goal = new Vector2i(px >> 4, py >> 4);
-//		if (Vector2i.getDistance(start, goal) < 10 && time % 3 == 0) path = level.findPath(start, goal);
-//		if (path != null) {
-//			if (path.size() > 0) {
-//				Vector2i v = path.get(path.size() - 1).tile;
-//				if (x < v.getX() << 4) xa += 0.8;
-//				if (x > v.getX() << 4) xa -= 0.8;
-//				if (y < v.getY() << 4) ya += 0.8;
-//				if (y > v.getY() << 4) ya -= 0.8;
-//			}
-//		}
 		if (xa != 0 || ya != 0) {
-			move(xa, ya);
+			move(xa, ya, true);
 			walking = true;
 		} else {
 			walking = false;
@@ -55,13 +41,14 @@ public class ChaserEnemy extends ShootingEnemy {
 	}
 
 	public void update() {
-
-		if (level.getPlayer().getX() < x) dir = Direction.LEFT;
-		if (level.getPlayer().getX() > x) dir = Direction.RIGHT;
-
-		time++;
+		super.update();
 		move();
-		updateAnimSprites();
+	}
+
+	@Override
+	protected void constructBehaviourTree(AIBlackboard bb) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
