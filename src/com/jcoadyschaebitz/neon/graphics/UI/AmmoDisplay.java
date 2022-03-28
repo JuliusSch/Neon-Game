@@ -29,4 +29,12 @@ public class AmmoDisplay implements UIComp {
 		font.render(19, 36, 1, Integer.toString(totalAmmoCount), screen, false);
 	}
 
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
+	}
+
 }

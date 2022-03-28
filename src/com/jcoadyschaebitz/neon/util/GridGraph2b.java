@@ -16,8 +16,8 @@ public class GridGraph2b {
 
 	public Map<Vec2i, Double> getNeighbours(Vec2i point) {
 		Map<Vec2i, Double> neighbours = new HashMap<Vec2i, Double>();
-		int x = point.X();
-		int y = point.Y();
+		int x = point.x;
+		int y = point.y;
 //		if (!nodes[x + width * y]) return neighbours;
 //		else 
 		for (int j = -1; j < 2; j++) {

@@ -108,4 +108,12 @@ public class SkillTreeManager implements UIComp {
 		skillDescriptionDisplay.render(screen);
 	}
 
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
+	}
+
 }

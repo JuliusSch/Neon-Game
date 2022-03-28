@@ -1,6 +1,7 @@
 package com.jcoadyschaebitz.neon.graphics;
 
 import com.jcoadyschaebitz.neon.Game;
+import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public class Sprite {
 
@@ -25,15 +26,15 @@ public class Sprite {
 	public static Sprite tarmac_3 = new Sprite(16, 6, 3, Spritesheet.x16);
 	public static Sprite tarmac_4 = new Sprite(16, 6, 4, Spritesheet.x16);
 	public static Sprite tarmac_5 = new Sprite(16, 6, 5, Spritesheet.x16);
-	
+
 	public static Sprite old_concrete = new Sprite(16, 11, 16, Spritesheet.x16);
 	public static Sprite large_kitchen_tile = new Sprite(16, 11, 17, Spritesheet.x16);
-	
+
 	public static Sprite steps_arch = new Sprite(16, 6, 6, Spritesheet.x16);
 	public static Sprite steps_base = new Sprite(16, 6, 7, Spritesheet.x16);
 	public static Sprite steps_base_right = new Sprite(16, 6, 8, Spritesheet.x16);
 	public static Sprite steps_base_left = new Sprite(16, 6, 9, Spritesheet.x16);
-	
+
 	public static Sprite stepsDown = new Sprite(16, 11, 0, Spritesheet.x16);
 	public static Sprite stepsRightTop = new Sprite(16, 1, 6, Spritesheet.x16);
 	public static Sprite stepsRight = new Sprite(16, 1, 7, Spritesheet.x16);
@@ -68,6 +69,8 @@ public class Sprite {
 	public static Sprite poolFloorTile = new Sprite(16, 14, 13, Spritesheet.x16);
 	public static Sprite blackStoneTile = new Sprite(16, 14, 16, Spritesheet.x16);
 	public static Sprite whiteStoneTile = new Sprite(16, 15, 16, Spritesheet.x16);
+	public static Sprite poolWater = new Sprite(16, 8, 16, Spritesheet.x16);
+	public static Sprite poolWaterTop = new Sprite(16, 8, 17, Spritesheet.x16);
 
 //	wall sprites: 
 	public static Sprite wall = new Sprite(16, 5, 0, Spritesheet.x16);
@@ -243,14 +246,14 @@ public class Sprite {
 	public static Sprite divider_1_h = new Sprite(48, 32, 6, 0, Spritesheet.x16);
 	public static Sprite divider_2_h_base = new Sprite(16, 16, 17, 3, Spritesheet.x16);
 	public static Sprite divider_2_h_window = new Sprite(16, 48, 17, 0, Spritesheet.x16);
-			
+
 	public static Sprite planter_1_h = new Sprite(64, 32, 9, 0, Spritesheet.x32);
 	public static Sprite planter_1_v = new Sprite(32, 64, 20, 0, Spritesheet.x32);
 	public static Sprite kitchen_unit_h = new Sprite(48, 14, 10, Spritesheet.x24);
 	public static Sprite kitchen_unit_v = new Sprite(48, 48, 11, 10, Spritesheet.x24);
 	public static Sprite door_h_open = new Sprite(48, 12, 10, Spritesheet.x24);
 	public static Sprite door_h_closed = new Sprite(48, 13, 10, Spritesheet.x24);
-	
+
 //	player sprites:
 	public static Sprite playerR = new Sprite(24, 0, 0, Spritesheet.x24);
 	public static Sprite shadow = new Sprite(24, 27, 28, Spritesheet.x24);
@@ -290,6 +293,10 @@ public class Sprite {
 	public static Sprite particleOrange = new Sprite(2, 0xffFF8C00);
 	public static Sprite particleCrimson = new Sprite(2, 0xffFF0037);
 	public static Sprite particleYellow = new Sprite(2, 0xffB6FF00);
+	public static Sprite smallParticleBlue = new Sprite(1, 0xff96ffff);
+	public static Sprite smallParticleOrange = new Sprite(1, 0xffFF8C00);
+	public static Sprite smallParticleCrimson = new Sprite(1, 0xffFF0037);
+	public static Sprite smallParticleYellow = new Sprite(1, 0xffB6FF00);
 	public static Sprite smallRainParticle = new Sprite(1, 0xff9BAFFF);
 	public static Sprite rainParticle = new Sprite(6, 4, 0, Spritesheet.bullets);
 	public static Sprite rainSplashParticle = new Sprite(6, 5, 0, Spritesheet.bullets);
@@ -321,7 +328,7 @@ public class Sprite {
 	public static Sprite miniGun = new Sprite(32, 6, 0, Spritesheet.x32);
 	public static Sprite laserSword = new Sprite(48, 8, 2, Spritesheet.x24);
 	public static Sprite doublePistols = new Sprite(32, 6, 7, Spritesheet.x32);
-	
+
 	public static Sprite laserSwordGlow = new Sprite(48, 8, 3, Spritesheet.x24);
 	public static Sprite laserSwordSlash = new Sprite(48, 8, 4, Spritesheet.x24);
 	public static Sprite swordSlash2 = new Sprite(64, 0, 4, Spritesheet.x32);
@@ -360,6 +367,7 @@ public class Sprite {
 	public static Sprite buttonHighlighted = new Sprite(64, 1, 0, Spritesheet.x64UI);
 	public static Sprite pauseMenuBackground = new Sprite(Spritesheet.pauseMenuBackground, 400, 250);
 	public static Sprite menuOutline = new Sprite(Spritesheet.menuOutline, 400, 225);
+	public static Sprite loadMenuOutline = new Sprite(Spritesheet.loadMenuOutline, 244, 176);
 	public static Sprite leftButton = new Sprite(16, 3, 10, Spritesheet.x16);
 	public static Sprite rightButton = new Sprite(16, 3, 11, Spritesheet.x16);
 	public static Sprite leftButtonHighlighted = new Sprite(16, 3, 12, Spritesheet.x16);
@@ -371,8 +379,8 @@ public class Sprite {
 	public static Sprite SpeakingIcon = new Sprite(16, 5, 18, Spritesheet.x16);
 
 	// Effect sprites:
-	public static Sprite wallBlur = new Sprite(32, 13, 3, Spritesheet.x32);
-	public static Sprite largeWallBlur = new Sprite(64, 5, 3, Spritesheet.x64);
+//	public static Sprite wallBlur = new Sprite(32, 13, 3, Spritesheet.x32);
+//	public static Sprite largeWallBlur = new Sprite(192, 64, 0, 7, Spritesheet.x64);
 
 	protected Sprite(Spritesheet sheet, int width, int height) {
 		this.sheet = sheet;
@@ -483,7 +491,7 @@ public class Sprite {
 		return new Sprite(out, width, height);
 	}
 
-	public Sprite translucentMask(Sprite mask, int dx, int dy) {												// ---------------------QUITE LAGGY------------------------
+	public Sprite translucentMask(Sprite mask, int dx, int dy) { // ---------------------QUITE LAGGY------------------------
 		int out[] = pixels.clone();
 		for (int yy = dy; yy < height + dy; yy++) {
 			for (int xx = dx; xx < width + dx; xx++) {
@@ -495,9 +503,77 @@ public class Sprite {
 		}
 		return new Sprite(out, width, height);
 	}
-	
+
+	public static Sprite alterTranslucency(Sprite sprite, double alpha) {
+		int[] newPixels = new int[sprite.getWidth() * sprite.getHeight()];
+		if (alpha > 1) alpha = 1;
+		if (alpha < 0) alpha = 0;
+		for (int y = 0; y < sprite.getHeight(); y++) {
+			for (int x = 0; x < sprite.getWidth(); x++) {
+				int col = sprite.pixels[ y * sprite.getWidth() + x];
+				if (col != 0xffff00ff) newPixels[ y * sprite.getWidth() + x] = (int) (alpha * 0xff) << 24 | (col & 0x00ffffff);
+				else newPixels[ y * sprite.getWidth() + x] = col;
+			}
+		}
+		return new Sprite(newPixels, sprite.width, sprite.height);
+	}
+
+	public static Sprite addLine(Sprite sprite, Vec2i p1, Vec2i p2, int colour) {
+		Sprite newSprite = new Sprite(sprite.pixels.clone(), sprite.getWidth(), sprite.getHeight());
+		double dx = p2.x - p1.x;
+		double dy = p2.y - p1.y;
+		if (dx > 0) {
+			double dxy = dy / dx;
+			if (dxy < 1 && dxy > -1) {
+				for (double i = 0; i < dx; i++) {
+					Vec2i p = new Vec2i((int) (p1.x + i), (int) (dxy * i + p1.y));
+					if (p.x >= 0 && p.x < newSprite.getWidth() && p.y >= 0 && p.y < newSprite.getHeight()) newSprite.pixels[p.x + newSprite.getWidth() * p.y] = colour;
+				}
+			} else if (dy > 0) {
+				double dyx = dx / dy;
+				for (double i = 0; i < dy; i++) {
+					Vec2i p = new Vec2i((int) (dyx * i + p1.x), (int) (p1.y + i));
+					if (p.x >= 0 && p.x < newSprite.getWidth() && p.y >= 0 && p.y < newSprite.getHeight()) newSprite.pixels[p.x + newSprite.getWidth() * p.y] = colour;
+				}
+			} else {
+				dx = p1.x - p2.x;
+				dy = p1.y - p2.y;
+				double dyx = dx / dy;
+				for (double i = 0; i < dy; i++) {
+					Vec2i p = new Vec2i((int) (dyx * i + p2.x), (int) (p2.y + i));
+					if (p.x >= 0 && p.x < newSprite.getWidth() && p.y >= 0 && p.y < newSprite.getHeight()) newSprite.pixels[p.x + newSprite.getWidth() * p.y] = colour;
+				}
+			}
+		} else {
+			dx = p1.x - p2.x;
+			dy = p1.y - p2.y;
+			double dxy = dy / dx;
+			if (dxy < 1 && dxy > -1) {
+				for (double i = 0; i < dx; i++) {
+					Vec2i p = new Vec2i((int) (p2.x + i), (int) (dxy * i + p2.y));
+					if (p.x >= 0 && p.x < newSprite.getWidth() && p.y >= 0 && p.y < newSprite.getHeight()) newSprite.pixels[p.x + newSprite.getWidth() * p.y] = colour;
+				}
+			} else if (dy > 0) {
+				double dyx = dx / dy;
+				for (double i = 0; i < dy; i++) {
+					Vec2i p = new Vec2i((int) (dyx * i + p2.x), (int) (p2.y + i));
+					if (p.x >= 0 && p.x < newSprite.getWidth() && p.y >= 0 && p.y < newSprite.getHeight()) newSprite.pixels[p.x + newSprite.getWidth() * p.y] = colour;
+				}
+			} else {
+				dx = p2.x - p1.x;
+				dy = p2.y - p1.y;
+				double dyx = dx / dy;
+				for (double i = 0; i < dy; i++) {
+					Vec2i p = new Vec2i((int) (dyx * i + p1.x), (int) (p1.y + i));
+					if (p.x >= 0 && p.x < newSprite.getWidth() && p.y >= 0 && p.y < newSprite.getHeight()) newSprite.pixels[p.x + newSprite.getWidth() * p.y] = colour;
+				}
+			}
+		}
+		return newSprite;
+	}
+
 	public long unsignedConvert(int v) {
-	return (Long.parseLong(Integer.toHexString(v), 16));
+		return (Long.parseLong(Integer.toHexString(v), 16));
 	}
 
 	public Sprite overlay(Sprite overlay, int offX, int offY) {
@@ -569,5 +645,27 @@ public class Sprite {
 				alphas[x + y * width] = pixels[x + y * width] >> 24 & 0xff;
 			}
 		}
+	}
+
+	public static Sprite createButtonSprite(Spritesheet corners, int width, int height, int colour, boolean outline) {
+		if (width < 16) width = corners.WIDTH;
+		if (height < 16) height = corners.HEIGHT;
+		Sprite sprite = new Sprite(width, height, 0xffff00ff);
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (y < corners.getSprites()[0].height && x < corners.getSprites()[0].width) sprite.pixels[y * width + x] = corners.getSprites()[0].pixels[y * corners.getSprites()[0].width + x];
+				else if (y < corners.getSprites()[0].height && x > width - corners.getSprites()[1].width)
+					sprite.pixels[y * width + x] = corners.getSprites()[1].pixels[y * corners.getSprites()[1].width + (x + corners.getSprites()[0].width - width)];
+				else if (y > height - corners.getSprites()[2].height && x < corners.getSprites()[0].width)
+					sprite.pixels[y * width + x] = corners.getSprites()[2].pixels[(y + corners.getSprites()[0].height - height) * corners.getSprites()[2].width + x];
+				else if (y > height - corners.getSprites()[2].height && x > width - corners.getSprites()[1].width)
+					sprite.pixels[y * width + x] = corners.getSprites()[3].pixels[(y + corners.getSprites()[0].height - height) * corners.getSprites()[3].width + (x + corners.getSprites()[0].width - width)];
+				else if (outline) {
+					if (y == 0 || x == 0 || y == height - 1 || x == width - 1 || y == 4 || x == 4 || y == height - 5 || x == width - 5) sprite.pixels[y * width + x] = colour;
+				} else if (y == 2 || x == 2 || y == height - 3 || x == width - 3) sprite.pixels[y * width + x] = colour;
+			}
+		}
+		return sprite;
 	}
 }

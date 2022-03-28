@@ -10,6 +10,7 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 import com.jcoadyschaebitz.neon.input.Mouse;
 import com.jcoadyschaebitz.neon.sound.SoundClip;
+import com.jcoadyschaebitz.neon.util.Vec2d;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public class Crossbow extends PlayerWeapon {
@@ -62,8 +63,8 @@ public class Crossbow extends PlayerWeapon {
 			int xx = (Mouse.getX() - Game.getWindowWidth() / 2 - Game.getXBarsOffset()) * 10;
 			int yy = (Mouse.getY() - Game.getWindowHeight() / 2) * 10;
 			double distance = Math.sqrt((xx * xx) + (yy * yy));
-			Vec2i targetPoint = level.castRay((int) (x + 9 + xShootOffset), (int) (y + 14 + yShootOffset), direction);
-			if (distance > 300) screen.renderLine((int) (x + 9 + xShootOffset), (int) (y + 14 + yShootOffset), targetPoint.X(), targetPoint.Y(), 0x88FF002F);
+			Vec2i targetPoint = level.castRay(new Vec2i((int) (x + 8 + xShootOffset), (int) (y + 14 + yShootOffset)), new Vec2d(xx, yy), 320, false, new Vec2i(0, 0), false);
+			if (distance > 300) screen.renderLine((int) (x + 8 + xShootOffset), (int) (y + 14 + yShootOffset), targetPoint.x, targetPoint.y, 0x88FF002F, 0.5);
 		}
 		if (!owned){
 			if (shining) rotSprite = Sprite.rotateSprite(shine.getSprite(), direction, 32, 32);

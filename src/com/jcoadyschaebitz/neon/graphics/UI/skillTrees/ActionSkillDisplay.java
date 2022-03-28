@@ -18,7 +18,6 @@ public class ActionSkillDisplay implements UIComp {
 	}
 
 	public void update() {
-		
 	}
 	
 	public void updateStats(boolean active, int ttu, int tts, int tcd) {
@@ -33,6 +32,14 @@ public class ActionSkillDisplay implements UIComp {
 		screen.drawRect(true, x, y, 20, 20, backgroundColour, false);
 		if (height == 0) return;
 		screen.drawRect(true, x, y, 20, height, foregroundColour, false);
+	}
+
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
 	}
 
 }

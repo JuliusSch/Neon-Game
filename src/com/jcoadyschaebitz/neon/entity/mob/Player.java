@@ -18,8 +18,11 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 import com.jcoadyschaebitz.neon.graphics.UI.AmmoDisplay;
 import com.jcoadyschaebitz.neon.graphics.UI.AmmoDisplayPaused;
+import com.jcoadyschaebitz.neon.graphics.UI.ExitButton;
 import com.jcoadyschaebitz.neon.graphics.UI.HealthBar;
+import com.jcoadyschaebitz.neon.graphics.UI.LoadMenuButton;
 import com.jcoadyschaebitz.neon.graphics.UI.MapButton;
+import com.jcoadyschaebitz.neon.graphics.UI.PlayButton;
 import com.jcoadyschaebitz.neon.graphics.UI.ResumeButton;
 import com.jcoadyschaebitz.neon.graphics.UI.SaveButton;
 import com.jcoadyschaebitz.neon.graphics.UI.SettingsButton;
@@ -49,10 +52,7 @@ public class Player extends Mob implements Serializable {
 	private Shield shield;
 	private UIManager ui;
 	private HealthBar healthBar;
-	private UIItemSlot itemSlot1;
-	private UIItemSlot itemSlot2;
-	private UIItemSlot itemSlot3;
-	private UIItemSlot itemSlot4;
+	private UIItemSlot itemSlot1, itemSlot2, itemSlot3, itemSlot4;
 	private XPDisplay xpDisplay;
 	private AmmoDisplay ammoDisplay;
 	private SkillTreeManager skillTreeManager;
@@ -61,9 +61,11 @@ public class Player extends Mob implements Serializable {
 	private SkillsButton skillsButton;
 	private SaveButton saveButton;
 	private MapButton mapButton;
-	private SkillTreeSwitcherButton leftButton;
-	private SkillTreeSwitcherButton rightButton;
+	private LoadMenuButton loadMenuButton;
+	private SkillTreeSwitcherButton leftButton, rightButton;
 	private AmmoDisplayPaused ammoDisplayPaused;
+	private PlayButton playButton;
+	private ExitButton exitButton;
 	public List<UIItemSlot> slots = new ArrayList<UIItemSlot>();
 	private List<UIButton> buttons = new ArrayList<UIButton>();
 	public Game game;
@@ -114,13 +116,17 @@ public class Player extends Mob implements Serializable {
 		ammoDisplay = new AmmoDisplay(this);
 		skillTreeManager = new SkillTreeManager(game, this);
 //		actionSkillManager = new ActionSkillManager(this);
-		resumeButton = new ResumeButton(13, 27, 58, 36, "Continue", 0xffBAFFDA);
-		settingsButton = new SettingsButton(13, 67, 58, 36, "Settings", 0xffBAFFDA, game);
-		skillsButton = new SkillsButton(13, 107, 58, 36, "Skills", 0xffBAFFDA, game);
-		mapButton = new MapButton(13, 147, 58, 36, "Map", 0xffBAFFDA);
-		saveButton = new SaveButton(13, 187, 58, 36, "Save and \nExit", 0xffBAFFDA);
-		leftButton = new SkillTreeSwitcherButton(216, 143, 5, 9, "", 0xffBAFFDA, skillTreeManager, Pointing.LEFT);
-		rightButton = new SkillTreeSwitcherButton(297, 143, 5, 9, "", 0xffBAFFDA, skillTreeManager, Pointing.RIGHT);
+		resumeButton = new ResumeButton(13, 27, 61, 37, "Continue", 0xffADFFFF);
+		settingsButton = new SettingsButton(13, 67, 61, 37, "Settings", 0xffADFFFF, game);
+		skillsButton = new SkillsButton(13, 107, 61, 37, "Skills", 0xffADFFFF, game);
+		mapButton = new MapButton(13, 147, 61, 37, "Map", 0xffADFFFF);
+		saveButton = new SaveButton(13, 187, 61, 37, "Save and \nExit", 0xffADFFFF);
+		leftButton = new SkillTreeSwitcherButton(216, 143, 5, 9, "", 0xffADFFFF, skillTreeManager, Pointing.LEFT);
+		rightButton = new SkillTreeSwitcherButton(297, 143, 5, 9, "", 0xffADFFFF, skillTreeManager, Pointing.RIGHT);
+		playButton = new PlayButton(60, 120, 60, 30, "Play", 0xffADFFFF);
+		loadMenuButton = new LoadMenuButton(60, 160, 61, 37, "Load", 0xffADFFFF);
+		exitButton = new ExitButton(60, 200, 61, 37, "Exit", 0xffADFFFF);
+		
 		buttons.add(resumeButton);
 		buttons.add(settingsButton);
 		buttons.add(skillsButton);
@@ -128,6 +134,10 @@ public class Player extends Mob implements Serializable {
 		buttons.add(saveButton);
 		buttons.add(leftButton);
 		buttons.add(rightButton);
+		buttons.add(playButton);
+		buttons.add(exitButton);
+		buttons.add(loadMenuButton);
+		
 		slots.add(itemSlot1);
 		slots.add(itemSlot2);
 		slots.add(itemSlot3);
@@ -159,11 +169,22 @@ public class Player extends Mob implements Serializable {
 		game.pauseSettingsMenu.addComp(mapButton);
 		game.pauseSettingsMenu.addComp(saveButton);
 //		game.cutSceneUI.addComp(skipButton);	add skip button as button (find out where thats currently being done.
+		game.mainMenu.addComp(playButton);
+		game.mainMenu.addComp(exitButton);
+		game.mainMenu.addComp(loadMenuButton);
+		game.loadMenu.addComp(playButton);
+		game.loadMenu.addComp(exitButton);
+		
 		ui.addMenu(game.pauseSkillsMenu);
+		ui.setMenu(game.mainMenu);
 	}
 
 	public Shield getShield() {
 		return shield;
+	}
+	
+	public void addButton(UIButton button) {
+		buttons.add(button);
 	}
 
 	public void changeHealth(double amount) {
@@ -181,7 +202,7 @@ public class Player extends Mob implements Serializable {
 	public List<UIButton> getMouseListeningButtons() {
 		return buttons;
 	}
-
+	
 	public boolean addWeapon(PlayerWeapon weapon) {
 		if (this.weapon == null) this.weapon = weapon;
 		return ui.addWeapon(weapon);

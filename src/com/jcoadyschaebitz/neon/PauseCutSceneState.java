@@ -27,17 +27,24 @@ public class PauseCutSceneState implements GameState {
 
 	@Override
 	public void update() {
+		ui.update();
 		game.getKeyboard().update();
-		if (ui.currentMenu != game.pauseSkillsMenu) {
-			ui.setMenu(game.pauseSkillsMenu);
-		}
 	}
 
 	@Override
 	public void render(Screen screen, double xScroll, double yScroll) {
 		game.getLevel().render(currentScene.getX(), currentScene.getY(), screen, game.getLevel());
-		screen.renderTranslucentSprite(0, 0, new Sprite(400, 250, 0xff000000), false, 0.6);
+		screen.renderTranslucentSprite(0, 0, new Sprite(640, 360, 0xff000000), false, 0.6);
 		screen.renderSprite(81, 27, Sprite.menuOutline, false);
+	}
+
+	@Override
+	public void enterState() {
+		ui.setMenu(game.pauseSettingsMenu);
+	}
+
+	@Override
+	public void exitState() {
 	}
 
 }

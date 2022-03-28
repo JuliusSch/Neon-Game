@@ -18,7 +18,6 @@ public class SkillDescriptionDisplay implements UIComp {
 	}
 
 	public void update() {
-		
 	}
 
 	public void render(Screen screen) {
@@ -31,6 +30,14 @@ public class SkillDescriptionDisplay implements UIComp {
 	
 	public void updateSkill(SkillTreeNode skill) {
 		this.skill = skill;
+	}
+
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
 	}
 
 }

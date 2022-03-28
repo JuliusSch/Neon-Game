@@ -41,8 +41,8 @@ public class FindNewPosition extends BehaviourNode {
 		int ay2 = my > py ? (my >> 4) + 4 : (py >> 4) + 4;
 		for (int i = ax1; i < ax2; i++) {
 			for (int j = ay1; j < ay2; j++) {
-				if (!blackboard.getLevel().isSightline(mx, my, i << 4, j << 4)) continue;
-				if (!blackboard.getLevel().isSightline(i << 4, j << 4, px, py)) continue;
+				if (!blackboard.getLevel().isSightline(new Vec2i(mx, my), new Vec2i(i << 4, j << 4), true)) continue;
+				if (!blackboard.getLevel().isSightline(new Vec2i(i << 4, j << 4), new Vec2i(px, py), true)) continue;
 				validPositions.add(new Vec2i(i << 4, j << 4));
 				blackboard.getLevel().add(new DebugParticle(i << 4, j << 4, 50, 16, 16, Sprite.item_slot_outline));
 			}

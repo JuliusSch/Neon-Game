@@ -46,4 +46,12 @@ public class HealthBar implements UIComp {
 		screen.renderSprite(4, 6, Sprite.healthIcon, false);
 	}
 
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
+	}
+
 }

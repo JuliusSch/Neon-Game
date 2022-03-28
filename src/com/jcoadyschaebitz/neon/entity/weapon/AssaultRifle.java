@@ -6,6 +6,7 @@ import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.sound.SoundClip;
 
 public class AssaultRifle extends PlayerWeapon {
 	
@@ -32,6 +33,7 @@ public class AssaultRifle extends PlayerWeapon {
 	}
 
 	public void attack(double x, double y, double direction) {
+		SoundClip.pistol_shot.play();
 		double xp = Math.cos(direction) * 25;
 		double yp = Math.sin(direction) * 25;
 		Projectile p = new AssaultRifleBullet(owner, x + xp, y + yp + 6, direction);

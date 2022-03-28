@@ -11,4 +11,8 @@ public interface UIComp {
 
 	public abstract void render(Screen screen);
 	
+	public abstract void activate();
+	
+	public abstract void deactivate();
+	
 }

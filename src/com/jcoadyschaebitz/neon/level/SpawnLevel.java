@@ -8,11 +8,10 @@ import javax.imageio.ImageIO;
 import com.jcoadyschaebitz.neon.entity.spawner.RainSpawner;
 import com.jcoadyschaebitz.neon.entity.weapon.Shotgun;
 
-@SuppressWarnings("serial")
 public class SpawnLevel extends Level {
 
-	public SpawnLevel(String path, long seed) {
-		super(path, "/levels/overlays/lvl_4.png", seed);
+	public SpawnLevel(String path, String levelName, long seed) {
+		super(path, "/levels/overlays/lvl_4.png", levelName, seed);
 		playerSpawn = new TileCoordinate(5, 5);
 	}
 

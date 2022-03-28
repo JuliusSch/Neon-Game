@@ -21,17 +21,17 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.util.Rect;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
-@SuppressWarnings("serial")
 public class Level_1_Bar extends Level {
 
-	public Level_1_Bar(String path, long seed) {
-		super(path, "/levels/overlays/lvl_1_bar.png", seed);
+	public Level_1_Bar(String path, String levelName, long seed) {
+		super(path, "/levels/overlays/lvl_1_bar.png", levelName, seed);
 		playerSpawn = new TileCoordinate(17, 12);
 	}
 
 	@Override
 	protected void initTransition() {
 		add(new LevelTransition(new Rect(19, 32, 1, 1), new Vec2i(28 * 16, 118 * 16), this, Level.level_1));
+		add(new LevelTransition(new Rect(6, 22, 1, 0), new Vec2i(27 * 16, 15 * 16), this, Level.level_0_menu));
 	}
 	
 	@Override

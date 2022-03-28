@@ -25,6 +25,13 @@ public class UIItemSlot implements UIComp {
 		sprite = Sprite.item_slot;
 		this.player = player;
 	}
+	
+	public void update() {
+		if (ui.selectedItemSlot == thisSlot) {
+			selected = true;
+			player.setGun(weapon);
+		} else selected = false;
+	}
 
 	public void render(Screen screen) {
 		screen.renderSprite(x, y, sprite, false);
@@ -49,10 +56,11 @@ public class UIItemSlot implements UIComp {
 		hasItem = false;
 	}
 
-	public void update() {
-		if (ui.selectedItemSlot == thisSlot) {
-			selected = true;
-			player.setGun(weapon);
-		} else selected = false;
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
 	}
 }

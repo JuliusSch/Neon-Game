@@ -17,10 +17,8 @@ public class PauseMenuState implements GameState {
 
 	@Override
 	public void update() {
+		ui.update();
 		game.getKeyboard().update();
-		if (ui.currentMenu != game.pauseSkillsMenu) {
-			ui.setMenu(game.pauseSkillsMenu);
-		}
 	}
 
 	public void recordMouse(int x, int y) {
@@ -32,13 +30,24 @@ public class PauseMenuState implements GameState {
 	public void render(Screen screen, double xScroll, double yScroll) {
 //		screen.renderSprite(0, 0, Sprite.pauseMenuBackground, false);
 		game.playState.render(screen, (int) xScroll, (int) yScroll);
-		screen.renderTranslucentSprite(0, 0, new Sprite(400, 250, 0xff000000), false, 0.6);
+		screen.renderTranslucentSprite(0, 0, new Sprite(640, 360, 0xff000000), false, 0.6);
 		screen.renderSprite(81, 27, Sprite.menuOutline, false);
 	}
 
 	@Override
 	public boolean canScrollWeapons() {
 		return false;
+	}
+
+	@Override
+	public void enterState() {
+		ui.setMenu(game.pauseSettingsMenu);
+//		pauseState.recordMouse(Mouse.getX(), Mouse.getY());
+	}
+
+	@Override
+	public void exitState() {
+//		Mouse.move(pauseState.lastMouseX, pauseState.lastMouseY);
 	}
 
 }

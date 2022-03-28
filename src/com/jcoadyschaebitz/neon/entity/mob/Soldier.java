@@ -68,7 +68,7 @@ public class Soldier extends ShootingEnemy {
 		SequencerNode shootPlayer = new SequencerNode(bb, this);
 		shootPlayer.addNode(new FindSightline(bb, this));
 		shootPlayer.addNode(new CheckDistanceToPlayer(bb, this, 32, 160));
-		shootPlayer.addNode(new WaitBehaviour(bb, this, random.nextInt(30) + 30));
+		shootPlayer.addNode(new WaitBehaviour(bb, this, random.nextInt(15) + 20));
 		shootPlayer.addNode(new AttackBehaviour(bb, this));
 		SequencerNode getNewSightline = new SequencerNode(bb, this);
 		getNewSightline.addNode(new FindNewPosition(bb, this));

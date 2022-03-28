@@ -2,7 +2,6 @@ package com.jcoadyschaebitz.neon.level;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,6 +18,8 @@ import com.jcoadyschaebitz.neon.entity.decorationEntities.BackgroundDecoration;
 import com.jcoadyschaebitz.neon.entity.decorationEntities.Decoration;
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
+import com.jcoadyschaebitz.neon.entity.particle.DebugParticle;
+import com.jcoadyschaebitz.neon.entity.particle.LineParticle;
 import com.jcoadyschaebitz.neon.entity.particle.Particle;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -27,11 +28,11 @@ import com.jcoadyschaebitz.neon.level.tile.BorderRenderer;
 import com.jcoadyschaebitz.neon.level.tile.StairTile;
 import com.jcoadyschaebitz.neon.level.tile.Tile;
 import com.jcoadyschaebitz.neon.util.Util;
+import com.jcoadyschaebitz.neon.util.Vec2d;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
-public abstract class Level implements Serializable {
+public abstract class Level {
 
-	private static final long serialVersionUID = 8517428031736948566L;
 	private final int transitionLength = 30;
 	private int transitionDelay = 0;
 	protected long seed;
@@ -52,6 +53,7 @@ public abstract class Level implements Serializable {
 	protected Random random = new Random();
 	protected TileCoordinate playerSpawn;
 	protected Player player;
+	public String levelName;
 
 	protected List<Entity> entities = new ArrayList<Entity>();
 	protected List<Entity> tempAdd = new ArrayList<Entity>();
@@ -63,21 +65,23 @@ public abstract class Level implements Serializable {
 	private List<CutScene> cutScenes = new ArrayList<CutScene>();
 	protected CutScene currentScene;
 
-	public static Level testLevel = new SpawnLevel("/levels/testLevel.png", 80387673L);
-	public static Level level_1 = new Level_1("/levels/level1.png", 448822856L);
-	public static Level level_2 = new Level_2("/levels/level2.png", 593057015L);
-	public static Level level_1_bar = new Level_1_Bar("/levels/level_1_bar.png", 498619487L);
-	public static Level level_3_chinatown = new Level_3_Chinatown("/levels/level_3_chinatown.png", 599271332L);
-	public static Level level_4_pool = new Level_4_Pool("/levels/level_pool.png", 387341236L);
+	public static Level testLevel = new SpawnLevel("/levels/testLevel.png", "testLevel", 80387673L);
+	public static Level level_0_menu = new Level_0_Menu("/levels/level_0.png", "level_0_menu", 99010224L);
+	public static Level level_1 = new Level_1("/levels/level1.png", "level_1", 448822856L);
+	public static Level level_1_bar = new Level_1_Bar("/levels/level_1_bar.png", "level_1_bar", 498619487L);
+	public static Level level_2 = new Level_2("/levels/level2.png", "level_2", 593057015L);
+	public static Level level_3_chinatown = new Level_3_Chinatown("/levels/level_3_chinatown.png", "level_3_chinatown", 599271332L);
+	public static Level level_4_pool = new Level_4_Pool("/levels/level_pool.png", "level_4_pool", 387341236L);
 
-	public Level(String path, String path2, long seed) {
+	public Level(String path, String overlaysPath, String levelName, long seed) {
 		this.seed = seed;
+		this.levelName = levelName;
 		MAX_SHAKE_OFFSET = 16;
 		MAX_RECOIL_OFFSET = 12;
 		loadLevel(path);
 		loadShadows();
 		loadTileZ();
-		loadOverlaysMap(path2);
+		loadOverlaysMap(overlaysPath);
 		loadBorderMap();
 		loadCollisionMap();
 	}
@@ -107,8 +111,34 @@ public abstract class Level implements Serializable {
 		}
 	}
 
+	public static Level getLevelFromName(String name) {
+		switch (name) {
+		case "testLevel":
+			return testLevel;
+		case "level_0_menu":
+			return level_0_menu;
+		case "level_1":
+			return level_1;
+		case "level_1_bar":
+			return level_1_bar;
+		case "level_2":
+			return level_2;
+		case "level_3_chinatown":
+			return level_3_chinatown;
+		case "level_4_pool":
+			return level_4_pool;
+		default:
+			return null;
+		}
+	}
+
+	public String getLevelName() {
+		return levelName;
+	}
+
 	public static void addPlayersToLevels(Player player) {
 		testLevel.add(player);
+		level_0_menu.add(player);
 		level_1_bar.add(player);
 		level_1.add(player);
 		level_2.add(player);
@@ -118,6 +148,7 @@ public abstract class Level implements Serializable {
 
 	public static void initiateLevelTransitions() {
 		testLevel.initTransition();
+		level_0_menu.initTransition();
 		level_1_bar.initTransition();
 		level_1.initTransition();
 		level_2.initTransition();
@@ -331,7 +362,7 @@ public abstract class Level implements Serializable {
 			else if (e instanceof BackgroundDecoration) entities.add(e);
 			else if (e instanceof Decoration) decorations.add((Decoration) e);
 			else entities.add(e);
-			if (e instanceof CollisionEntity) loadCollisionEntitiesToMap();					// may cause lag if many entities being added;
+			if (e instanceof CollisionEntity) loadCollisionEntitiesToMap(); // may cause lag if many entities being added;
 		}
 		tempAdd.clear();
 	}
@@ -358,16 +389,139 @@ public abstract class Level implements Serializable {
 		recoilDir = direction;
 	}
 
-	public Vec2i castRay(int x, int y, double direction) {
-		double x2 = x;
-		double y2 = y;
-		double nx = Math.cos(direction);
-		double ny = Math.sin(direction);
-		while (getTile((int) x2 >> 4, (int) y2 >> 4).getZ() != 2) {
-			x2 += nx;
-			y2 += ny;
+	public Vec2i castRay(Vec2i start, Vec2i target, boolean ignoreLowWalls) {
+		Vec2d directionVec = new Vec2d(target.x - start.x, target.y - start.y);
+		double distance = Math.sqrt((target.x - start.x) * (target.x - start.x) + (target.y - start.y) * (target.y - start.y));
+		return castRay(start, directionVec, distance, true, target, ignoreLowWalls);
+	}
+
+	public Vec2i castRay(Vec2i start, Vec2d directionVector, double maxDistance, boolean hasTarget, Vec2i target, boolean ignoreLowWalls) {
+		Vec2d intraTileStartPos = new Vec2d((start.x % 16) / 16.0, (start.y % 16) / 16.0);
+		Vec2i rayPos_Tile = new Vec2i((int) ((double) start.x / 16), (int) ((double) start.y / 16));
+		Vec2d unitVec = directionVector.normalise();
+
+		Vec2d rayStepSize = new Vec2d(Math.sqrt(1 + (unitVec.y * unitVec.y) / (unitVec.x * unitVec.x)), Math.sqrt(1 + (unitVec.x * unitVec.x) / (unitVec.y * unitVec.y)));
+		Vec2d rayLength1D = new Vec2d(0, 0);
+		Vec2i stepPolarity = new Vec2i(0, 0);
+
+		double lastMove;
+		boolean lastMoveX;
+		double distanceCovered = 0;
+		boolean isSightline = true;
+		boolean lowWallHit = false;
+
+		if (unitVec.x < 0) {
+			stepPolarity.x = -1;
+			rayLength1D.x = intraTileStartPos.x * rayStepSize.x;
+		} else {
+			stepPolarity.x = 1;
+			rayLength1D.x = (1 - intraTileStartPos.x) * rayStepSize.x;
 		}
-		return new Vec2i((int) x2, (int) y2);
+
+		if (unitVec.y < 0) {
+			stepPolarity.y = -1;
+			rayLength1D.y = intraTileStartPos.y * rayStepSize.y;
+		} else {
+			stepPolarity.y = 1;
+			rayLength1D.y = (1 - intraTileStartPos.y) * rayStepSize.y;
+		}
+		
+		if (getTileZ((int) (start.x + maxDistance * unitVec.x) >> 4, (int) (start.y + maxDistance * unitVec.y) >> 4) != 0 && hasTarget) return start;
+
+		while (isSightline && distanceCovered * 16 < maxDistance) {
+			if (rayLength1D.x < rayLength1D.y) {
+				rayPos_Tile.x = rayPos_Tile.x + stepPolarity.x;
+//				lastMoveX = true;
+//				lastMove = rayLength1D.x - distanceCovered;
+				distanceCovered = rayLength1D.x;
+				rayLength1D.x += rayStepSize.x;
+				if (rayLength1D.x > maxDistance / 16) rayLength1D.x = maxDistance / 16;
+				if (distanceCovered > maxDistance / 16) distanceCovered = maxDistance / 16;
+
+				// DEBUG:
+//				add(new DebugParticle(rayPos_Tile.x * 16, rayPos_Tile.y * 16, 10, 1, 1, Sprite.item_slot));
+//				add(new DebugParticle(start.x + distanceCovered * unitVec.x * 16, start.y + distanceCovered * unitVec.y * 16, 30, 1, 1, Sprite.smallParticleCrimson));
+			} else {
+				rayPos_Tile.y = rayPos_Tile.y + stepPolarity.y;
+//				lastMoveX = false;
+//				lastMove = rayLength1D.y - distanceCovered;
+				distanceCovered = rayLength1D.y;
+				rayLength1D.y += rayStepSize.y;
+				if (rayLength1D.y > maxDistance / 16) rayLength1D.y = maxDistance / 16;
+				if (distanceCovered > maxDistance / 16) distanceCovered = maxDistance / 16;
+
+//				if (lowWallHit) isSightline = false;
+
+				// DEBUG:
+//				add(new DebugParticle(rayPos_Tile.x * 16, rayPos_Tile.y * 16, 10, 1, 1, Sprite.item_slot_outline));
+//				add(new DebugParticle(start.x + distanceCovered * unitVec.x * 16, start.y + distanceCovered * unitVec.y * 16, 30, 1, 1, Sprite.smallParticleYellow));
+			}
+			int tileZ = getTileZ(rayPos_Tile.x, rayPos_Tile.y);
+
+//			if (ignoreLowWalls) {
+//				if (tileZ == 1) {
+//					if ((start.y + distanceCovered * unitVec.y * 16) % 16 == 0) {
+//						if (stepPolarity.y == 1) {
+//							int rx = (int) (start.x + distanceCovered * unitVec.x * 16);
+//							int ry = (int) (start.y + distanceCovered * unitVec.y * 16 - 1);
+//						add(new DebugParticle(rx, ry, 30, 1, 1, Sprite.smallParticleOrange));
+//							return new Vec2i(rx, ry);
+//						} else {
+//							int rx = (int) (start.x + distanceCovered * unitVec.x * 16);
+//							int ry = (int) (start.y + distanceCovered * unitVec.y * 16 - 16);
+//						add(new DebugParticle(rx, ry, 30, 1, 1, Sprite.smallParticleBlue));
+//							return new Vec2i(rx, ry);
+//						}
+//					} else isSightline = true;
+//				} else isSightline = tileZ == 0;
+//			}
+//			if (ignoreLowWalls) {
+//				if (tileZ == 1) {
+//					if (!lastMoveX && stepPolarity.y == 1 && !lowWallHit) {
+//						int rx = (int) (start.x + distanceCovered * unitVec.x * 16);
+//						int ry = (int) (start.y + distanceCovered * unitVec.y - 1);
+////						add(new DebugParticle(rx, ry, 30, 1, 1, Sprite.smallParticleBlue));
+//						return new Vec2i(rx, ry);
+//					} else {
+//						isSightline = true;
+//						lowWallHit = true;
+//					}
+//				} else isSightline = tileZ == 0;
+//				if (tileZ == 0 && lowWallHit && !lastMoveX && stepPolarity.y == -1) {
+//					int rx = (int) (start.x + (distanceCovered - lastMove / 16) * unitVec.x * 16);
+//					int ry = (int) (start.y + (distanceCovered - lastMove / 16) * unitVec.y * 16 - 15);
+//					return new Vec2i(rx, ry);
+//				}
+//				if (tileZ != 1) lowWallHit = false;
+			/* } else */ isSightline = tileZ == 0;
+
+//			if (ignoreLowWalls && tileZ == 1 && (lastMoveX || stepPolarity.y == -1)) lowWallHit = true;
+//			if (lowWallHit) {
+//				if (tileZ == 0) {
+//					if (!lastMoveX && stepPolarity.y == -1) isSightline = false;
+//					else lowWallHit = false;
+//				} else if (tileZ == 2) isSightline = false;
+//			} else isSightline = tileZ == 0;
+//			if (tileZ == 1 && !lastMoveX && stepPolarity.y == 1) {
+//				isSightline = false;
+//				int rx = (int) (start.x + (distanceCovered - 1/16.0) * unitVec.x * 16);
+//				int ry = (int) (start.y + (distanceCovered - 1/16.0) * unitVec.y * 16);
+//				return new Vec2i(rx, ry);
+//			}
+
+//			if (!isSightline) {
+//				if (lastMoveX) rayPos_Tile.x = rayPos_Tile.x - stepPolarity.x;
+//				else rayPos_Tile.y = rayPos_Tile.y - stepPolarity.y;
+//			}
+//			if (drawLines && tileZ != 2) isSightline = true;
+		}
+
+//		if (distanceCovered * 16 >= maxDistance && hasTarget) return target;
+
+		int rx = (int) (start.x + distanceCovered * unitVec.x * 16);
+		int ry = (int) (start.y + distanceCovered * unitVec.y * 16);
+		if (distanceCovered == maxDistance / 16) add(new DebugParticle(rx, ry, 30, 1, 1, Sprite.glassParticle));
+		return new Vec2i(rx, ry);
 	}
 
 	public boolean isSightline(int x, int y, double direction, Entity target) {
@@ -391,17 +545,10 @@ public abstract class Level implements Serializable {
 		}
 		return false;
 	}
-	
-	public boolean isSightline(int xStart, int yStart, int xGoal, int yGoal) {
-		double direction = Math.atan2(yGoal - yStart, xGoal - xStart);
-		double dx = Math.cos(direction) * 5;
-		double dy = Math.sin(direction) * 5;
-		while (aiCollisionMap[((int) xStart >> 4) + ((int) yStart >> 4) * width]) {
-			xStart += dx;
-			yStart += dy;
-			if (Math.abs(xGoal - xStart) <= 4 && Math.abs(yGoal - yStart) <= 4) return true;
-		}
-		return false;
+
+	public boolean isSightline(Vec2i start, Vec2i target, boolean ignoreLowWalls) {
+		Vec2i reached = castRay(start, target, ignoreLowWalls);
+		return new Vec2i(reached.x >> 4, reached.y >> 4).equals(new Vec2i(target.x >> 4, target.y >> 4));
 	}
 
 	protected int getTileZ(int x, int y) {
@@ -502,7 +649,7 @@ public abstract class Level implements Serializable {
 		for (int y = y0 - 4; y < y1 + 4; y++) {
 			for (int i = 0; i < entities.size(); i++) {
 				int eBottomY = entities.get(i).getYAnchor();
-				if (eBottomY > y * 16 && eBottomY <= (y + 1) * 16) entities.get(i).render(screen);
+				if (eBottomY > y << 4 && eBottomY <= (y + 1) << 4) entities.get(i).render(screen);
 			}
 			for (int x = x0; x < x1; x++) {
 				if (getTileZ(x, y) == 1) getTile(x, y).render(x, y, screen, level, seed);
@@ -512,16 +659,41 @@ public abstract class Level implements Serializable {
 			projectiles.get(i).render(screen);
 		}
 
+		double arcLength = Math.PI / 3;
+		double arc1 = player.getDirection() + (arcLength / 2);
+		double arc2 = player.getDirection() - (arcLength / 2);
+		Vec2d lVec = new Vec2d(Math.cos(arc1), Math.sin(arc1));
+		Vec2d rVec = new Vec2d(Math.cos(arc2), Math.sin(arc2));
+		Vec2i playerMid = new Vec2i(player.getMidX(), player.getMidY() + 4);
+
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				if (x < 0 || y < 0 || x >= width || y >= height) continue;
 				if (getTileZ(x, y) == 2) getTile(x, y).render(x, y, screen, level, seed);
-				int s = borderMap[y * width + x];
 				Sprite borderSpr = Sprite.nullSprite;
+				int s = borderMap[y * width + x];
 				if (s != -1) borderSpr = Tile.wallEdges.getSprites().get(s);
 				if (overlaysMap[x + y * width] != Screen.ALPHA_COLOUR) {
-					getTile(x, y).renderOverlay(x, y, screen, level, overlaysMap[x + y * width], borderSpr);
-//					System.out.print(Integer.toHexString(overlaysMap[x + y * width]) + ", ");
+
+					boolean[] corners = new boolean[4];
+					corners[0] = isVecInArc(new Vec2d((x << 4) - player.getMidX(), (y << 4) - player.getMidY()), lVec, rVec) || isPlayerInRad((x << 4), (y << 4), 80);
+					corners[1] = isVecInArc(new Vec2d((x << 4) + 15 - player.getMidX(), (y << 4) - player.getMidY()), lVec, rVec) || isPlayerInRad((x << 4) + 15, (y << 4), 80);
+					corners[2] = isVecInArc(new Vec2d((x << 4) - player.getMidX(), (y << 4) + 15 - player.getMidY()), lVec, rVec) || isPlayerInRad((x << 4), (y << 4) + 15, 80);
+					corners[3] = isVecInArc(new Vec2d((x << 4) + 15- player.getMidX(), (y << 4) + 15 - player.getMidY()), lVec, rVec) || isPlayerInRad((x << 4) + 15, (y << 4) + 15, 80);
+					String cornersChar = String.valueOf(corners[0]).substring(0, 1) + String.valueOf(corners[1]).substring(0, 1) + String.valueOf(corners[2]).substring(0, 1) + String.valueOf(corners[3]).substring(0, 1);
+					if (cornersChar.equals("ffff")) {
+						getTile(x, y).renderOverlay(x, y, screen, level, getTile(overlaysMap[x + y * width]).getSprite(), borderSpr);
+					} else {
+						boolean[] corners2 = new boolean[4];
+						corners2[0] = isSightline(playerMid, new Vec2i((x << 4) + 0, (y << 4) + 0), true) && isVecInArc(new Vec2d((x << 4) + 0 - player.getMidX(), (y << 4) + 0 - player.getMidY()), lVec, rVec);
+						corners2[1] = isSightline(playerMid, new Vec2i((x << 4) + 15, (y << 4) + 0), true) && isVecInArc(new Vec2d((x << 4) + 15 - player.getMidX(), (y << 4) + 0 - player.getMidY()), lVec, rVec);
+						corners2[2] = isSightline(playerMid, new Vec2i((x << 4) + 0, (y << 4) + 15), true) && isVecInArc(new Vec2d((x << 4) + 0 - player.getMidX(), (y << 4) + 15 - player.getMidY()), lVec, rVec);
+						corners2[3] = isSightline(playerMid, new Vec2i((x << 4) + 15, (y << 4) + 15), true) && isVecInArc(new Vec2d((x << 4) + 15 - player.getMidX(), (y << 4) + 15 - player.getMidY()), lVec, rVec);
+
+						Sprite spr = getSightlineSprite(x, y, corners2, getTile(overlaysMap[x + y * width]).getSprite(), lVec, rVec);
+						borderSpr = getSightlineSprite(x, y, corners2, borderSpr, lVec, rVec);
+						getTile(x, y).renderOverlay(x, y, screen, level, spr, (spr == Sprite.nullSprite ? spr : borderSpr));
+					}
 				} else screen.renderSprite(x << 4, y << 4, borderSpr, true);
 			}
 		}
@@ -545,6 +717,119 @@ public abstract class Level implements Serializable {
 			screen.renderTranslucentSprite(0, 0, new Sprite(400, 250, 0xff000000), false, (double) transitionDelay / (double) transitionLength);
 			transitionDelay--;
 		}
+	}
+
+	private boolean isVecInArc(Vec2d vec, Vec2d leftVec, Vec2d rightVec) {
+		return vec.invert().dot(rightVec.normal()) > 0 && vec.dot(leftVec.normal()) > 0;
+	}
+
+	private Sprite getSightlineSprite(int x, int y, boolean[] corners, Sprite sprite, Vec2d leftBorder, Vec2d rightBorder) {
+		String cornersChar = String.valueOf(corners[0]).substring(0, 1) + String.valueOf(corners[1]).substring(0, 1) + String.valueOf(corners[2]).substring(0, 1) + String.valueOf(corners[3]).substring(0, 1);
+		Sprite result = sprite/* Sprite.alterTranslucency(sprite, 0.7) */;
+//		result = Sprite.nullSprite;
+		if (cornersChar.equals("ffff")) return sprite;
+		if (cornersChar.equals("tttt")) return Sprite.alterTranslucency(result, 0.3);
+			
+		if (cornersChar.equals("tftf")) {
+			int point = calculateIntersection(new Vec2i(1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(point, 0), new Vec2i(point2, 15), new Vec2i(0, 8), result, 0xffff00ff);
+		}
+		if (cornersChar.equals("ftft")) {
+			int point = calculateIntersection(new Vec2i(-1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(-1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(15 + point, 0), new Vec2i(15 + point2, 15), new Vec2i(15, 8), result, 0xffff00ff);
+		}
+		if (cornersChar.equals("ttff")) {
+			int point = calculateIntersection(new Vec2i(0, 1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, 1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 0), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(0, point), new Vec2i(15, point2), new Vec2i(8, 0), result, 0xffff00ff);
+		}
+		if (cornersChar.equals("fftt")) {
+			int point = calculateIntersection(new Vec2i(0, -1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 15), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, -1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(0, 15 + point), new Vec2i(15, 15 + point2), new Vec2i(8, 15), result, 0xffff00ff);
+		}
+
+		if (cornersChar.equals("tfff")) {
+			int point = calculateIntersection(new Vec2i(1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, 1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 0), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(point, 0), new Vec2i(0, point2), -1, result, 0xffff00ff);
+		}
+		if (cornersChar.equals("ftff")) {
+			int point = calculateIntersection(new Vec2i(-1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, 1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 0), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(15 + point, 0), new Vec2i(15, point2), 1, result, 0xffff00ff);
+		}
+		if (cornersChar.equals("fftf")) {
+			int point = calculateIntersection(new Vec2i(1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 15), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, -1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(point, 15), new Vec2i(0, 15 + point2), 1, result, 0xffff00ff);
+		}
+		if (cornersChar.equals("ffft")) {
+			int point = calculateIntersection(new Vec2i(-1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 15), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, -1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(15 + point, 15), new Vec2i(15, 15 + point2), -1, result, 0xffff00ff);
+		}
+
+		if (cornersChar.equals("tttf")) {
+			int point = calculateIntersection(new Vec2i(1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 15), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, 1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 0), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(point, 15), new Vec2i(15, point2), new Vec2i(0, 0), result, 0xffff00ff);
+		}
+		if (cornersChar.equals("ttft")) {
+			int point = calculateIntersection(new Vec2i(-1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 15), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, 1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 0), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(15 + point, 15), new Vec2i(0, point2), new Vec2i(15, 0), result, 0xffff00ff);
+		}
+		if (cornersChar.equals("tftt")) {
+			int point = calculateIntersection(new Vec2i(1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, -1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(point, 0), new Vec2i(15, 15 + point2), new Vec2i(0, 15), result, 0xffff00ff);
+		}
+		if (cornersChar.equals("fttt")) {
+			int point = calculateIntersection(new Vec2i(-1, 0), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(15, 0), leftBorder, rightBorder);
+			int point2 = calculateIntersection(new Vec2i(0, -1), new Vec2i(player.getMidX(), player.getMidY() + 4), new Vec2i(x, y), new Vec2i(0, 15), leftBorder, rightBorder);
+			result = calculateLineSprite(new Vec2i(15 + point, 0), new Vec2i(0, 15 + point2), new Vec2i(15, 15), result, 0xffff00ff);
+		}
+		return result;
+	}
+
+	private int calculateIntersection(Vec2i direction, Vec2i origin, Vec2i tile, Vec2i intraTile, Vec2d leftBorder, Vec2d rightBorder) {
+		Vec2i oneVec = new Vec2i(1, 1);
+		Vec2i check = new Vec2i(0, 0);
+		int polarity = direction.dot(oneVec);
+		int point = 0;
+		int lastSight = point;
+		check.set((tile.x << 4) + intraTile.x + direction.x * direction.x * point, (tile.y << 4) + intraTile.y + direction.y * direction.y * point);
+		boolean pointFound = false;
+		while (!pointFound) {
+			point += polarity;
+			check.set((tile.x << 4) + intraTile.x + direction.x * direction.x * point, (tile.y << 4) + intraTile.y + direction.y * direction.y * point);
+			pointFound = !isSightline(origin, check, true) || !isVecInArc(new Vec2d(check.subtract(new Vec2i(player.getMidX(), player.getMidY()))), leftBorder, rightBorder);
+			if (point == 0 || point == 15) pointFound = true;
+			if (!pointFound) lastSight = point;
+		}
+		return lastSight;
+	}
+	
+	private Sprite calculateLineSprite(Vec2i pointA, Vec2i pointB, int polarity, Sprite sprite, int colour) {
+		int[] newPixels = new int[sprite.getWidth() * sprite.getHeight()];
+		Sprite altSprite = Sprite.alterTranslucency(sprite, 0.3);
+		int check;
+		for (int y = 0; y < sprite.getHeight(); y++) {
+			for (int x = 0; x < sprite.getWidth(); x++) {
+				check = (int) Math.signum((x - pointA.x) * (pointB.y - pointA.y) - (y - pointA.y) * (pointB.x - pointA.x));
+				if (check == polarity) newPixels[y * sprite.getWidth() + x] = altSprite.pixels[y * sprite.getWidth() + x];
+				else newPixels[y * sprite.getWidth() + x] = sprite.pixels[y * sprite.getWidth() + x];
+			}
+		}
+		return new Sprite(newPixels, sprite.getWidth(), sprite.getHeight());
+	}
+	
+	private Sprite calculateLineSprite(Vec2i pointA, Vec2i pointB, Vec2i polarityCheck, Sprite sprite, int colour) {
+		int polarity = (int) Math.signum((polarityCheck.x - pointA.x) * (pointB.y - pointA.y) - (polarityCheck.y - pointA.y) * (pointB.x - pointA.x));
+		return calculateLineSprite(pointA, pointB, polarity, sprite, colour);
 	}
 
 	public void add(Entity e) {
@@ -616,32 +901,27 @@ public abstract class Level implements Serializable {
 	}
 
 	public boolean isPlayerInRad(Entity e, int radius) {
-		return isPlayerInRad(e.getIntX(), e.getIntY(), radius);
+		return isPlayerInRad(e.getMidX(), e.getMidY(), radius);
 	}
 
 	public boolean isPlayerInRad(double x, double y, int radius) {
-		double ex = x;
-		double ey = y;
 		double px = getPlayer().getMidX();
 		double py = getPlayer().getMidY();
-		double dx = Math.abs(px - ex);
-		double dy = Math.abs(py - ey);
+		double dx = Math.abs(px - x);
+		double dy = Math.abs(py - y);
 		double d = Math.sqrt((dx * dx) + (dy * dy));
-		if (d <= radius) return true;
-		else return false;
+		return (d <= radius);
 	}
 
 	public List<Entity> getEntitiesInRad(double x, double y, int radius) {
 		List<Entity> result = new ArrayList<Entity>();
-		double ex = x;
-		double ey = y;
 		int xx, yy;
 		double dx, dy;
 		for (Entity e : entities) {
 			xx = e.getIntX();
 			yy = e.getIntY();
-			dx = Math.abs(ex - xx);
-			dy = Math.abs(ey - yy);
+			dx = Math.abs(x - xx);
+			dy = Math.abs(y - yy);
 			double d = Math.sqrt((dx * dx) + (dy * dy));
 			if (d <= radius) result.add(e);
 		}

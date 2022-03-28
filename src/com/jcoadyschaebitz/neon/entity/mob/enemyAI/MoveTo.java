@@ -33,8 +33,8 @@ public class MoveTo extends BehaviourNode {
 			if (blackboard.getMoveToPos() == null) currentState = NodeState.FAILURE;
 			else {
 				currentState = NodeState.RUNNING;
-				targetX = blackboard.getMoveToPos().X();
-				targetY = blackboard.getMoveToPos().Y();
+				targetX = blackboard.getMoveToPos().x;
+				targetY = blackboard.getMoveToPos().y;
 				path = findPath(new Vec2i(mob.getMidX() >> 4, (mob.getMidY()) >> 4), new Vec2i(targetX >> 4, targetY >> 4));
 				if (path.size() == 0) currentState = NodeState.FAILURE;
 			}
@@ -45,15 +45,15 @@ public class MoveTo extends BehaviourNode {
 				nodeReached = false;
 				if (path.size() != 0) {
 					currentNodeDest = path.pop();
-					if ((currentNodeDest.Y() << 4) - (mob.getIntY()) == 0 && (currentNodeDest.X() << 4) - mob.getIntX() == 0) nodeReached = true;
-					direction = Math.atan2((currentNodeDest.Y() << 4) - (mob.getIntY()), (currentNodeDest.X() << 4) - mob.getIntX());
+					if ((currentNodeDest.y << 4) - (mob.getIntY()) == 0 && (currentNodeDest.x << 4) - mob.getIntX() == 0) nodeReached = true;
+					direction = Math.atan2((currentNodeDest.y << 4) - (mob.getIntY()), (currentNodeDest.x << 4) - mob.getIntX());
 					xa = Math.cos(direction) * mob.speed;
 					ya = Math.sin(direction) * mob.speed;
 					predTravelTime = (int) (timer + 15);
 				} else currentState = NodeState.SUCCESS;
 			}
 			mob.move(xa, ya, true);
-			if ((mob.getIntX() == currentNodeDest.X() << 4 && mob.getIntY() == currentNodeDest.Y() << 4) || predTravelTime < timer) {
+			if ((mob.getIntX() == currentNodeDest.x << 4 && mob.getIntY() == currentNodeDest.y << 4) || predTravelTime < timer) {
 //				blackboard.getLevel().add(new DebugParticle(currentNodeDest.X() << 4, currentNodeDest.Y() << 4, 200, 4, 4, Sprite.particleYellow));
 				nodeReached = true;
 			}
@@ -88,7 +88,7 @@ public class MoveTo extends BehaviourNode {
 	public Stack<Vec2i> findPath(Vec2i start, Vec2i goal) {
 		int gridW = 31;
 		int gridH = 31;
-		boolean[] subMap = blackboard.getLevel().getSubAICollisionMap(start.X() - 16, start.Y() - 16, gridW, gridH);
+		boolean[] subMap = blackboard.getLevel().getSubAICollisionMap(start.x - 16, start.y - 16, gridW, gridH);
 		GridGraph2b graph = new GridGraph2b(subMap, gridW, gridH);
 		Stack<Vec2i> path = new Stack<Vec2i>();
 

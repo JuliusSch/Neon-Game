@@ -2,6 +2,7 @@ package com.jcoadyschaebitz.neon;
 
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
+import com.jcoadyschaebitz.neon.sound.SoundClip;
 
 public class PlayActiveState implements GameState {
 	
@@ -17,9 +18,6 @@ public class PlayActiveState implements GameState {
 	public void update() {
 		game.getKeyboard().update();
 		game.getLevel().update();
-		if (ui.currentMenu != game.gamePlayUI) {
-			ui.setMenu(game.gamePlayUI);
-		}
 	}
 
 	@Override
@@ -30,5 +28,20 @@ public class PlayActiveState implements GameState {
 	@Override
 	public boolean canScrollWeapons() {
 		return true;
+	}
+
+	@Override
+	public void enterState() {
+		ui.setMenu(game.gamePlayUI);
+		for (SoundClip clip : SoundClip.allClips) {
+			clip.resume();
+		}
+	}
+
+	@Override
+	public void exitState() {
+		for (SoundClip clip : SoundClip.allClips) {
+			clip.pause();
+		}
 	}
 }

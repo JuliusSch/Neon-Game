@@ -4,10 +4,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import com.jcoadyschaebitz.neon.Game;
-import com.jcoadyschaebitz.neon.GameState;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 import com.jcoadyschaebitz.neon.input.Mouse;
 
 public abstract class UIButton implements UIComp, MouseListener {
@@ -17,27 +17,30 @@ public abstract class UIButton implements UIComp, MouseListener {
 	protected String label;
 	protected Font font;
 	Sprite defaultSprite, highlightedSprite, ClickedSprite;
+	protected UIMenu menu;
+	protected boolean buttonActive;
 
-	public UIButton(int x, int y, int width, int height, String label, int fontColour) {
+	public UIButton(int x, int y, int width, int height, String label, int colour) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.label = label;
-		font = new Font(Font.SIZE_8x8, fontColour, 1);
-		defaultSprite = Sprite.buttonOutline;
-		highlightedSprite = Sprite.buttonHighlighted;
+		font = new Font(Font.SIZE_8x8, colour, 1);
+		defaultSprite = Sprite.createButtonSprite(Spritesheet.buttonCorners, width, height, colour, false);
+		highlightedSprite = Sprite.createButtonSprite(Spritesheet.buttonCornersHighlight, width, height, colour, true);
 	}
 
 	public abstract void doFunction();
 
 	public void update() {
+		if (!buttonActive) return;
 		double s = Game.getWindowScale();
 		if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
-				buttonHighlighted = true;
-			} else buttonHighlighted = false;
-		} else buttonHighlighted = false;
+				if (!buttonHighlighted) buttonHighlighted = true;
+			} else if (buttonHighlighted) buttonHighlighted = false;
+		} else if (buttonHighlighted) buttonHighlighted = false;
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -56,9 +59,18 @@ public abstract class UIButton implements UIComp, MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
+	public void activate() {
+		buttonActive = true;
+	}
+
+	@Override
+	public void deactivate() {
+		buttonActive = false;
+	}
+
 	public void mousePressed(MouseEvent e) {
-		GameState state = UIComp.ui.getGame().getState();
-		if (!state.equals(UIComp.ui.getGame().pauseState) && !state.equals(UIComp.ui.getGame().pausedSceneState)) return;
+		if (!buttonActive) return;
 		double s = Game.getWindowScale();
 		if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
@@ -68,14 +80,14 @@ public abstract class UIButton implements UIComp, MouseListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		if (mousePressedInArea) {
-			double s = Game.getWindowScale();
-			if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
-				if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
-					doFunction();
-				}
+		if (!mousePressedInArea) return;
+		double s = Game.getWindowScale();
+		if (Mouse.getX() > (x * s) + Game.getXBarsOffset() && Mouse.getX() < (x + width) * s + Game.getXBarsOffset()) {
+			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
+				doFunction();
 			}
 		}
+
 		mousePressedInArea = false;
 	}
 

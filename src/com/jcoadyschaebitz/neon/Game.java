@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -19,12 +20,13 @@ import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
+import com.jcoadyschaebitz.neon.graphics.UI.LoadGameSubMenu;
+import com.jcoadyschaebitz.neon.graphics.UI.SaveSlot;
 import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
 import com.jcoadyschaebitz.neon.graphics.UI.UIMenu;
 import com.jcoadyschaebitz.neon.input.Keyboard;
 import com.jcoadyschaebitz.neon.input.Mouse;
 import com.jcoadyschaebitz.neon.level.Level;
-import com.jcoadyschaebitz.neon.sound.SoundClip;
 
 @SuppressWarnings("serial")
 public class Game extends Canvas implements Runnable {
@@ -32,9 +34,10 @@ public class Game extends Canvas implements Runnable {
 	private static int width = 410;
 	private static int height = width * 4 / 5;
 	private static int[] screenDimensions = { (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()), (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight()) };
-	private static double scale = screenDimensions[1] / height;
+	private static double scale = screenDimensions[1] / height;		// 	NEED TO DECIDE HOW THIS SHOULD WORK FOR DIFFERENT SIZED SCREENS
+//	private static double screenScale = screenDimensions[1] / (height * scale);
 	private static int xBlackBarsOffset = (int) (screenDimensions[0] - (width * scale)) / 2;
-	private static String title = "neon";
+	private static String title = "neon";															//	SCREEN DIMENSIONS: 640 x 360 scaled by 3
 
 	private Thread gameThread;
 	private JFrame frame;
@@ -48,10 +51,8 @@ public class Game extends Canvas implements Runnable {
 	public MainMenuState mainMenuState;
 	public CutSceneState cutSceneState;
 	public PauseCutSceneState pausedSceneState;
-	public UIMenu pauseSkillsMenu;
-	public UIMenu pauseSettingsMenu;
-	public UIMenu gamePlayUI;
-	public UIMenu cutSceneUI;
+	public UIMenu pauseSkillsMenu, pauseSettingsMenu, gamePlayUI, cutSceneUI, mainMenu, loadMenu;
+	public LoadGameSubMenu loadSaveSelection;
 	Font font;
 
 	private static UIManager uiManager;
@@ -60,6 +61,7 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	private int time;
+	private double prevCameraX, prevCameraY;
 
 	public Game() {
 		Dimension size = new Dimension((int) (width * scale), (int) (height * scale));
@@ -72,21 +74,31 @@ public class Game extends Canvas implements Runnable {
 		mainMenuState = new MainMenuState(this);
 		cutSceneState = new CutSceneState(this);
 		pausedSceneState = new PauseCutSceneState(this);
-		pauseSkillsMenu = new UIMenu();
-		pauseSettingsMenu = new UIMenu();
-		gamePlayUI = new UIMenu();
-		cutSceneUI = new UIMenu();
-		gameState = playState; // eventually change to main menu state
-		uiManager.setMenu(gamePlayUI);
+		pauseSkillsMenu = new UIMenu(null);
+		pauseSettingsMenu = new UIMenu(null);
+		gamePlayUI = new UIMenu(null);
+		cutSceneUI = new UIMenu(null);
+		mainMenu = new UIMenu(null);
+		loadMenu = new UIMenu(null);
+		
+		gameState = mainMenuState;
 		frame = new JFrame();
 		key = new Keyboard(this);
 		Level.initiateLevelTransitions();
-//		level = Level.level_1_bar;
+		level = Level.level_0_menu;
 		level = Level.level_4_pool;
+		
 		player = new Player(this, level.getPlayerSpawn(), key);
+		prevCameraX = player.getX() - screen.width / 2 + 8;		// See render method for why these are initial calculations.
+		prevCameraY = player.getY() - screen.height / 2 + 14;	//
 		Level.addPlayersToLevels(player);
 		level.initPlayer(player);
 
+		loadSaveSelection = new LoadGameSubMenu(122, 122, player, level);
+		List<SaveSlot> loadSaveSlots = loadSaveSelection.getSlots();
+		for (SaveSlot slot : loadSaveSlots) player.addButton(slot);
+		loadMenu.addComp(loadSaveSelection);
+		
 		addKeyListener(key);
 
 		Mouse mouse = new Mouse(this);
@@ -141,6 +153,12 @@ public class Game extends Canvas implements Runnable {
 
 	public static UIManager getUIManager() {
 		return uiManager;
+	}
+	
+	public void loadSelectedSave() {
+//		SavedGame save = uiManager.loadGameMenu.getSelectedSave();
+//		level = Level.getLevelFromName(save.level);
+//		Game.getUIManager().getGame().switchToLevel(level);
 	}
 
 	public Level getLevel() {
@@ -203,45 +221,32 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void togglePause() {
-		if (gameState == playState) {
-			gameState = pauseState;
-//			pauseState.recordMouse(Mouse.getX(), Mouse.getY());
-			for (SoundClip clip : SoundClip.clips) {
-				clip.pause();
-			}
-		} else if (gameState == pauseState) {
-			gameState = playState;
-//			Mouse.move(pauseState.lastMouseX, pauseState.lastMouseY);
-			for (SoundClip clip : SoundClip.clips) {
-				clip.resume();
-			}
-		} else if (gameState == cutSceneState) {
-			gameState = pausedSceneState;
-			for (SoundClip clip : SoundClip.clips) {
-				clip.pause();
-			}
-		} else if (gameState == pausedSceneState) {
-			gameState = cutSceneState;
-			for (SoundClip clip : SoundClip.clips) {
-				clip.resume();
-			}
-		}
+		if (gameState == playState) switchToGameState(pauseState);
+		else if (gameState == pauseState) switchToGameState(playState);	
+		else if (gameState == cutSceneState) switchToGameState(pausedSceneState);	
+		else if (gameState == pausedSceneState) switchToGameState(cutSceneState);
+	}
+	
+	public void switchToGameState(GameState newState) {
+		gameState.exitState();
+		gameState = newState;
+		gameState.enterState();
 	}
 
 	public boolean toggleCutScene(CutScene scene) {
 		if (gameState == playState) {
-			gameState = cutSceneState;
+			switchToGameState(cutSceneState);
 			cutSceneState.setScene(scene);
 			pausedSceneState.setScene(scene);
 			level.setInSceneStatus(true);
 			return true;
 		}
 		if (gameState == cutSceneState) {
-			gameState = playState;
+			switchToGameState(playState);
 			level.setInSceneStatus(false);
 			return true;
-		} else
-			return false;
+		}
+		return false;
 	}
 
 	public void render() {
@@ -254,7 +259,11 @@ public class Game extends Canvas implements Runnable {
 		int mouseXRelToMid = (Mouse.getX() - Game.getWindowWidth() / 2) - Game.getXBarsOffset();
 		int mouseYRelToMid = Mouse.getY() - Game.getWindowHeight() / 2;
 		double xs = player.getX() + mouseXRelToMid / 16 - screen.width / 2 + 8;
-		double ys = player.getY() + mouseYRelToMid / 16 - screen.height / 2 + 14;
+		double ys = player.getY() + mouseYRelToMid / 12 - screen.height / 2 + 14;
+		xs = (prevCameraX + (xs - prevCameraX) / 30);
+		ys = (prevCameraY + (ys - prevCameraY) / 30);
+		prevCameraX = xs;
+		prevCameraY = ys;
 		gameState.render(screen, xs, ys);
 		uiManager.render(screen);
 
@@ -263,9 +272,16 @@ public class Game extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(image, xBlackBarsOffset, 0, getWindowWidth(), getWindowHeight(), null);
+		g.drawImage(image, xBlackBarsOffset, 0, getWindowWidth(), getWindowHeight(), null); // 	SCALE IMAGE TO SCREEN BY SCALING WINDOWWITDTH() AND WINDOWHEIGHT()
 		g.dispose();
 		bs.show();
+	}
+	
+	public void resetCameraOnPlayer() {
+		int mouseXRelToMid = (Mouse.getX() - Game.getWindowWidth() / 2) - Game.getXBarsOffset();
+		int mouseYRelToMid = Mouse.getY() - Game.getWindowHeight() / 2;
+		prevCameraX = player.getX() + mouseXRelToMid / 16 - screen.width / 2 + 8;
+		prevCameraY = player.getY() + mouseYRelToMid / 12 - screen.height / 2 + 14;
 	}
 
 	public static void main(String[] args) {

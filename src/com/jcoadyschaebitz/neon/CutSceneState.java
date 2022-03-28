@@ -3,6 +3,7 @@ package com.jcoadyschaebitz.neon;
 import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
+import com.jcoadyschaebitz.neon.sound.SoundClip;
 
 public class CutSceneState implements GameState {
 	
@@ -30,9 +31,7 @@ public class CutSceneState implements GameState {
 		currentScene.setScrollValues(xScroll, yScroll);
 		game.getKeyboard().update();
 		game.getLevel().update();
-		if (ui.currentMenu != game.cutSceneUI) {
-			ui.setMenu(game.cutSceneUI);
-		}
+		ui.update();
 	}
 
 	@Override
@@ -40,6 +39,21 @@ public class CutSceneState implements GameState {
 		game.getLevel().render(currentScene.getX(), currentScene.getY(), screen, game.getLevel());
 		this.xScroll = xScroll;
 		this.yScroll = yScroll;
+	}
+
+	@Override
+	public void enterState() {
+		for (SoundClip clip : SoundClip.allClips) {
+			clip.resume();
+		}
+		ui.setMenu(game.cutSceneUI);
+	}
+
+	@Override
+	public void exitState() {
+		for (SoundClip clip : SoundClip.allClips) {
+			clip.pause();
+		}
 	}
 
 }

@@ -48,6 +48,10 @@ public class Spritesheet {
 	//UI:
 	public static Spritesheet pauseMenuBackground = new Spritesheet("/textures/UI/menubackground.png", 400, 250);
 	public static Spritesheet menuOutline = new Spritesheet("/textures/UI/menuoutline.png", 400, 225);
+	public static Spritesheet loadMenuOutline = new Spritesheet("/textures/UI/loadMenuOutline.png", 244, 176);
+	public static Spritesheet mainMenuBackground = new Spritesheet("/textures/UI/main_menu.png", 640, 360);
+	public static Spritesheet buttonCorners = new Spritesheet(x16, 20, 22, 2, 2, 8);
+	public static Spritesheet buttonCornersHighlight = new Spritesheet(x16, 24, 22, 2, 2, 8);
 
 	//	Entity animations:
 	public static Spritesheet player_right_walking = new Spritesheet(x24, 0, 4, 8, 1, 24);

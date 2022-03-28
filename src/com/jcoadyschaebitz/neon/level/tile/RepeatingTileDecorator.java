@@ -14,8 +14,8 @@ public class RepeatingTileDecorator extends Tile {
 	public RepeatingTileDecorator(Tile tile, Vec2i repeatAfter, Spritesheet sheet, Renderer[] renderers) {
 		super(sheet.getSprites()[0], tile.getColour(), tile.getZ(), renderers);
 		tile.colour = -1;
-		this.repeatAfterW = repeatAfter.X();
-		this.repeatAfterH = repeatAfter.Y();
+		this.repeatAfterW = repeatAfter.x;
+		this.repeatAfterH = repeatAfter.y;
 		this.sprites = sheet.getSprites();
 //		blocksSightline = tile.blocksSightline;
 		blocksProjectiles = tile.blocksProjectiles;

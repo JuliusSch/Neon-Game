@@ -149,7 +149,7 @@ public class Screen {
 		return finalColour;
 	}
 
-	public void setOffset(int xOffset, int yOffset) {
+	public void setOffset(int xOffset, int yOffset) { //see Game.render()
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 	}
@@ -194,11 +194,11 @@ public class Screen {
 	}
 
 	public void drawCircleSegment(boolean filled, Vec2i xy, int rad, double arcStart, double arcEnd, int colour, boolean fixed, double alpha) {
-		if (fixed) xy.set(xy.X() - xOffset, xy.Y() - yOffset);
-		for (int ya = xy.Y() - rad; ya < xy.Y() + rad; ya++) {
-			for (int xa = xy.X() - rad; xa < xy.X() + rad; xa++) {
+		if (fixed) xy.set(xy.x - xOffset, xy.y - yOffset);
+		for (int ya = xy.y - rad; ya < xy.y + rad; ya++) {
+			for (int xa = xy.x - rad; xa < xy.x + rad; xa++) {
 				if (xa < 0 || xa >= this.width || ya < 0 || ya >= this.height) continue;
-				double pointAngle = Math.atan2(ya - xy.Y(), xa - xy.X()) + Math.PI;
+				double pointAngle = Math.atan2(ya - xy.y, xa - xy.x) + Math.PI;
 				double dist = Vec2i.getDistance(xy, new Vec2i(xa, ya));
 				if (arcStart < pointAngle && pointAngle < arcEnd && dist < rad) {
 					screenPixels[xa + ya * this.width] = colour;
@@ -224,6 +224,14 @@ public class Screen {
 			}
 		}
 	}
+	
+	public void renderTranslucentPixel(int x, int y, int colour, double alpha) {
+		x -= xOffset;
+		y -= yOffset;
+		if (x < 0 || x >= width || y < 0 || y >= height) return;
+		int newColour = Util.calculateTranslucencyValues(screenPixels[x + y * width], colour, alpha);
+		screenPixels[x + y * width] = newColour;
+	}
 
 	public void renderPixel(int x, int y, int colour) {
 		x -= xOffset;
@@ -231,27 +239,34 @@ public class Screen {
 		if (x < 0 || x >= width || y < 0 || y >= height) return;
 		screenPixels[x + y * width] = colour;
 	}
+	
+	public void renderTriangle(Vec2i a, Vec2i b, Vec2i c, int colour, double alpha) {
+		
+	}
 
-	public void renderLine(int x1, int y1, int x2, int y2, int colour) {
+	public void renderLine(int x1, int y1, int x2, int y2, int colour, double alpha) {
 		double dx = x2 - x1;
 		double dy = y2 - y1;
 		if (dx > 0) {
 			double dxy = dy / dx;
 			if (dxy < 1 && dxy > -1) {
 				for (double i = 0; i < dx; i++) {
-					renderPixel((int) (x1 + i), (int) (dxy * i + y1), colour);
+					if (alpha == 1) renderPixel((int) (x1 + i), (int) (dxy * i + y1), colour);
+					else renderTranslucentPixel((int) (x1 + i), (int) (dxy * i + y1), colour, alpha);
 				}
 			} else if (dy > 0) {
 				double dyx = dx / dy;
 				for (double i = 0; i < dy; i++) {
-					renderPixel((int) (dyx * i + x1), (int) (y1 + i), colour);
+					if (alpha == 1) renderPixel((int) (dyx * i + x1), (int) (y1 + i), colour);
+					else renderTranslucentPixel((int) (dyx * i + x1), (int) (y1 + i), colour, alpha);
 				}
 			} else {
 				dx = x1 - x2;
 				dy = y1 - y2;
 				double dyx = dx / dy;
 				for (double i = 0; i < dy; i++) {
-					renderPixel((int) (dyx * i + x2), (int) (y2 + i), colour);
+					if (alpha == 1) renderPixel((int) (dyx * i + x2), (int) (y2 + i), colour);
+					else renderTranslucentPixel((int) (dyx * i + x2), (int) (y2 + i), colour, alpha);
 				}
 			}
 		} else {
@@ -260,22 +275,24 @@ public class Screen {
 			double dxy = dy / dx;
 			if (dxy < 1 && dxy > -1) {
 				for (double i = 0; i < dx; i++) {
-					renderPixel((int) (x2 + i), (int) (dxy * i + y2), colour);
+					if (alpha == 1) renderPixel((int) (x2 + i), (int) (dxy * i + y2), colour);
+					else renderTranslucentPixel((int) (x2 + i), (int) (dxy * i + y2), colour, alpha);
 				}
 			} else if (dy > 0) {
 				double dyx = dx / dy;
 				for (double i = 0; i < dy; i++) {
-					renderPixel((int) (dyx * i + x2), (int) (y2 + i), colour);
+					if (alpha == 1) renderPixel((int) (dyx * i + x2), (int) (y2 + i), colour);
+					else renderTranslucentPixel((int) (dyx * i + x2), (int) (y2 + i), colour, alpha);
 				}
 			} else {
 				dx = x2 - x1;
 				dy = y2 - y1;
 				double dyx = dx / dy;
 				for (double i = 0; i < dy; i++) {
-					renderPixel((int) (dyx * i + x1), (int) (y1 + i), colour);
+					if (alpha == 1) renderPixel((int) (dyx * i + x1), (int) (y1 + i), colour);
+					else renderTranslucentPixel((int) (dyx * i + x1), (int) (y1 + i), colour, alpha);
 				}
 			}
-
 		}
 	}
 

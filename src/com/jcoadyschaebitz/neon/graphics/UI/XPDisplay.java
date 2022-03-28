@@ -16,7 +16,6 @@ public class XPDisplay implements UIComp {
 	}
 
 	public void update() {
-		
 	}
 	
 	public void setValues(int progress, int level) {
@@ -29,6 +28,14 @@ public class XPDisplay implements UIComp {
 		screen.drawRect(true, x, y, xPlus, 9, 0xffADFFFF, false);
 		if (playerLevel > 9) font.render(x + 5, y + 1, Integer.toString(playerLevel), screen, false);
 		else font.render(x + 6, y + 1, Integer.toString(playerLevel), screen, false);
+	}
+
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
 	}
 	
 }

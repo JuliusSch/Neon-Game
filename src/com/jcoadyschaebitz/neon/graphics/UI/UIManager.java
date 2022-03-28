@@ -17,6 +17,7 @@ public class UIManager {
 	public int selectedItemSlot = 0;
 	private Game game;
 	private Player player;
+	public LoadGameSubMenu loadGameMenu;
 
 	public UIManager(Game game) {
 		this.game = game;
@@ -29,6 +30,10 @@ public class UIManager {
 
 	public void addMenu(UIMenu menu) {
 		menus.add(menu);
+	}
+	
+	public void setLoadMenu(LoadGameSubMenu menu) {
+		loadGameMenu = menu;
 	}
 
 	public Game getGame() {
@@ -44,7 +49,9 @@ public class UIManager {
 	}
 
 	public void setMenu(UIMenu menu) {
+		if (currentMenu != null) currentMenu.deactivate();
 		currentMenu = menu;
+		currentMenu.activate();
 	}
 
 	public boolean addWeapon(PlayerWeapon weapon) {

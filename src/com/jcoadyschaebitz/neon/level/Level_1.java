@@ -31,11 +31,10 @@ import com.jcoadyschaebitz.neon.sound.SoundClip;
 import com.jcoadyschaebitz.neon.util.Rect;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
-@SuppressWarnings("serial")
 public class Level_1 extends Level {
 
-	public Level_1(String path, long seed) {
-		super(path, "/levels/overlays/lvl_4.png", seed);
+	public Level_1(String path, String levelName, long seed) {
+		super(path, "/levels/overlays/lvl_4.png", levelName, seed);
 		playerSpawn = new TileCoordinate(27, 100);
 //		this.playerSpawn = new TileCoordinate(91, 113);			//spawn halfway through
 //		this.playerSpawn = new TileCoordinate(94, 15);			//spawn at end		
@@ -56,6 +55,7 @@ public class Level_1 extends Level {
 		addItems();
 		add(new RainSpawner(0, 0, 0, this));
 		SoundClip.rain.loop();
+		SoundClip.rain.pause();
 	}
 
 	protected void initTransition() {

@@ -2,7 +2,7 @@ package com.jcoadyschaebitz.neon.util;
 
 public class Vec2d {
 	
-	private double x, y;
+	public double x, y;
 
 	public Vec2d(double x, double  y) {
 		set(x, y);	
@@ -15,28 +15,14 @@ public class Vec2d {
 	public Vec2d(Vec2d v) {
 		set(v.x, v.y);
 	}
+	
+	public Vec2d(Vec2i v) {
+		set(v.x, v.y);
+	}
 
 	public void set(double x, double y) {
 		this.x = x;
 		this.y = y;
-	}
-
-	public double getX() {
-		return x;
-	}
-
-	public Vec2d setX(double x) {
-		this.x = x;
-		return this;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public Vec2d setY(double y) {
-		this.y = y;
-		return this;
 	}
 	
 	public Vec2d add(Vec2d v) {
@@ -45,23 +31,52 @@ public class Vec2d {
 		return this;
 	}
 	
+	public Vec2d scale(double factor) {
+		return new Vec2d(x * factor, y * factor);
+	}
+	
 	public Vec2d sub(Vec2d v) {
 		this.x -= v.x;
 		this.y -= v.y;
 		return this;
 	}
 	
+	public Vec2d invert() {
+		return new Vec2d(-x, -y);
+	}
+	
+	public Vec2d normal() {
+		return new Vec2d(y, -x);
+	}
+	
+	public Vec2d normalise() {
+		double magnitude = Math.sqrt(x * x + y * y);
+		return new Vec2d(x / magnitude, y / magnitude);
+	}
+	
+	public double dot(Vec2d v2) {
+		return (x * v2.x) + (y * v2.y);
+	}
+	
 	public boolean equals(Object o) {
 		if (!(o instanceof Vec2d)) return false;
 		Vec2d v = (Vec2d) o;
-		if (v.getX() == getX() && v.getY() == getY()) return true;
+		if (v.x == x && v.y == y) return true;
 		else return false;
 	}
 	
 	public static double getDistance(Vec2d a, Vec2d b) {
-		double dx = a.getX() - b.getX();
-		double dy = a.getY() - b.getY();
+		double dx = a.x - b.x;
+		double dy = a.y - b.y;
 		double distance = Math.sqrt((dx * dx) + (dy * dy));
 		return distance;
+	}
+	
+	public void print() {
+		System.out.print("(" + x + "," + y + ")");
+	}
+
+	public void println() {
+		System.out.println("(" + x + "," + y + ")");
 	}
 }

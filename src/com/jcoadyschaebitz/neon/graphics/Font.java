@@ -9,7 +9,7 @@ public class Font {
 	public static final int SIZE_5x5 = 3;
 	public static final int SIZE_12x12 = 4;
 	public int fontSize, fontColour;
-	public double alpha;
+	private double alpha;
 	
 	private Sprite[] characters;
 	private static String charIndex = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-.,\"'()?!%£$#:/";
@@ -68,7 +68,7 @@ public class Font {
 		this.alpha = alpha;
 	}
 	
-	public void render(int x, int y, int spacing, String text, Screen screen, boolean fixed) {
+	public void render(int x, int y, int spacing, String text, Screen screen, boolean fixed, double alpha) {
 		int xOffset = 0;
 		int yOffset = 0;
 		int lineOffset = 0;
@@ -90,8 +90,16 @@ public class Font {
 		}
 	}
 	
+	public void render(int x, int y, String text, Screen screen, boolean fixed, double alpha) {
+		render(x, y, 0, text, screen, fixed, alpha);
+	}
+	
+	public void render(int x, int y, int spacing, String text, Screen screen, boolean fixed) {
+		render(x, y, spacing, text, screen, fixed, alpha);
+	}
+	
 	public void render(int x, int y, String text, Screen screen, boolean fixed) {
-		render(x, y, 0, text, screen, fixed);
+		render(x, y, text, screen, fixed, alpha);
 	}
 	
 }

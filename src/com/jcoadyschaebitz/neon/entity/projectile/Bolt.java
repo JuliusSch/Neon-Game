@@ -13,13 +13,13 @@ public class Bolt extends Projectile {
 	private boolean impaled = false;
 	private Mob impaleTarget;
 	private int impaleXOffset, impaleYOffset, trailCounter;
-	private double direction;
+//	private double direction;
 
 	public Bolt(Entity source, double x, double y, double angle, double speed) {
 		super(source, x, y, angle);
 		range = 400;
 		this.speed = speed;
-		damage = 16;
+		damage = 12;
 		sprite = Sprite.bolt;
 		glow = Sprite.bolt;
 		sheet = Spritesheet.bolt;
@@ -31,7 +31,7 @@ public class Bolt extends Projectile {
 		nx = Math.cos(angle) * speed;
 		ny = Math.sin(angle) * speed;
 
-		direction = angle;
+//		direction = angle;
 		trailCounter = 30;
 		sprite = Sprite.rotateSprite(Sprite.bolt, angle, sprite.getWidth(), sprite.getHeight());
 	}
@@ -65,7 +65,8 @@ public class Bolt extends Projectile {
 		if (e instanceof CollisionEntity && e.getHealth() <= 0) {
 			nx = 0;
 			ny = 0;
-		}
+		} 
+		damage *= 0.6;
 	}
 	
 	public void impaled(Mob mob) {

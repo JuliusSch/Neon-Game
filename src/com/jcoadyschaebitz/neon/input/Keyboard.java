@@ -14,7 +14,7 @@ public class Keyboard implements KeyListener {
 	}
 
 	private boolean[] keys = new boolean[256];
-	public boolean up, down, left, right, F, esc;
+	public boolean up, down, left, right, F, esc, E;
 	public boolean[] numbers = new boolean[10];
 	public String[] numbersString = {"zero", "one", "two", "three", "four", "five", "six", "seven", "seven", "eight", "nine"};
 
@@ -25,6 +25,7 @@ public class Keyboard implements KeyListener {
 		right = keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D];
 		F = keys[KeyEvent.VK_F];
 		esc = keys[KeyEvent.VK_R];
+		E = keys[KeyEvent.VK_E];
 		numbers[0] = keys[KeyEvent.VK_0];
 		numbers[1] = keys[KeyEvent.VK_1];
 		numbers[2] = keys[KeyEvent.VK_2];

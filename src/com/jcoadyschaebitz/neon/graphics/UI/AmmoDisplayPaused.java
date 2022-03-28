@@ -54,4 +54,12 @@ public class AmmoDisplayPaused implements UIComp {
 		return strings;
 	}
 
+	@Override
+	public void activate() {
+	}
+
+	@Override
+	public void deactivate() {
+	}
+
 }

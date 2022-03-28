@@ -16,18 +16,20 @@ import com.jcoadyschaebitz.neon.entity.collisionEntities.SlidingDoor;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.Window1x3;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.WireFence;
 import com.jcoadyschaebitz.neon.entity.decorationEntities.OverheadFan;
+import com.jcoadyschaebitz.neon.entity.mob.PoolGangster;
 import com.jcoadyschaebitz.neon.entity.mob.Soldier;
+import com.jcoadyschaebitz.neon.entity.weapon.AssaultRifle;
+import com.jcoadyschaebitz.neon.entity.weapon.Crossbow;
 import com.jcoadyschaebitz.neon.entity.weapon.Pistol;
 import com.jcoadyschaebitz.neon.entity.weapon.Shotgun;
 
-@SuppressWarnings("serial")
 public class Level_4_Pool extends Level {
 
-	public Level_4_Pool(String path, long seed) {
-		super(path, "/levels/overlays/lvl_4.png", seed);
+	public Level_4_Pool(String path, String levelName, long seed) {
+		super(path, "/levels/overlays/lvl_4.png", levelName, seed);
 		playerSpawn = new TileCoordinate(101, 154);
 //		playerSpawn = new TileCoordinate(22, 237);
-		playerSpawn = new TileCoordinate(22, 109);	// new intro area
+//		playerSpawn = new TileCoordinate(22, 109);	// new intro area
 	}
 
 	@Override
@@ -37,15 +39,15 @@ public class Level_4_Pool extends Level {
 
 	@Override
 	protected void addMobs() {
-		add(new Soldier(106, 158));
-		add(new Soldier(108, 148));
-		add(new Soldier(110, 144));
-		add(new Soldier(106, 144));
-		add(new Soldier(108, 148));
+//		add(new Soldier(106, 158));
+//		add(new Soldier(108, 148));
+//		add(new Soldier(110, 144));
+//		add(new Soldier(106, 144));
+//		add(new Soldier(108, 148));
 //		add(new PoolGangster(120, 145));
-		
-		//intro area
-		add(new Soldier(23, 115));
+//		
+//		//intro area
+//		add(new Soldier(23, 115));
 	}
 
 	@Override
@@ -54,6 +56,8 @@ public class Level_4_Pool extends Level {
 		add(new WireFence(23 * 16, 102 * 16, Or_2D.HORIZONTAL));
 		
 		add(new Pistol(101, 156, 240));
+		add(new AssaultRifle(101, 152, 240));
+		add(new Crossbow(102, 152, 36));
 		add(new Shotgun(24, 234, 60));
 		
 		add(new Window1x3(15 * 16, 240 * 16));

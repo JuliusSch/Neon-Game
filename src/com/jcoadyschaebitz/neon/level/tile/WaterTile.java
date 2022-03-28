@@ -35,12 +35,9 @@ public class WaterTile extends Tile {
 	public void render(int x, int y, Screen screen, Level level, long seed) {
 		screen.renderTile(x << 4, y << 4, this);
 		Sprite spr = water;
-		double alpha = 0.9;
-		if (type == WaterTile.TOP_EDGE) {
-			spr = water.mask(calcWaveMask(x, 14, 1.5, level.getPlayer().game.getElapsedTime()), 0xff000000, 0, 0);
-			alpha = 0.6;
-		}
-		screen.renderTranslucentSprite(x << 4, y << 4, spr, true, alpha);
+		if (type == WaterTile.TOP_EDGE) spr = water.mask(calcWaveMask(x, 14, 1.5, level.getPlayer().game.getElapsedTime()), 0xff000000, 0, 0);
+		
+		screen.renderTranslucentSprite(x << 4, y << 4, spr, true);
 	}
 	
 }

@@ -2,7 +2,6 @@ package com.jcoadyschaebitz.neon.level;
 
 import java.util.Random;
 
-@SuppressWarnings("serial")
 public class RandomLevel extends Level {
 	
 	private static final Random RANDOM = new Random();

@@ -164,8 +164,8 @@ public abstract class Mob extends Entity implements DropsItems {
 
 	public void move(double xa, double ya, boolean stairChange) {
 		Vec2d newVs = checkDiagCollision(xa, ya);
-		double xx = newVs.getX();
-		double yy = newVs.getY();
+		double xx = newVs.x;
+		double yy = newVs.y;
 		Tile standingTile = level.getTile((int) (x + spriteWidth / 2) >> 4, (int) (y + spriteHeight) >> 4);
 		if (stairChange && standingTile.isStair() != 0) {
 			xx = StairTile.changeXa(level, xa, ya, (int) (x + 8), (int) (y + 20), standingTile.isStair());

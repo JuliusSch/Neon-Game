@@ -11,7 +11,7 @@ import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 
-public class Projectile extends Entity {
+public abstract class Projectile extends Entity {
 
 	protected double xOrigin, yOrigin;
 	public double angle;
@@ -160,8 +160,7 @@ public class Projectile extends Entity {
 		screen.renderTranslucentSprite((int) x - 8, (int) y - 8, glow, true);
 		screen.renderSprite((int) x, (int) y, sprite, true);
 	}
-
-	@Override
+	
 	public void hitReceived(Projectile projectile) {
 	}
 }

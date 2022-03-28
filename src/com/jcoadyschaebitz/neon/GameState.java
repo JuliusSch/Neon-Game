@@ -10,4 +10,8 @@ public interface GameState {
 	
 	public void render(Screen screen, double xScroll, double yScroll);
 	
+	public void enterState();
+	
+	public void exitState();
+	
 }

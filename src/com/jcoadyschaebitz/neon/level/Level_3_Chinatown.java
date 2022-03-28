@@ -13,11 +13,10 @@ import com.jcoadyschaebitz.neon.entity.weapon.Pistol;
 import com.jcoadyschaebitz.neon.entity.weapon.Shotgun;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
-@SuppressWarnings("serial")
 public class Level_3_Chinatown extends Level {
 
-	public Level_3_Chinatown(String path, long seed) {
-		super(path, "/levels/overlays/lvl_4.png", seed);
+	public Level_3_Chinatown(String path, String levelName, long seed) {
+		super(path, "/levels/overlays/lvl_4.png", levelName, seed);
 		playerSpawn = new TileCoordinate(107, 250);
 	}
 	
