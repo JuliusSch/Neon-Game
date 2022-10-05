@@ -1,5 +1,6 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
+import java.util.List;
 import java.util.Random;
 
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -10,7 +11,7 @@ public class WallTile extends Tile {
 	
 	Random random;
 	
-	public WallTile(Sprite sprite, int colour, Renderer[] renderers) {
+	public WallTile(Sprite sprite, int colour, List<Renderer> renderers) {
 		super(sprite, colour, 1, renderers);
 		blocksProjectiles = true;
 //		blocksSightline = true;
@@ -25,7 +26,7 @@ public class WallTile extends Tile {
 //		this(sprite, 0, renderers);
 //	}
 	
-	public WallTile(Sprite sprite, int colour, boolean border, Renderer[] renderers) {
+	public WallTile(Sprite sprite, int colour, boolean border, List<Renderer> renderers) {
 		this(sprite, colour, renderers);
 		this.border = border;
 	}

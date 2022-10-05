@@ -63,6 +63,7 @@ public class Sprite {
 	public static Sprite barCarpetStepsTopRight2 = new Sprite(16, 12, 0, Spritesheet.x16);
 	public static Sprite woodPlanksSunset = new Sprite(16, 12, 1, Spritesheet.x16);
 	public static Sprite insideTiles = new Sprite(16, 11, 1, Spritesheet.x16);
+	public static Sprite carpetPlankSteps = new Sprite(16, 16, 6, Spritesheet.x16);
 
 	public static Sprite whitePoolTiles = new Sprite(16, 14, 15, Spritesheet.x16);
 	public static Sprite smallPoolFloorTiles = new Sprite(16, 14, 14, Spritesheet.x16);
@@ -104,7 +105,7 @@ public class Sprite {
 	public static Sprite corrIronVertEndBottom = new Sprite(16, 4, 18, Spritesheet.x16);
 	public static Sprite corrIronVertEndTop = new Sprite(16, 4, 16, Spritesheet.x16);
 	public static Sprite fakeWallTop = new Sprite(16, 5, 16, Spritesheet.x16);
-	public static Sprite fakeWallBottom = Sprite.flipSpriteVert(fakeWallTop);
+	public static Sprite fakeWallBottom = Sprite.mirrorVert(fakeWallTop);
 	public static Sprite fakeWallRight = Sprite.rotateSprite(fakeWallTop, Math.PI / 2, 16, 16);
 	public static Sprite fakeWallLeft = Sprite.rotateSprite(fakeWallTop, -Math.PI / 2, 16, 16);
 	public static Sprite fakeWallTopLeft = new Sprite(16, 5, 17, Spritesheet.x16);
@@ -114,6 +115,11 @@ public class Sprite {
 
 	public static Sprite barBottleShelf = new Sprite(16, 16, 3, Spritesheet.x16);
 	public static Sprite interiorPanelling = new Sprite(16, 16, 4, Spritesheet.x16);
+	public static Sprite paperPanelling = new Sprite(16, 17, 4, Spritesheet.x16);
+//	public static Sprite speakerPanelTop = new Sprite(16, 17, 5, Spritesheet.x16);
+//	public static Sprite speakerPanelBottom = Sprite.mirrorVert(speakerPanelTop);
+	public static Sprite slateTiles = new Sprite(16, 17, 6, Spritesheet.x16);
+	public static Sprite slateTilesLight = new Sprite(16, 17, 7, Spritesheet.x16);
 
 	public static Sprite japaneseNeonSign = new Sprite(16, 9, 7, Spritesheet.x16);
 	public static Sprite wallGrate = new Sprite(16, 5, 1, Spritesheet.x16);
@@ -171,6 +177,7 @@ public class Sprite {
 	public static Sprite bigVentBlades = new Sprite(48, 15, 7, Spritesheet.x24);
 	public static Sprite bigVentCover = new Sprite(48, 15, 8, Spritesheet.x24);
 	public static Sprite overheadFan = new Sprite(64, 7, 3, Spritesheet.x64);
+	public static Sprite windowFloorReflection = new Sprite(24, 9, 0, Spritesheet.x24);
 
 	public static Sprite wireFenceVert = new Sprite(16, 48, 0, 3, Spritesheet.x16);
 	public static Sprite wireFenceVertShadow = new Sprite(16, 32, 0, 6, Spritesheet.x16);
@@ -195,6 +202,12 @@ public class Sprite {
 	public static Sprite doubleSideShadowTop = new Sprite(16, 16, 16, 0, Spritesheet.x16);
 	public static Sprite doubleSideShadowMiddle = new Sprite(16, 16, 16, 1, Spritesheet.x16);
 	public static Sprite doubleSideShadowBottom = new Sprite(16, 16, 16, 2, Spritesheet.x16);
+	
+	public static Sprite buildingSide1 = new Sprite(16, 16, 1, 24, Spritesheet.x16);
+	public static Sprite buildingSide2 = new Sprite(16, 16, 1, 25, Spritesheet.x16);
+	public static Sprite buildingSide3 = new Sprite(16, 16, 1, 26, Spritesheet.x16);
+	public static Sprite buildingSide4 = new Sprite(16, 16, 1, 27, Spritesheet.x16);
+	public static Sprite buildingSide5 = new Sprite(16, 16, 1, 28, Spritesheet.x16);
 
 	// Collision entities:
 	public static Sprite down_facing_bin = new Sprite(48, 32, 5, 0, Spritesheet.x24);
@@ -208,8 +221,9 @@ public class Sprite {
 	public static Sprite car_left = new Sprite(72, 48, 7, 0, Spritesheet.x24);
 	public static Sprite car_left_shadow = new Sprite(72, 48, 7, 1, Spritesheet.x24);
 	public static Sprite stall1_down = new Sprite(72, 48, 8, 0, Spritesheet.x24);
-	public static Sprite stall1_left = new Sprite(72, 96, 7, 1, Spritesheet.x24);
+	public static Sprite stall1_left = new Sprite(48, 96, 10, 1, Spritesheet.x24);
 	public static Sprite stall1_down_shadow = new Sprite(72, 24, 8, 2, Spritesheet.x24);
+	public static Sprite stall1_left_shadow = new Sprite(48, 96, 11, 1, Spritesheet.x24);
 	public static Sprite canopyRight = new Sprite(24, 72, 28, 0, Spritesheet.x24);
 	public static Sprite canopy2Right = new Sprite(48, 96, 14, 4, Spritesheet.x24);
 	public static Sprite canopy2Left = Sprite.mirror(canopy2Right);
@@ -241,6 +255,9 @@ public class Sprite {
 	public static Sprite crowdBarrierVertShadow = new Sprite(24, 72, 15, 0, Spritesheet.x24);
 	public static Sprite crowdBarrierHoriz = new Sprite(48, 24, 6, 2, Spritesheet.x24);
 	public static Sprite crowdBarrierHorizShadow = new Sprite(48, 24, 6, 3, Spritesheet.x24);
+	public static Sprite concreteBarrierhoriz = new Sprite(64, 32, 9, 1, Spritesheet.x32);
+	public static Sprite concreteBarrierhorizShadow = new Sprite(64, 32, 9, 2, Spritesheet.x32);
+	public static Sprite concreteBarrierRightUp = new Sprite(64, 64, 8, 1, Spritesheet.x32);
 	public static Sprite tallPlanter = new Sprite(32, 48, 8, 5, Spritesheet.x16);
 	public static Sprite divider_1_v = new Sprite(16, 48, 0, 2, Spritesheet.x16);
 	public static Sprite divider_1_h = new Sprite(48, 32, 6, 0, Spritesheet.x16);
@@ -253,6 +270,15 @@ public class Sprite {
 	public static Sprite kitchen_unit_v = new Sprite(48, 48, 11, 10, Spritesheet.x24);
 	public static Sprite door_h_open = new Sprite(48, 12, 10, Spritesheet.x24);
 	public static Sprite door_h_closed = new Sprite(48, 13, 10, Spritesheet.x24);
+	public static Sprite side_table = new Sprite(16, 32, 18, 3, Spritesheet.x16);
+	
+	public static Sprite sofa_right = new Sprite(24, 48, 20, 0, Spritesheet.x24);
+	public static Sprite sofa_left = Sprite.mirror(sofa_right);
+	public static Sprite sofa_up = new Sprite(48, 24, 8, 2, Spritesheet.x24);
+	public static Sprite sofa_down = new Sprite(48, 24, 8, 3, Spritesheet.x24);
+	
+	public static Sprite openingTrain = new Sprite(512, 128, 1, 2, Spritesheet.x32);
+	public static Sprite shop = new Sprite(64, 128, 7, 2, Spritesheet.x32);
 
 //	player sprites:
 	public static Sprite playerR = new Sprite(24, 0, 0, Spritesheet.x24);
@@ -287,6 +313,7 @@ public class Sprite {
 	public static Sprite fastBulletBlue = new Sprite(24, 8, 1, Spritesheet.x24);
 	public static Sprite fastBulletBlueGlow = new Sprite(24, 8, 2, Spritesheet.x24);
 	public static Sprite silverBullet = new Sprite(16, 3, 16, Spritesheet.x16);
+	public static Sprite laserShot = new Sprite(16, 9, 16, Spritesheet.x16);
 
 //	particle sprites:
 	public static Sprite particleBlue = new Sprite(2, 0xff96FFFF);
@@ -297,7 +324,8 @@ public class Sprite {
 	public static Sprite smallParticleOrange = new Sprite(1, 0xffFF8C00);
 	public static Sprite smallParticleCrimson = new Sprite(1, 0xffFF0037);
 	public static Sprite smallParticleYellow = new Sprite(1, 0xffB6FF00);
-	public static Sprite smallRainParticle = new Sprite(1, 0xff9BAFFF);
+	public static Sprite smallParticleLime = new Sprite(1, 0xff00D31C);
+	public static Sprite smallRainParticle = new Sprite(1, 0x779BAFFF);
 	public static Sprite rainParticle = new Sprite(6, 4, 0, Spritesheet.bullets);
 	public static Sprite rainSplashParticle = new Sprite(6, 5, 0, Spritesheet.bullets);
 	public static Sprite glassParticle = new Sprite(1, 0x8883C2C4);
@@ -319,15 +347,16 @@ public class Sprite {
 
 //	item sprites:	
 	public static Sprite shotgun_ammo = new Sprite(16, 4, 0, Spritesheet.x16);
-	public static Sprite shotgun = new Sprite(32, 0, 0, Spritesheet.x32);
-	public static Sprite pistol = new Sprite(32, 1, 0, Spritesheet.x32);
 	public static Sprite enemyGun = new Sprite(32, 2, 0, Spritesheet.x32);
 	public static Sprite slowEnemyGun = new Sprite(32, 7, 0, Spritesheet.x32);
-	public static Sprite crossbow = new Sprite(32, 3, 0, Spritesheet.x32);
-	public static Sprite assaultRifle = new Sprite(32, 4, 0, Spritesheet.x32);
 	public static Sprite miniGun = new Sprite(32, 6, 0, Spritesheet.x32);
 	public static Sprite laserSword = new Sprite(48, 8, 2, Spritesheet.x24);
 	public static Sprite doublePistols = new Sprite(32, 6, 7, Spritesheet.x32);
+	
+	public static Sprite pistol = new Sprite(24, 0, 24, Spritesheet.x24);
+	public static Sprite shotgun = new Sprite(24, 1, 24, Spritesheet.x24);
+	public static Sprite assaultRifle = new Sprite(24, 2, 24, Spritesheet.x24);
+	public static Sprite crossbow = new Sprite(24, 3, 24, Spritesheet.x24);
 
 	public static Sprite laserSwordGlow = new Sprite(48, 8, 3, Spritesheet.x24);
 	public static Sprite laserSwordSlash = new Sprite(48, 8, 4, Spritesheet.x24);
@@ -366,13 +395,13 @@ public class Sprite {
 	public static Sprite buttonOutline = new Sprite(64, 0, 0, Spritesheet.x64UI);
 	public static Sprite buttonHighlighted = new Sprite(64, 1, 0, Spritesheet.x64UI);
 	public static Sprite pauseMenuBackground = new Sprite(Spritesheet.pauseMenuBackground, 400, 250);
-	public static Sprite menuOutline = new Sprite(Spritesheet.menuOutline, 400, 225);
+	public static Sprite menuOutline = new Sprite(Spritesheet.menuOutline, 320, 300);
 	public static Sprite loadMenuOutline = new Sprite(Spritesheet.loadMenuOutline, 244, 176);
 	public static Sprite leftButton = new Sprite(16, 3, 10, Spritesheet.x16);
 	public static Sprite rightButton = new Sprite(16, 3, 11, Spritesheet.x16);
 	public static Sprite leftButtonHighlighted = new Sprite(16, 3, 12, Spritesheet.x16);
 	public static Sprite rightButtonHighlighted = new Sprite(16, 3, 13, Spritesheet.x16);
-	public static Sprite SkillTreeOutline = new Sprite(128, 0, 1, Spritesheet.x64UI);
+	public static Sprite SkillTreeOutline = Sprite.createButtonSprite(Spritesheet.buttonCorners, 69, 128, false);;
 	public static Sprite healthBarEnd = new Sprite(16, 11, 11, Spritesheet.x16);
 	public static Sprite healthBarEnd2 = new Sprite(16, 11, 12, Spritesheet.x16);
 	public static Sprite healthBarEnd3 = new Sprite(16, 4, 15, Spritesheet.x16);
@@ -411,7 +440,7 @@ public class Sprite {
 		this.height = height;
 		pixels = new int[width * height];
 		alphas = new int[width * height];
-		setColour(colour);
+		loadMonochromeSprite(colour);
 	}
 
 	public Sprite(int size, int colour) {
@@ -436,7 +465,7 @@ public class Sprite {
 		return new Sprite(tempPixels, sprite.width, sprite.height);
 	}
 
-	public static Sprite flipSpriteVert(Sprite sprite) {
+	public static Sprite mirrorVert(Sprite sprite) {
 		int[] tempPixels = new int[sprite.width * sprite.height];
 		for (int y = 0; y < sprite.height; y++) {
 			for (int x = 0; x < sprite.width; x++) {
@@ -510,9 +539,9 @@ public class Sprite {
 		if (alpha < 0) alpha = 0;
 		for (int y = 0; y < sprite.getHeight(); y++) {
 			for (int x = 0; x < sprite.getWidth(); x++) {
-				int col = sprite.pixels[ y * sprite.getWidth() + x];
-				if (col != 0xffff00ff) newPixels[ y * sprite.getWidth() + x] = (int) (alpha * 0xff) << 24 | (col & 0x00ffffff);
-				else newPixels[ y * sprite.getWidth() + x] = col;
+				int col = sprite.pixels[y * sprite.getWidth() + x];
+				if (col != 0xffff00ff) newPixels[y * sprite.getWidth() + x] = (int) (alpha * 0xff) << 24 | (col & 0x00ffffff);
+				else newPixels[y * sprite.getWidth() + x] = col;
 			}
 		}
 		return new Sprite(newPixels, sprite.width, sprite.height);
@@ -616,9 +645,10 @@ public class Sprite {
 		return new Sprite(pixelsExtended, newW, newH);
 	}
 
-	private void setColour(int colour) {
+	private void loadMonochromeSprite(int colour) {
 		for (int i = 0; i < width * height; i++) {
 			pixels[i] = colour;
+			alphas[i] = (colour >> 24 & 0xff);
 		}
 	}
 
@@ -647,6 +677,10 @@ public class Sprite {
 		}
 	}
 
+	public static Sprite createButtonSprite(Spritesheet corners, int width, int height, boolean outline) {
+		return createButtonSprite(corners, width, height, 0xffADFFFF, outline);
+	}
+	
 	public static Sprite createButtonSprite(Spritesheet corners, int width, int height, int colour, boolean outline) {
 		if (width < 16) width = corners.WIDTH;
 		if (height < 16) height = corners.HEIGHT;
@@ -655,11 +689,11 @@ public class Sprite {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				if (y < corners.getSprites()[0].height && x < corners.getSprites()[0].width) sprite.pixels[y * width + x] = corners.getSprites()[0].pixels[y * corners.getSprites()[0].width + x];
-				else if (y < corners.getSprites()[0].height && x > width - corners.getSprites()[1].width)
+				else if (y < corners.getSprites()[0].height && x >= width - corners.getSprites()[1].width)
 					sprite.pixels[y * width + x] = corners.getSprites()[1].pixels[y * corners.getSprites()[1].width + (x + corners.getSprites()[0].width - width)];
-				else if (y > height - corners.getSprites()[2].height && x < corners.getSprites()[0].width)
+				else if (y >= height - corners.getSprites()[2].height && x < corners.getSprites()[0].width)
 					sprite.pixels[y * width + x] = corners.getSprites()[2].pixels[(y + corners.getSprites()[0].height - height) * corners.getSprites()[2].width + x];
-				else if (y > height - corners.getSprites()[2].height && x > width - corners.getSprites()[1].width)
+				else if (y >= height - corners.getSprites()[2].height && x >= width - corners.getSprites()[1].width)
 					sprite.pixels[y * width + x] = corners.getSprites()[3].pixels[(y + corners.getSprites()[0].height - height) * corners.getSprites()[3].width + (x + corners.getSprites()[0].width - width)];
 				else if (outline) {
 					if (y == 0 || x == 0 || y == height - 1 || x == width - 1 || y == 4 || x == 4 || y == height - 5 || x == width - 5) sprite.pixels[y * width + x] = colour;

@@ -21,7 +21,6 @@ public class CheckDistanceToPlayer extends BehaviourNode {
 	@Override
 	public void update() {
 		double dist = Util.pythag(blackboard.getPlayer().getIntX() - mob.getIntX(), blackboard.getPlayer().getIntY() - mob.getIntY());
-		System.out.println(dist);
 		if (maxDist == -1) {
 			if (dist >= minDist) currentState = NodeState.SUCCESS;
 			else currentState = NodeState.FAILURE;

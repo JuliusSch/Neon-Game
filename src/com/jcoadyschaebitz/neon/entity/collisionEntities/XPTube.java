@@ -19,6 +19,7 @@ public class XPTube extends CollisionEntity {
 		int[] xCollPoints = { 4, 11, 4, 11 };
 		int[] yCollPoints = { 5, 5, 15, 15 };
 		entityBounds = new CollisionBox(xCollPoints, yCollPoints);
+		corners = new CollisionBox(xCollPoints, yCollPoints);
 	}
 
 	public XPTube(int x, int y) {

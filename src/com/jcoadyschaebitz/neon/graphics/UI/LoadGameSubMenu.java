@@ -28,7 +28,7 @@ public class LoadGameSubMenu implements UIComp {
 		this.y = y;
 		saveSlots = new ArrayList<SaveSlot>();
 		for (int i = 0; i < 5; i++) {
-			SaveSlot slot = new SaveSlot(x + 4, y + 4 + i * 32, 236, 32, "Empty save", 0xffADFFFF, i, player, level);
+			SaveSlot slot = new SaveSlot(x + 4, y + 4 + i * 32, 236, 32, "Empty save", 0xffADFFFF, i);
 			saveSlots.add(slot);
 			slot.tryLoadSave(i);
 			Game.getUIManager().getGame().loadMenu.addComp(slot);
@@ -38,7 +38,7 @@ public class LoadGameSubMenu implements UIComp {
 	}
 	
 	public SavedGame getSelectedSave() {
-		return saveSlots.get(selectedSlot).savedGame;
+		return saveSlots.get(selectedSlot).getSavedGame();
 	}
 	
 	public List<SaveSlot> getSlots() {

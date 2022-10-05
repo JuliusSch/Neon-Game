@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.jcoadyschaebitz.neon.entity.decorationEntities.BackgroundDecoration;
+import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.util.Rect;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
@@ -12,7 +14,7 @@ public class Level_0_Menu extends Level {
 
 	public Level_0_Menu(String path, String levelName, long seed) {
 		super(path, "/levels/overlays/lvl_0.png", levelName, seed);
-		playerSpawn = new TileCoordinate(15, 17);
+		playerSpawn = new TileCoordinate(16, 17);
 	}
 
 	@Override
@@ -28,8 +30,9 @@ public class Level_0_Menu extends Level {
 
 	@Override
 	protected void addItems() {
-		// TODO Auto-generated method stub
-		
+		add(new BackgroundDecoration(18 * 16 + 8, 7 * 16 + 11, Sprite.windowFloorReflection, true, -24));
+		add(new BackgroundDecoration(18 * 16 + 8, 8 * 16 + 11, Sprite.windowFloorReflection, true, -24));
+		add(new BackgroundDecoration(18 * 16 + 8, 9 * 16 + 11, Sprite.windowFloorReflection, true, -24));
 	}
 
 	@Override

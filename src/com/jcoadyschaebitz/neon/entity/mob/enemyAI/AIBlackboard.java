@@ -11,6 +11,7 @@ public class AIBlackboard {
 	private Level level;
 	private Vec2i lastPlayerPos;
 	private Vec2i moveToPosition;
+	private boolean targeted = false;
 
 	public void init(Level level) {
 		this.level = level;
@@ -18,7 +19,7 @@ public class AIBlackboard {
 	}
 
 	public void updateLastPlayerPos() {
-		lastPlayerPos = new Vec2i(getPlayer().getIntX(), getPlayer().getIntY());
+		lastPlayerPos = new Vec2i(getPlayer().getMidX(), getPlayer().getMidY());
 	}
 
 	public Vec2i getLastPlayerPos() {
@@ -39,6 +40,14 @@ public class AIBlackboard {
 
 	public Level getLevel() {
 		return level;
+	}
+	
+	public void setTargeted(boolean b) {
+		targeted = b;
+	}
+	
+	public boolean beenTargeted() {
+		return targeted;
 	}
 
 	public double getPlayerDirection(Mob mob) {

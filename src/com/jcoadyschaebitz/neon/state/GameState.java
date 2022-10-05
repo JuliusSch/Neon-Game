@@ -1,4 +1,4 @@
-package com.jcoadyschaebitz.neon;
+package com.jcoadyschaebitz.neon.state;
 
 import com.jcoadyschaebitz.neon.graphics.Screen;
 

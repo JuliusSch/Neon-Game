@@ -1,57 +1,64 @@
 package com.jcoadyschaebitz.neon.cutscene.events;
 
+import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.cutscene.events.CameraMoveEvent.Transition;
+import com.jcoadyschaebitz.neon.input.Mouse;
+import com.jcoadyschaebitz.neon.util.Vec2d;
 
 public class SmoothCameraMoveEvent extends Event {
 
-	private double x, y, xa, ya, targetX, targetY, linXa, linYa;
+	private double startX, startY, targetX, targetY, distance, direction;
+	private int mouseX, mouseY;
 	private Transition type = Transition.NULL;
 	
-	public SmoothCameraMoveEvent(CutScene scene, int startTime, int duration, double targX, double targY) {
-		this(scene, startTime, duration, targX, targY, Transition.NULL);
+	public SmoothCameraMoveEvent(CutScene scene, int startTime, int duration) {
+		this(scene, startTime, duration, Transition.NULL);
 	}
 	
-	public SmoothCameraMoveEvent(CutScene scene, int startTime, int duration, double targX, double targY, Transition t) {
+	public SmoothCameraMoveEvent(CutScene scene, int startTime, int duration, Transition t) {
 		super(scene, startTime, duration);
-		targetX = targX;
-		targetY = targY;
 		type = t;
 	}
 	
 	public void init() {
 		switch (type) {
 		case IN:
-			x = scene.getXScroll();
-			y = scene.getYScroll();
+			startX = scene.getXOffset();
+			startY = scene.getYOffset();
+			targetX = scene.currentScreenX;
+			targetY = scene.currentScreenY;
+			mouseX = Mouse.getX();
+			mouseY = Mouse.getY();
 			break;
 		case OUT:
-			targetX = scene.getXScroll();
-			targetY = scene.getYScroll();
-			x = scene.currentScreenX;
-			y = scene.currentScreenY;
+			targetX = Game.getUIManager().getGame().getCameraPos().x;
+			targetY = Game.getUIManager().getGame().getCameraPos().y;
+			startX = scene.currentScreenX;
+			startY = scene.currentScreenY;
+			mouseX = Mouse.getX();
+			mouseY = Mouse.getY();
 			break;
 		default:
-			x = scene.currentScreenX;
-			y = scene.currentScreenY;
 			break;
 		}
-		linXa = (targetX - x) / duration;
-		linYa = (targetY - y) / duration;
-		xa = linXa;
-		ya = linYa;
+		distance = Vec2d.getDistance(new Vec2d(startX, startY), new Vec2d(targetX, targetY));
+		direction = Math.atan2(targetY - startY, targetX - startX);
 	}
 	
 	public void update() {
-		if (time > duration) {
+		if (time == duration) {
+			Mouse.move(mouseX, mouseY);
+			Game.getUIManager().getGame().resetCameraOnPlayer();
 			endEvent();
 			return;
 		}
-		xa = 4 * (targetX - scene.currentScreenX) / duration;
-		ya = 4 * (targetY - scene.currentScreenY) / duration;
+		double xComp = (double) time / duration;
+		double curveSeverity = -4;
+		double newMagnitude = 1 / (1 + Math.pow((xComp / (1 - xComp)), curveSeverity)); //	Simple sigmoid function with domain [0,1] and range [0,1]
+		scene.currentScreenX = startX + Math.cos(direction) * newMagnitude * distance;
+		scene.currentScreenY = startY + Math.sin(direction) * newMagnitude * distance;
 		time++;
-		scene.currentScreenX += xa;
-		scene.currentScreenY += ya;
 	}
 
 }

@@ -12,7 +12,7 @@ public class WireFence extends CollisionEntity {
 	
 	private int xRenderShadowOffset, yRenderShadowOffset;		//generalise random sprites with interface
 
-	public WireFence(int x, int y, Or_2D dir) {
+	public WireFence(int x, int y, Orientation2D dir) {
 		super(x, y);
 		switch (dir) {
 		case HORIZONTAL:
@@ -25,6 +25,10 @@ public class WireFence extends CollisionEntity {
 			initHorizontal();
 			break;
 		}
+	}
+	
+	public int getYAnchor() {
+		return (int) y + getSpriteH();
 	}
 	
 	private void initHorizontal() {
@@ -46,7 +50,7 @@ public class WireFence extends CollisionEntity {
 	private void initVert() {
 		sprite = Sprite.wireFenceVert;
 		shadowSprite = Sprite.wireFenceVertShadow;
-		int[] xPoints = { 5, 9, 5, 9, 5, 9 };
+		int[] xPoints = { 6, 9, 6, 9, 6, 9 };
 		int[] yPoints = { 32, 32, 47, 47, 40, 40 };
 		xRenderShadowOffset = 8;
 		yRenderShadowOffset = 32;

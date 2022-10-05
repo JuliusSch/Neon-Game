@@ -6,7 +6,7 @@ import com.jcoadyschaebitz.neon.entity.collisionEntities.CollisionEntity;
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
-import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class Bolt extends Projectile {
 	
@@ -15,14 +15,13 @@ public class Bolt extends Projectile {
 	private int impaleXOffset, impaleYOffset, trailCounter;
 //	private double direction;
 
-	public Bolt(Entity source, double x, double y, double angle, double speed) {
-		super(source, x, y, angle);
+	public Bolt(Entity source, double x, double y, double angle, double speed, Level level) {
+		super(source, x, y, angle, level);
 		range = 400;
 		this.speed = speed;
 		damage = 12;
 		sprite = Sprite.bolt;
 		glow = Sprite.bolt;
-		sheet = Spritesheet.bolt;
 		life = random.nextInt(20) + 2000;
 		int[] xCollisionValues = { 8, 8, 8, 8 };
 		int[] yCollisionValues = { 8, 8, 8, 8 };

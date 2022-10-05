@@ -9,8 +9,9 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 public abstract class CollisionEntity extends Entity {
 
 	protected Sprite shadowSprite;
+	protected boolean blocksProjectiles = true;
 	
-	public enum Or_2D {
+	public enum Orientation2D {
 		HORIZONTAL, VERTICAL;
 	}
 
@@ -26,6 +27,10 @@ public abstract class CollisionEntity extends Entity {
 	public CollisionBox getCollisionBounds() {
 		return corners;
 	}
+	
+	public boolean blocksProjectiles() {
+		return blocksProjectiles;
+	}
 
 	public void update() {
 		time++;
@@ -36,6 +41,7 @@ public abstract class CollisionEntity extends Entity {
 		screen.renderSprite((int) x, (int) y, sprite, true);
 //		screen.renderSprite((int) x, (int) y - sprite.getHeight(), sprite, true);
 //		entityBounds.renderBounds(screen, 0xffff00ff, (int) x, (int) y);
+//		corners.renderBounds(screen, 0xffff00ff, (int) x, (int) y);
 	}
 	
 	public void hitReceived(Projectile projectile) {

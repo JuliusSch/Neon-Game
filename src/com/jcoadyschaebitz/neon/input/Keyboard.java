@@ -47,6 +47,9 @@ public class Keyboard implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			game.togglePause();
 		}
+		if (e.getKeyCode() == KeyEvent.VK_E) {
+			if (game.getState() == game.shopMenuState) game.switchToGameState(game.playState);
+		}
 	}
 
 	public void keyTyped(KeyEvent e) {

@@ -4,7 +4,8 @@ import com.jcoadyschaebitz.neon.graphics.Screen;
 
 public class CollisionBox {
 
-	private int[] origXValues, origYValues;
+	protected int[] origXValues;
+	protected int[] origYValues;
 
 	public CollisionBox(int[] xV, int[] yV) {
 		origXValues = xV;

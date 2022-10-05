@@ -15,6 +15,10 @@ public class Vec2i {
 	public Vec2i(Vec2i v) {
 		set(v.x, v.y);
 	}
+	
+	public Vec2i(Vec2d v) {
+		set((int) v.x, (int) v.y);
+	}
 
 	public Vec2i(String key) {
 		try {
@@ -74,8 +78,19 @@ public class Vec2i {
 		return distance;
 	}
 
-	public String getKey() {
+	public String getString() {
 		return "(" + x + "," + y + ")";
+	}
+	
+	public static Vec2i decodeString(String key) {
+		try {
+			String[] vals = key.substring(0, key.length() - 1).substring(1).split(",");
+			return new Vec2i(Integer.parseInt(vals[0]), Integer.parseInt(vals[1]));
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Invalid Vec2i string format passed");
+		}
+		return null;
 	}
 
 	public void print() {

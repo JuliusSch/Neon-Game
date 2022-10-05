@@ -14,9 +14,7 @@ public class BulletSpeedSkill extends LayeredSkillNode {
 
 	public void deactivate() {
 		super.deactivate();
-		player.bulletSpeedMultiplier = 1;
-		layer = 0;
-		prevLayer = 0;
+//		player.bulletSpeedMultiplier = 1;
 	}
 
 	public void playerKilledEnemy() {

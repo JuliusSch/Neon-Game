@@ -30,7 +30,7 @@ public class SelectorNode extends BehaviourNode {
 		currentState = NodeState.READY;
 		for (BehaviourNode node : childNodes) node.hardReset();
 	}
-
+	
 	@Override
 	public void update() {
 		if ((currentNode == null || currentState == NodeState.READY) && childNodes.size() > 0) {

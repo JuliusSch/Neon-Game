@@ -6,6 +6,7 @@ import java.util.List;
 import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.entity.Shield;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
+import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.UI.SkillDescriptionDisplay;
 import com.jcoadyschaebitz.neon.graphics.UI.UIComp;
@@ -15,10 +16,12 @@ public class SkillTreeManager implements UIComp {
 	Player player;
 	public boolean stationaryShieldUnlocked, shieldReflectUnlocked;
 	public double shieldReflectChance = 0;
-	public int selectedTree = 1;
 	public List<Shield> activeShields = new ArrayList<Shield>();
 	public SkillTree tree1, tree2, tree3;
 	public SkillDescriptionDisplay skillDescriptionDisplay;
+	private Font font;
+	
+	public int availableSkillPoints;
 
 	private SkillTree[] trees = new SkillTree[3];
 
@@ -59,27 +62,23 @@ public class SkillTreeManager implements UIComp {
 		tree3Skills[8] = new NullSkill(20, 80, 1, player, this);
 		tree3Skills[9] = new NullSkill(20, 100, 1, player, this);
 		
-		skillDescriptionDisplay = new SkillDescriptionDisplay(95, 71, tree1Skills[0]);
+		skillDescriptionDisplay = new SkillDescriptionDisplay(95, 224, 280, 60, tree1Skills[0]);
 
-		tree1 = new SkillTree(0, "name1", 225, 83, tree1Skills);
-		tree2 = new SkillTree(1, "name2", 225, 83, tree2Skills);
-		tree3 = new SkillTree(2, "name3", 225, 83, tree3Skills);
-		trees[0] = tree1;
-		trees[1] = tree2;
-		trees[2] = tree3;
+		trees[0] = tree1 = new SkillTree(0, "name1", 125, 83, tree1Skills);
+		trees[1] = tree2 = new SkillTree(1, "name2", 200, 83, tree2Skills);
+		trees[2] = tree3 = new SkillTree(2, "name3", 275, 83, tree3Skills);
 		for (SkillTree tree : trees) {
 			for (SkillTreeNode node : tree.skills) {
 				if (node != null) game.addMouseListener(node);
 			}
 		}
+		
+		font =  new Font(Font.SIZE_16x16, 0xffBAFFDA, 1);
+		availableSkillPoints = 3;
 	}
 
 	public void update() {
-		for (SkillTree tree : trees) {
-			if (tree.treeNumber == selectedTree) {
-				tree.update();
-			}
-		}
+		for (SkillTree tree : trees) tree.update();
 		skillDescriptionDisplay.update();
 	}
 
@@ -89,23 +88,14 @@ public class SkillTreeManager implements UIComp {
 		}
 	}
 	
-	public void changeTree(int amount) {
-		selectedTree += amount;
-		if (selectedTree > 2) selectedTree = 0;
-		if (selectedTree < 0) selectedTree = 2;
-	}
-	
 	public Shield getShield() {
 		return new Shield(player.getX(), player.getY(), player.getDirection(), player);
 	}
 
 	public void render(Screen screen) {
-		for (SkillTree tree : trees) {
-			if (tree.treeNumber == selectedTree) {
-				tree.render(screen);
-			}
-		}
+		for (SkillTree tree : trees) tree.render(screen);
 		skillDescriptionDisplay.render(screen);
+		font.render(100, 40, Integer.toString(availableSkillPoints), screen, false);
 	}
 
 	@Override

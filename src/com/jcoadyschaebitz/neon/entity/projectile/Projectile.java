@@ -5,11 +5,18 @@ import java.util.List;
 
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.Entity;
+import com.jcoadyschaebitz.neon.entity.RotCollisionBox;
+import com.jcoadyschaebitz.neon.entity.Shield;
+import com.jcoadyschaebitz.neon.entity.mob.MeleeEnemy;
+import com.jcoadyschaebitz.neon.entity.mob.Player;
+import com.jcoadyschaebitz.neon.entity.mob.ShootingEnemy;
+import com.jcoadyschaebitz.neon.entity.particle.DebugParticle;
 import com.jcoadyschaebitz.neon.entity.spawner.ParticleSpawner;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public abstract class Projectile extends Entity {
 
@@ -25,14 +32,14 @@ public abstract class Projectile extends Entity {
 	protected boolean isEnemyBullet;
 	protected AnimatedSprite bulletAnim;
 
-	public Projectile(Entity source, double x, double y, double angle) {
-		xOrigin = x;
-		yOrigin = y;
+	public Projectile(Entity source, double x, double y, double angle, Level level) {
 		this.angle = angle;
-		this.x = x;
-		this.y = y;
 		sprite = Sprite.pistolBullet;
 		glow = Sprite.pistolBullet;
+		xOrigin = x - sprite.getWidth() / 2;
+		yOrigin = y - sprite.getHeight() / 2;
+		this.x = xOrigin;
+		this.y = yOrigin;
 		int[] xCollisionValues = { 6, 10, 6, 10 };
 		int[] yCollisionValues = { 6, 6, 10, 10 };
 		entityBounds = new CollisionBox(xCollisionValues, yCollisionValues);
@@ -41,6 +48,7 @@ public abstract class Projectile extends Entity {
 		nx = Math.cos(angle) * speed;
 		ny = Math.sin(angle) * speed;
 		particle = Sprite.particleBlue;
+		this.level = level;
 	}
 
 	public Sprite getSprite() {
@@ -60,7 +68,7 @@ public abstract class Projectile extends Entity {
 		return isEnemyBullet;
 	}
 
-	protected void move(Entity source, double nx, double ny) {
+	public void move(Entity source, double nx, double ny) {
 		double nx2 = nx;
 		double ny2 = ny;
 		double nx3, ny3;
@@ -81,8 +89,8 @@ public abstract class Projectile extends Entity {
 				ny3 = ny2;
 			}
 			boolean isHit = level.tileCollision((int) (x + nx3), (int) (y + ny3), entityBounds.getXValues(), entityBounds.getYValues()).isHit;
-			Entity e = entityCollision(source, (int) (x + nx3), (int) (y + ny3));
-			if (e != null) {
+			Entity e = entityCollision(source, (int) (x + nx3), (int) (y + ny3), entityBounds instanceof RotCollisionBox);
+			if (e != null/* && time > 1 */) {
 				e.hitReceived(this);
 				collideEntity((int) (x + nx3), (int) (y + ny3), e);
 				break;
@@ -97,23 +105,38 @@ public abstract class Projectile extends Entity {
 		}
 		distanceMoved += Math.sqrt(nx * nx + ny * ny);
 
-		if (distance() > range) remove();
+		if (distance() > range)
+			remove();
 	}
 
-	protected Entity entityCollision(Entity source, int x, int y) {
+	protected Entity entityCollision(Entity source, int x, int y, boolean isRotated) {
 		List<Entity> sources = new ArrayList<Entity>();
 		sources.add(this);
 		sources.add(source);
-		List<Entity> near = level.getValidTargetsInRad(x, y, sources, 200);
+		List<Entity> near = level.getValidTargetsInRad(x, y, sources, 48);
 		if (near.size() > 0) {
 			for (Entity e : near) {
+				if (isEnemyBullet() && (e instanceof ShootingEnemy || e instanceof MeleeEnemy)) continue;
+				if (e.getCollisionBounds() instanceof RotCollisionBox) {
+					if (e instanceof Shield && !((Shield) e).active) continue;
+					if (((RotCollisionBox) e.getCollisionBounds()).checkForCollisions(this, x, y, e, isRotated)) return e;
+					continue;
+				}
+				if (e instanceof Player && ((Player) e).getShield().active) {
+					if (((RotCollisionBox) (((Player) e).getShield().getCollisionBounds())).checkForCollisions(this, x, y, e, isRotated)) return ((Player) e).getShield();
+				}
 				int mx0 = e.getCollisionBounds().getXValues()[0] + e.getIntX();
 				int my0 = e.getCollisionBounds().getYValues()[0] + e.getIntY();
 				int mx1 = e.getCollisionBounds().getXValues()[1] + e.getIntX();
 				int my1 = e.getCollisionBounds().getYValues()[2] + e.getIntY();
+				level.add(new DebugParticle(mx0, my0, 30, Sprite.smallParticleLime));
+				level.add(new DebugParticle(mx1, my0, 30, Sprite.smallParticleLime));
+				level.add(new DebugParticle(mx0, my1, 30, Sprite.smallParticleLime));
+				level.add(new DebugParticle(mx1, my1, 30, Sprite.smallParticleLime));
 				for (int i = 0; i < getCollisionBounds().getXValues().length; i++) {
 					int px = getCollisionBounds().getXValues()[i] + x;
 					int py = getCollisionBounds().getYValues()[i] + y;
+//					level.add(new DebugParticle(px, py, 30, Sprite.smallParticleCrimson));	// could add some sort of trail here
 					if (px >= mx0 && px <= mx1) {
 						if (py >= my0 && py <= my1) {
 							return e;
@@ -143,13 +166,12 @@ public abstract class Projectile extends Entity {
 			ny = Math.sin(angle) * speed;
 			isEnemyBullet = false;
 			source = level.getPlayer();
-		} else collide((int) this.x, (int) this.y);
+		} else
+			collide((int) this.x, (int) this.y);
 	}
 
 	protected double distance() {
-		double dist = 0;
-		dist = Math.sqrt((xOrigin - x) * (xOrigin - x) + (yOrigin - y) * (yOrigin - y));
-		return dist;
+		return Math.sqrt((xOrigin - x) * (xOrigin - x) + (yOrigin - y) * (yOrigin - y));
 	}
 
 	public double getKnockbackMultiplier() {
@@ -159,8 +181,9 @@ public abstract class Projectile extends Entity {
 	public void render(Screen screen) {
 		screen.renderTranslucentSprite((int) x - 8, (int) y - 8, glow, true);
 		screen.renderSprite((int) x, (int) y, sprite, true);
+//		entityBounds.renderBounds(screen, 0xffaabbcc, (int) x, (int) y);
 	}
-	
+
 	public void hitReceived(Projectile projectile) {
 	}
 }

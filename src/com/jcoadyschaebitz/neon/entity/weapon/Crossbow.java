@@ -16,32 +16,33 @@ import com.jcoadyschaebitz.neon.util.Vec2i;
 public class Crossbow extends PlayerWeapon {
 
 	public Crossbow(int x, int y, int ammoCount) {
-		super(x, y, 32, 32, Sprite.crossbow, ammoCount);
+		super(x, y, 24, 24, Sprite.crossbow, ammoCount);
 		initiateValues();
 	}
 
 	public Crossbow(Player player, int ammoCount) {
-		super(player, 32, 32, Sprite.crossbow, ammoCount);
+		super(player, 24, 24, Sprite.crossbow, ammoCount);
 		initiateValues();
 	}
 
 	protected void initiateValues() {
 		cooldown = 60;
-		xRenderOffset = -7;
-		yRenderOffset = -3;
+		xRenderOffset = -3;
+		yRenderOffset = 1;
 		sprite = Sprite.crossbow;
 		slotSprite = Sprite.crossbowSlotSprite;
-		shine = new AnimatedSprite(Spritesheet.crossbowShine, 32, 32, 7, 4);
+		shine = new AnimatedSprite(Spritesheet.crossbowShine, 24, 24, 7, 4);
 		maxAmmo = 48;
 		standardAmmoBoxAmount = 12;
 		recoil = 0.3;
+		name = "Crossbow";
 	}
 
 	public void attack(double x, double y, double angle, double speed) {
 		SoundClip.crossbow_shot.play();
 		double xp = Math.cos(direction) * 20;
 		double yp = Math.sin(direction) * 20;
-		Projectile p = new Bolt(owner, x + xShootOffset + xp, y + 6 + yShootOffset + yp, angle, speed);
+		Projectile p = new Bolt(owner, x + xShootOffset + xp, y + 6 + yShootOffset + yp, angle, speed, level);
 		level.add(p);
 		addFlash((int) x, (int) y, angle);
 		shotsFired++;
@@ -67,8 +68,8 @@ public class Crossbow extends PlayerWeapon {
 			if (distance > 300) screen.renderLine((int) (x + 8 + xShootOffset), (int) (y + 14 + yShootOffset), targetPoint.x, targetPoint.y, 0x88FF002F, 0.5);
 		}
 		if (!owned){
-			if (shining) rotSprite = Sprite.rotateSprite(shine.getSprite(), direction, 32, 32);
-			else rotSprite = Sprite.rotateSprite(sprite, direction, 32, 32);
+			if (shining) rotSprite = Sprite.rotateSprite(shine.getSprite(), direction, 24, 24);
+			else rotSprite = Sprite.rotateSprite(sprite, direction, 24, 24);
 			screen.renderSprite((int) x, (int) y, rotSprite, true);
 		}
 	}

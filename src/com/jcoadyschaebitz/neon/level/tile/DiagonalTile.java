@@ -1,5 +1,7 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
+import java.util.List;
+
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.util.Vec2d;
 
@@ -7,7 +9,7 @@ public class DiagonalTile extends FloorTile {
 	
 	public DiagDirection dir;
 
-	public DiagonalTile(Sprite sprite, int colour, DiagDirection dir, Renderer[] renderers) {
+	public DiagonalTile(Sprite sprite, int colour, DiagDirection dir, List<Renderer> renderers) {
 		super(sprite, colour, renderers);
 		this.dir = dir;
 	}

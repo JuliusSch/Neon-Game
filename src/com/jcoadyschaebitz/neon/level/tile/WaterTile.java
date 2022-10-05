@@ -1,5 +1,7 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
+import java.util.List;
+
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.level.Level;
@@ -10,7 +12,7 @@ public class WaterTile extends Tile {
 	public static int FULL = 0, TOP_EDGE = 1;
 	private int type;
 	
-	public WaterTile(int colour, Sprite waterSprite, Sprite tileSprite, int type, Renderer[] renderers) {
+	public WaterTile(int colour, Sprite waterSprite, Sprite tileSprite, int type, List<Renderer> renderers) {
 		super(tileSprite, colour, 1, renderers);
 		water = waterSprite;
 		this.type = type;

@@ -1,5 +1,6 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
+import java.util.List;
 import java.util.Random;
 
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -11,8 +12,9 @@ public class RandomisedTileDecorator extends Tile {
 	private Sprite[] sprites;
 	private Random random;
 	
-	public RandomisedTileDecorator(Tile tile, Sprite[] sprites, Renderer[] renderers) {
+	public RandomisedTileDecorator(Tile tile, Sprite[] sprites, List<Renderer> renderers) {
 		super(sprites[0], tile.getColour(), tile.getZ(), renderers);
+		if (tile instanceof FloorTile) this.additionalRenderers = FloorTile.addRenderer(renderers, Tile.edgeShadows);
 		tile.colour = -1;
 		this.sprites = sprites;
 //		blocksSightline = tile.blocksSightline;
@@ -26,6 +28,9 @@ public class RandomisedTileDecorator extends Tile {
 		int i = (int) (random.nextDouble() * x * y) % sprites.length;
 		sprite = sprites[i];
 		screen.renderTile(x << 4, y << 4, this);
+		if (additionalRenderers != null) for (Renderer r : additionalRenderers) {
+			r.render(x, y, screen, level, seed);
+		}
 	}
 
 }

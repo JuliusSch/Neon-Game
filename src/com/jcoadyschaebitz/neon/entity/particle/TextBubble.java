@@ -2,6 +2,7 @@ package com.jcoadyschaebitz.neon.entity.particle;
 
 import java.util.Random;
 
+import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -17,14 +18,18 @@ public class TextBubble extends Particle {
 	public int start;
 	private Mob mob;
 
-	public TextBubble(int start, int maxLife, String text, boolean scroll, Mob mob) {
-		super(80, 10, maxLife, -1, -1, Sprite.nullSprite, 2);
+	public TextBubble(int start, int maxLife, String text, boolean scroll, Sprite speakerSprite) {
+		super(80, CutScene.BLACK_BAR_HEIGHT + 10, maxLife, -1, -1, speakerSprite, 2);
 		this.start = start;
-		this.mob = mob;
 		life = maxLife;
 		displayText = text;
 		scrolling = scroll;
 		font = new Font(Font.SIZE_12x12, 0xff87FFFB, 1);
+	}
+	
+	public TextBubble(int start, int maxLife, String text, boolean scroll, Sprite speakerSprite, Mob mob) {
+		this(start, maxLife, text, scroll, speakerSprite);
+		this.mob = mob;
 	}
 
 	public void update() {
@@ -33,12 +38,12 @@ public class TextBubble extends Particle {
 	}
 
 	public void render(Screen screen) {
-		screen.renderTranslucentSprite(10, 10, Sprite.oldManEye, false);
+		screen.renderTranslucentSprite(10, (int) yy, sprite, false);
 		if (time > 20) {
 			String s = displayText.substring(0, Math.min(displayText.length(), (time - 20) / scrollSpeed));
 			if (scrolling) font.render((int) xx, (int) yy, s, screen, false); 
 			else font.render((int) xx, (int) yy, displayText, screen, false);
-			screen.renderTranslucentSprite(mob.getIntX(), mob.getIntY() - 16, Sprite.SpeakingIcon, true);			
+			if (mob != null) screen.renderTranslucentSprite(mob.getIntX(), mob.getIntY() - 16, Sprite.SpeakingIcon, true);			
 		}
 	}
 

@@ -5,9 +5,9 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class KitchenUnit extends CollisionEntity {
 
-	public KitchenUnit(int x, int y, Or_2D direction) {
+	public KitchenUnit(int x, int y, Orientation2D direction) {
 		super(x, y);
-		if (direction == Or_2D.HORIZONTAL) {
+		if (direction == Orientation2D.HORIZONTAL) {
 			sprite = Sprite.kitchen_unit_h;
 			shadowSprite = Sprite.nullSprite;
 			int[] xPoints = { 4, 14, 23, 33, 43, 4, 14, 23, 33, 43, 4, 4, 4, 4, 43, 43, 43, 43 };

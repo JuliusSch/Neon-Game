@@ -34,7 +34,7 @@ public class SlowEnemyGun extends Gun {
 		double xx = Math.cos(angle) * 12;
 		double yy = Math.sin(angle) * 12;
 		for (int i = 0; i < 8; i++) {
-			Projectile p = new SlowEnemyBullet(owner, x + xx, y + 6 + yy, (angle + random.nextDouble() / 2) - 0.25, speed + (random.nextDouble() / 2));
+			Projectile p = new SlowEnemyBullet(owner, x + xx, y + 6 + yy, (angle + random.nextDouble() / 2) - 0.25, speed + (random.nextDouble() / 2), level);
 			level.add(p);
 		}
 		addFlash((int) x, (int) y, angle);

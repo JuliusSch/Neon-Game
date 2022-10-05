@@ -1,6 +1,7 @@
 package com.jcoadyschaebitz.neon.entity.mob.enemyAI;
 
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
+import com.jcoadyschaebitz.neon.entity.mob.Mob.MobState;
 
 public class CheckDamageTaken extends BehaviourNode {
 
@@ -10,8 +11,13 @@ public class CheckDamageTaken extends BehaviourNode {
 
 	@Override
 	public void update() {
-		if (mob.damageDelay > 0) currentState = NodeState.RUNNING;
-		else currentState = NodeState.FAILURE;
+		if (mob.damageDelay > 0) {
+			currentState = NodeState.RUNNING;
+		}
+		else {
+			currentState = NodeState.FAILURE;
+			mob.setState(MobState.IDLE);
+		}
 	}
 
 }

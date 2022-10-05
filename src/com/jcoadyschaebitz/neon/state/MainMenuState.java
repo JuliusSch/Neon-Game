@@ -1,5 +1,6 @@
-package com.jcoadyschaebitz.neon;
+package com.jcoadyschaebitz.neon.state;
 
+import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
@@ -17,7 +18,7 @@ public class MainMenuState implements GameState {
 	@Override
 	public void update() {
 		ui.update();
-		game.getKeyboard().update();
+		Game.getKeyboard().update();
 	}
 
 	@Override

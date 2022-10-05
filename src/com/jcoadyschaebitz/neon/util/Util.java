@@ -29,6 +29,7 @@ public class Util {
 	}
 	
 	public static int calculateTranslucencyValues(int oldColour, int foreColour, double alpha) {
+		if (alpha == 1) return foreColour;
 		int finalColour;
 
 		int r = (foreColour >> 16) & 0x000000ff;

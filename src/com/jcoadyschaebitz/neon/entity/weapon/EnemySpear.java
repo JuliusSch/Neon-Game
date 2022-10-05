@@ -19,8 +19,6 @@ public class EnemySpear extends MeleeWeapon implements MultiAttackWeapon {
 		xRenderOffset = -16;
 		yRenderOffset = -10;
 		rotSprite = Sprite.rotateSprite(sprite, Math.abs(random.nextDouble() * 3), 32, 32);
-		glow = Sprite.nullSprite;
-		rotGlow = glow;
 		rotSlashSprite = slashSprite;
 		flash = new AnimatedSprite(Spritesheet.swordFlash, 64, 64, 3, 2);
 	}

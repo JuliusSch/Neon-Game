@@ -6,6 +6,7 @@ import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.level.Level;
+import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public abstract class Entity {
 
@@ -68,11 +69,21 @@ public abstract class Entity {
 	}
 	
 	public int getMidX() {
-		return (int) x + spriteWidth / 2;
+		if (sprite != null) return (int) x + sprite.getWidth() / 2;
+		else return (int) x + spriteWidth / 2;
 	}
 
 	public int getMidY() {
-		return (int) y + spriteHeight / 2;
+		if (sprite != null) return (int) y + sprite.getHeight() / 2;
+		else return (int) y + spriteHeight / 2;
+	}
+	
+	public Vec2i getPos() {
+		return new Vec2i(getIntX(), getIntY());
+	}
+	
+	public Vec2i getMidPos() {
+		return new Vec2i(getMidX(), getMidY());
 	}
 	
 	public double getHealth() {

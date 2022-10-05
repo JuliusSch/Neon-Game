@@ -22,6 +22,7 @@ public class Spritesheet {
 	public static Spritesheet tarmac = new Spritesheet(x16, 13, 9, 3, 3, 16);
 	public static Spritesheet PlainWall = new Spritesheet(x16, 11, 13, 3, 3, 16);
 	public static Spritesheet poshBoards = new Spritesheet(x16, 0, 21, 3, 3, 16);
+	public static Spritesheet concrete = new Spritesheet(x16, 16, 9, 3, 3, 16);
 	
 	public static Spritesheet hCar = new Spritesheet(x16, 11, 2, 3, 2, 16);
 	public static Spritesheet shopFrontA = new Spritesheet(x16, 8, 2, 4, 3, 16);
@@ -47,7 +48,7 @@ public class Spritesheet {
 	
 	//UI:
 	public static Spritesheet pauseMenuBackground = new Spritesheet("/textures/UI/menubackground.png", 400, 250);
-	public static Spritesheet menuOutline = new Spritesheet("/textures/UI/menuoutline.png", 400, 225);
+	public static Spritesheet menuOutline = new Spritesheet("/textures/UI/menuoutline.png", 320, 300);
 	public static Spritesheet loadMenuOutline = new Spritesheet("/textures/UI/loadMenuOutline.png", 244, 176);
 	public static Spritesheet mainMenuBackground = new Spritesheet("/textures/UI/main_menu.png", 640, 360);
 	public static Spritesheet buttonCorners = new Spritesheet(x16, 20, 22, 2, 2, 8);
@@ -92,14 +93,14 @@ public class Spritesheet {
 	public static Spritesheet slowEnemyRightDying = new Spritesheet(x24, 8, 10, 7, 1, 24);
 	public static Spritesheet slowEnemyLeftDying = new Spritesheet(x24, 8, 11, 7, 1, 24);
 	
-	public static Spritesheet heavyLeftWalking = new Spritesheet(x32, 0, 1, 8, 1, 32);
-	public static Spritesheet heavyRightWalking = new Spritesheet(x32, 0, 2, 8, 1, 32);
-	public static Spritesheet heavyRightDamage = new Spritesheet(x32, 0, 3, 4, 1, 32);
-	public static Spritesheet heavyLeftDamage = new Spritesheet(x32, 4, 3, 4, 1, 32);
-	public static Spritesheet heavyRightIdle = new Spritesheet(x32, 0, 4, 4, 1, 32);
-	public static Spritesheet heavyLeftIdle = new Spritesheet(x32, 3, 4, 4, 1, 32);
-	public static Spritesheet heavyRightDying = new Spritesheet(x32, 0, 5, 4, 1, 32);
-	public static Spritesheet heavyLeftDying = new Spritesheet(x32, 3, 5, 4, 1, 32);
+	public static Spritesheet heavyRightWalking = new Spritesheet(x32, 0, 1, 8, 1, 32);
+	public static Spritesheet heavyLeftWalking = new Spritesheet(x32, 0, 2, 8, 1, 32);
+	public static Spritesheet heavyRightDamage = new Spritesheet(x32, 4, 3, 4, 1, 32);
+	public static Spritesheet heavyLeftDamage = new Spritesheet(x32, 0, 3, 4, 1, 32);
+	public static Spritesheet heavyRightIdle = new Spritesheet(x32, 4, 4, 4, 1, 32);
+	public static Spritesheet heavyLeftIdle = new Spritesheet(x32, 0, 4, 4, 1, 32);
+	public static Spritesheet heavyRightDying = new Spritesheet(x32, 4, 5, 4, 1, 32);
+	public static Spritesheet heavyLeftDying = new Spritesheet(x32, 0, 5, 4, 1, 32);
 	
 	public static Spritesheet fastMeleeLeftIdle = new Spritesheet(x64, 6, 4, 1, 4, 64, 64);
 	public static Spritesheet fastMeleeRightIdle = new Spritesheet(x64, 7, 4, 1, 4, 64, 64);
@@ -140,8 +141,8 @@ public class Spritesheet {
 	public static Spritesheet font4Characters = new Spritesheet(font4, 0, 0, 13, 6, 12);
 
 	//	Projectiles:
-	public static Spritesheet shotgun_pellet = new Spritesheet(bullets, 0, 1, 8, 2, 6);
-	public static Spritesheet bolt = new Spritesheet(bullets, 0, 3, 8, 2, 6);
+//	public static Spritesheet shotgun_pellet = new Spritesheet(bullets, 0, 1, 8, 2, 6);
+//	public static Spritesheet bolt = new Spritesheet(bullets, 0, 3, 8, 2, 6);
 	public static Spritesheet pistol_bullet_fade = new Spritesheet(x16, 8, 7, 1, 3, 16);
 	public static Spritesheet fast_bullet_anim = new Spritesheet(x24, 8, 1, 2, 1, 24);
 	
@@ -150,10 +151,10 @@ public class Spritesheet {
 	public static Spritesheet ventSteam = new Spritesheet(x32, 12, 0, 6, 1, 32);
 	
 	//	Weapons:
-	public static Spritesheet pistolShine = new Spritesheet(x32, 9, 0, 1, 7, 32);
-	public static Spritesheet shotgunShine = new Spritesheet(x32, 10, 0, 1, 7, 32);
-	public static Spritesheet crossbowShine = new Spritesheet(x32, 11, 0, 1, 7, 32);
-	public static Spritesheet assaultRifleShine = new Spritesheet(x32, 8, 0, 1, 7, 32);
+	public static Spritesheet pistolShine = new Spritesheet(x24, 0, 25, 1, 7, 24);
+	public static Spritesheet shotgunShine = new Spritesheet(x24, 1, 25, 1, 7, 24);
+	public static Spritesheet assaultRifleShine = new Spritesheet(x24, 2, 25, 1, 7, 24);
+	public static Spritesheet crossbowShine = new Spritesheet(x24, 3, 25, 1, 7, 24);
 	
 	//	Tiles:
 	public static Spritesheet wallHorizontalBars = new Spritesheet(x16, 5, 12, 5, 1, 16);
@@ -162,6 +163,7 @@ public class Spritesheet {
 	public static Spritesheet wireFenceHorizontal = new Spritesheet(x16, 0, 6, 4, 1, 16, 48);
 	public static Spritesheet poolGrateBorder = new Spritesheet(x16, 11, 19, 2, 8, 16);
 	public static Spritesheet wallTopBorder = new Spritesheet(x16, 7, 19, 2, 8, 16);
+	public static Spritesheet floorShadows = new Spritesheet(x16, 13, 19, 2, 8, 16);
 	
 	private Sprite[] sprites;
 

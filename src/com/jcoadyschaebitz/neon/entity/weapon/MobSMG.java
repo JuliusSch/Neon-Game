@@ -29,7 +29,7 @@ public class MobSMG extends Gun {
 
 	public void attack(double x, double y, double angle) {
 		SoundClip.pistol_shot.play();
-		Projectile p = new PistolBullet(owner, x + 8, y + 10, angle + (random.nextDouble() - 0.5) / 4, 2);
+		Projectile p = new PistolBullet(owner, x + 8, y + 10, angle + (random.nextDouble() - 0.5) / 4, 2, level);
 		level.add(p);
 	}
 

@@ -12,7 +12,7 @@ public class TranslucentWallTile extends WallTile {
 	Tile tile;
 	List<Sprite> sprites;
 	
-	public TranslucentWallTile(int colour, boolean canHaveShadow, Renderer[] renderers) {
+	public TranslucentWallTile(int colour, boolean canHaveShadow, List<Renderer> renderers) {
 		super(Sprite.fakeWallLeft, colour, canHaveShadow, renderers);
 		int tc = ((colour - 0xaa000000) + 0xff000000);
 //		System.out.println(Integer.toHexString(colour) + ", " + Integer.toHexString(tc));

@@ -6,6 +6,7 @@ public class EndSceneEvent extends Event {
 
 	public EndSceneEvent(CutScene scene, int startTime, int duration) {
 		super(scene, startTime, duration);
+		scene.setDuration(startTime + duration);
 	}
 	
 	public void update() {

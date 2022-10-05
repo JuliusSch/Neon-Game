@@ -9,22 +9,27 @@ import java.util.Queue;
 import java.util.Stack;
 
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
-import com.jcoadyschaebitz.neon.entity.mob.Mob.MobState;
 import com.jcoadyschaebitz.neon.util.GridGraph2b;
 import com.jcoadyschaebitz.neon.util.Node;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public class MoveTo extends BehaviourNode {
 
-	public MoveTo(AIBlackboard bb, Mob mob) {
-		super(bb, mob);
-	}
-
-	private double xa, ya, direction;
+	private double xa, ya, direction, speed;
 	private int targetX, targetY, predTravelTime;
 	private Vec2i currentNodeDest;
 	private Stack<Vec2i> path;
 	private boolean nodeReached;
+	
+	public MoveTo(AIBlackboard bb, Mob mob) {
+		super(bb, mob);
+		speed = mob.speed;
+	}
+	
+	public MoveTo(AIBlackboard bb, Mob mob, double speed) {
+		super(bb, mob);
+		this.speed = speed;
+	}
 
 	@Override
 	public void update() {
@@ -47,8 +52,8 @@ public class MoveTo extends BehaviourNode {
 					currentNodeDest = path.pop();
 					if ((currentNodeDest.y << 4) - (mob.getIntY()) == 0 && (currentNodeDest.x << 4) - mob.getIntX() == 0) nodeReached = true;
 					direction = Math.atan2((currentNodeDest.y << 4) - (mob.getIntY()), (currentNodeDest.x << 4) - mob.getIntX());
-					xa = Math.cos(direction) * mob.speed;
-					ya = Math.sin(direction) * mob.speed;
+					xa = Math.cos(direction) * speed;
+					ya = Math.sin(direction) * speed;
 					predTravelTime = (int) (timer + 15);
 				} else currentState = NodeState.SUCCESS;
 			}
@@ -141,10 +146,6 @@ public class MoveTo extends BehaviourNode {
 	public Node getMember(List<Node> set, Vec2i v) {
 		for (Node n : set) if (n.equals(v)) return n;
 		return null;
-	}
-
-	public void start() {
-		mob.setState(MobState.WALKING);
 	}
 
 }

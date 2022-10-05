@@ -6,11 +6,12 @@ import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class LaserBullet extends Projectile {
 
-	public LaserBullet(Entity source, double x, double y, double angle) {
-		super(source, x, y, angle);
+	public LaserBullet(Entity source, double x, double y, double angle, Level level) {
+		super(source, x, y, angle, level);
 		isEnemyBullet = true;
 		damage = 6;
 		speed = 3;

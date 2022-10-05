@@ -1,5 +1,7 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
+import java.util.List;
+
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.level.Level;
 
@@ -13,7 +15,7 @@ public class StairTile extends FloorTile {
 	public static final int DOWN = 4;
 	
 	
-	public StairTile(Sprite sprite, int colour, int dir, Renderer[] renderers) {
+	public StairTile(Sprite sprite, int colour, int dir, List<Renderer> renderers) {
 		super(sprite, colour, renderers);
 		this.dir = dir;
 	}

@@ -46,7 +46,7 @@ public class HealthKit extends Item {
 	}
 
 	public void update() {
-		if (level.isPlayerInRad(x, y + yROffset, 15)) doPickUp();
+		if (level.isPlayerInRad((int)x, (int) (y + yROffset), 15)) doPickUp();
 	}
 	
 	@Override

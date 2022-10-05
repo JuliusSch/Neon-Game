@@ -7,8 +7,12 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class DoublePistols extends Gun {
 
+	boolean alternate;
+	int defaultSpeed;
+	
 	public DoublePistols(Mob owner) {
 		super(owner, 32, 32, Sprite.doublePistols);
+		attackBuildup = 10;
 	}	
 
 	@Override
@@ -19,25 +23,24 @@ public class DoublePistols extends Gun {
 		xRenderOffset = -7;
 		yRenderOffset = -2;
 		recoil = 2;
+		defaultSpeed = 4;
 	}
-
 
 	@Override
 	public void attack(double x, double y, double direction) {
-		// TODO Auto-generated method stub
-		
+		if (alternate) attack(x, y, direction, defaultSpeed);
+		else secondaryAttack(x, y, direction);
+		alternate = !alternate;
 	}
-
 
 	@Override
 	public void attack(double x, double y, double direction, double speed) {
-		level.add(new SilverBullet(owner, x, y, direction));
-		
+		level.add(new SilverBullet(owner, x, y, direction, defaultSpeed, level));
 	}
 
 	
 	public void secondaryAttack(double x, double y, double direction) {
-		level.add(new SilverBullet(owner, x, y + 8, direction));
+		level.add(new SilverBullet(owner, x, y + 8, direction, defaultSpeed, level));
 	}
 
 	public void renderOnOwner(Screen screen, int bob) {

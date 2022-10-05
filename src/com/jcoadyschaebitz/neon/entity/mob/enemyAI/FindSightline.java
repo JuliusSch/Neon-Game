@@ -17,7 +17,7 @@ public class FindSightline extends BehaviourNode {
 			currentState = NodeState.SUCCESS;
 			blackboard.updateLastPlayerPos();
 		}
-		else if (timer < 10) {
+		else if (timer < 30) {
 			currentState = NodeState.RUNNING;
 			checkForSightline();
 		}

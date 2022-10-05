@@ -16,17 +16,27 @@ public abstract class LayeredSkillNode extends SkillTreeNode {
 	}
 	
 	public void activate() {
-		super.activate();
-		setLayer(layer + 1);
+		if (layer < 5 && manager.availableSkillPoints > 0) {
+			setLayer(layer + 1);
+			manager.availableSkillPoints--;
+		}
 	}
 	
 	public void setLayer(int layer) {
 		if (this.layer == 5) prevLayer = 5;
-		if (layer > 0 && layer <= 5) {
+		if (layer >= 0 && layer <= 5) {
 			prevLayer = this.layer;
 			this.layer = layer;
 		}
-		if (layer == 0) deactivate();
+		if (layer == 0) active = false;
+		else active = true;
+	}
+	
+	public void deactivate() {
+		if (layer > 0) {
+			setLayer(layer - 1);
+			manager.availableSkillPoints++;
+		}
 	}
 
 	protected void updateSkill() {

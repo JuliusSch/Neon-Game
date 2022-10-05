@@ -7,9 +7,9 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 public class CrowdBarrier extends CollisionEntity {
 	
 	private int xRenderOffset, yRenderOffset;
-	private Or_2D dir;
+	private Orientation2D dir;
 
-	public CrowdBarrier(int x, int y, Or_2D dir) {
+	public CrowdBarrier(int x, int y, Orientation2D dir) {
 		super(x, y);
 		this.dir = dir;
 		switch (dir) {
@@ -43,7 +43,7 @@ public class CrowdBarrier extends CollisionEntity {
 	}
 	
 	public int getYAnchor() {
-		if (dir == Or_2D.HORIZONTAL) return (int) y + 24;
+		if (dir == Orientation2D.HORIZONTAL) return (int) y + 24;
 		else return (int) y + 36;
 	}
 	

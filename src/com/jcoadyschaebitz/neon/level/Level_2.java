@@ -9,7 +9,7 @@ import com.jcoadyschaebitz.neon.entity.Item.HealthKit;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.BarStool;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.BarTable;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.Bin;
-import com.jcoadyschaebitz.neon.entity.collisionEntities.CollisionEntity.Or_2D;
+import com.jcoadyschaebitz.neon.entity.collisionEntities.CollisionEntity.Orientation2D;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.CrowdBarrier;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.Stall;
 import com.jcoadyschaebitz.neon.entity.collisionEntities.WireFence;
@@ -64,12 +64,14 @@ public class Level_2 extends Level {
 	}
 
 	protected void addItems() {
+//		add(new Crossbow(24, 125, 24));	//Testing
+		
 		add(new Stall(112 * 16, 108 * 16, Orientation.DOWN, 1));
-		add(new WireFence(28 * 16 - 7, 119 * 16, Or_2D.VERTICAL));
-		add(new WireFence(28 * 16 - 7, 120 * 16, Or_2D.VERTICAL));
-		add(new WireFence(28 * 16 - 7, 121 * 16, Or_2D.VERTICAL));
-		add(new WireFence(28 * 16 - 7, 122 * 16, Or_2D.VERTICAL));
-		add(new WireFence(28 * 16 - 7, 123 * 16, Or_2D.VERTICAL));
+		add(new WireFence(28 * 16 - 7, 119 * 16, Orientation2D.VERTICAL));
+		add(new WireFence(28 * 16 - 7, 120 * 16, Orientation2D.VERTICAL));
+		add(new WireFence(28 * 16 - 7, 121 * 16, Orientation2D.VERTICAL));
+		add(new WireFence(28 * 16 - 7, 122 * 16, Orientation2D.VERTICAL));
+		add(new WireFence(28 * 16 - 7, 123 * 16, Orientation2D.VERTICAL));
 		add(new Bin(24 * 16 - 12, 118 * 16, Orientation.DOWN));
 		add(new Bin(41 * 16 - 7, 123 * 16, Orientation.LEFT));
 		add(new Bin(41 * 16 - 7, 125 * 16, Orientation.LEFT));
@@ -78,16 +80,16 @@ public class Level_2 extends Level {
 		add(new BarStool(56 * 16, 126 * 16));
 		add(new BarTable(52 * 16, 230 * 16));
 		
-		add(new WireFence(45 * 16, 109 * 16, Or_2D.HORIZONTAL));
-		add(new WireFence(46 * 16, 109 * 16, Or_2D.HORIZONTAL));
-		add(new WireFence(47 * 16, 109 * 16, Or_2D.HORIZONTAL));
+		add(new WireFence(45 * 16, 109 * 16, Orientation2D.HORIZONTAL));
+		add(new WireFence(46 * 16, 109 * 16, Orientation2D.HORIZONTAL));
+		add(new WireFence(47 * 16, 109 * 16, Orientation2D.HORIZONTAL));
 
 		add(new HealthKit(63 * 16, 134 * 16));
 		add(new BackgroundDecoration(30 * 16, 117 * 16 - 7, Sprite.bigShopfront2));
 		add(new Vent(101 * 16, 135 * 16, 0.04));
 		add(new Vent(105 * 16, 135 * 16, 0.07));
-		add(new CrowdBarrier(82 * 16, 111 * 16, Or_2D.VERTICAL));
-		add(new CrowdBarrier(85 * 16 + 1, 117 * 16, Or_2D.HORIZONTAL));
-		add(new CrowdBarrier(88 * 16 - 1, 117 * 16, Or_2D.HORIZONTAL));
+		add(new CrowdBarrier(82 * 16, 111 * 16, Orientation2D.VERTICAL));
+		add(new CrowdBarrier(85 * 16 + 1, 117 * 16, Orientation2D.HORIZONTAL));
+		add(new CrowdBarrier(88 * 16 - 1, 117 * 16, Orientation2D.HORIZONTAL));
 	}
 }

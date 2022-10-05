@@ -6,7 +6,6 @@ public abstract class BehaviourNode {
 
 	protected Mob mob;
 	protected AIBlackboard blackboard;
-	protected BehaviourNode child;
 	protected NodeState currentState;
 	protected int timer, interTimer;
 

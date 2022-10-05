@@ -18,40 +18,40 @@ public class AmmoDisplayPaused implements UIComp {
 		this.y = y;
 		font = new Font(Font.SIZE_8x8, 0xffBAFFDA, 1);
 		this.player = player;
-		weapon1 = player.slots.get(0).weapon;
-		weapon2 = player.slots.get(1).weapon;
-		weapon3 = player.slots.get(2).weapon;
-		weapon4 = player.slots.get(3).weapon;
+		weapon1 = player.slots.get(0).getWeapon();
+		weapon2 = player.slots.get(1).getWeapon();
+		weapon3 = player.slots.get(2).getWeapon();
+		weapon4 = player.slots.get(3).getWeapon();
 	}
 
 	public void update() {
-		weapon1 = player.slots.get(0).weapon;
-		weapon2 = player.slots.get(1).weapon;
-		weapon3 = player.slots.get(2).weapon;
-		weapon4 = player.slots.get(3).weapon;
+		weapon1 = player.slots.get(0).getWeapon();
+		weapon2 = player.slots.get(1).getWeapon();
+		weapon3 = player.slots.get(2).getWeapon();
+		weapon4 = player.slots.get(3).getWeapon();
 	}
 
 	public void render(Screen screen) {
-		screen.renderSprite(x, y, Sprite.pistolIcon, false);
-		screen.renderSprite(x, y + 12, Sprite.shotgunIcon, false);
-		screen.renderSprite(x, y + 24, Sprite.crossbowIcon, false);
-		screen.renderSprite(x, y + 36, Sprite.assaultRifleIcon, false);
-		font.render(x + 24, y - 2, 1, getAmmoValues(weapon1)[0] + "/" + getAmmoValues(weapon1)[1], screen, false);
-		font.render(x + 24, y + 10, 1, getAmmoValues(weapon2)[0] + "/" + getAmmoValues(weapon2)[1], screen, false);
-		font.render(x + 24, y + 22, 1, getAmmoValues(weapon3)[0] + "/" + getAmmoValues(weapon3)[1], screen, false);
-		font.render(x + 24, y + 34, 1, getAmmoValues(weapon4)[0] + "/" + getAmmoValues(weapon4)[1], screen, false);
+		screen.renderSprite(x, y + 10, Sprite.pistolIcon, false);
+		screen.renderSprite(x + 64, y + 10, Sprite.shotgunIcon, false);
+		screen.renderSprite(x + 128, y + 10, Sprite.crossbowIcon, false);
+		screen.renderSprite(x + 192, y + 10, Sprite.assaultRifleIcon, false);
+		font.render(x + 20, y + 10, 1, getAmmoString(weapon1), screen, false);
+		font.render(x + 84, y + 10, 1, getAmmoString(weapon2), screen, false);
+		font.render(x + 148, y + 10, 1, getAmmoString(weapon3), screen, false);
+		font.render(x + 212, y + 10, 1, getAmmoString(weapon4), screen, false);
 	}
 
-	public String[] getAmmoValues(PlayerWeapon weapon) {
+	public String getAmmoString(PlayerWeapon weapon) {
 		String[] strings = new String[2];
 		if (weapon != null) {
-			int totalAmmoCount = weapon.ammoCount;
-			strings[1] = Integer.toString(totalAmmoCount);
+			strings[0] = Integer.toString(weapon.ammoCount);
+			strings[1] = Integer.toString(weapon.maxAmmo);
 		} else {
-			strings[0] = "0";
-			strings[1] = "0";
+			strings[0] = "-";
+			strings[1] = "-";
 		}
-		return strings;
+		return strings[0] + "/" + strings[1];
 	}
 
 	@Override

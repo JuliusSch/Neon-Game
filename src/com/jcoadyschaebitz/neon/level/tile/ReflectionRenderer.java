@@ -24,13 +24,13 @@ public class ReflectionRenderer implements Renderer {
 	
 	public static Sprite getReflectionSprite(int x, int y, Level level, boolean flipped) {
 		Sprite reflection = Sprite.nullSprite;
-		List<Entity> nearby = level.getEntitiesInRad(x << 4, y << 4, 48);
+		List<Entity> nearby = level.getEntitiesInRad((x << 4) + 8, (y << 4) + 8, 48);
 		for (Entity e : nearby) {
 			Sprite eSpr = e.getSprite();
 			if (eSpr == null) continue;
 			int dx = (x << 4) - e.getIntX();
 			int dy = (y << 4) - e.getIntY();
-			if (flipped) reflection = reflection.overlay(Sprite.flipSpriteVert(eSpr), dx, dy - e.getSpriteH());
+			if (flipped) reflection = reflection.overlay(Sprite.mirrorVert(eSpr), dx, dy - e.getSpriteH());
 			else reflection = reflection.overlay(eSpr, dx, dy + (e.getSpriteH() / 2));
 		}
 		return reflection;

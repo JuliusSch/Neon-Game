@@ -27,6 +27,12 @@ public class Vec2d {
 	
 	public Vec2d add(Vec2d v) {
 		this.x += v.x;
+		this.y += v.y;
+		return this;
+	}
+	
+	public Vec2d subtract(Vec2d v) {
+		this.x -= v.x;
 		this.y -= v.y;
 		return this;
 	}
@@ -51,7 +57,8 @@ public class Vec2d {
 	
 	public Vec2d normalise() {
 		double magnitude = Math.sqrt(x * x + y * y);
-		return new Vec2d(x / magnitude, y / magnitude);
+		if (magnitude == 0) return new Vec2d(0, 0);
+		else return new Vec2d(x / magnitude, y / magnitude);
 	}
 	
 	public double dot(Vec2d v2) {
@@ -79,4 +86,5 @@ public class Vec2d {
 	public void println() {
 		System.out.println("(" + x + "," + y + ")");
 	}
+
 }

@@ -2,11 +2,12 @@ package com.jcoadyschaebitz.neon.entity.projectile;
 
 import com.jcoadyschaebitz.neon.entity.Entity;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class AssaultRifleBullet extends Projectile {
 
-	public AssaultRifleBullet(Entity source, double x, double y, double angle) {
-		super(source, x, y, angle);
+	public AssaultRifleBullet(Entity source, double x, double y, double angle, Level level) {
+		super(source, x, y, angle, level);
 		range = 500;
 		damage = 2;
 		this.speed = 9;

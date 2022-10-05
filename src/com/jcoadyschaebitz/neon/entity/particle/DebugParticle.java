@@ -5,8 +5,8 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class DebugParticle extends Particle {
 
-	public DebugParticle(double x, double y, int maxLife, int spriteW, int spriteH, Sprite sprite) {
-		super(x, y, maxLife, spriteW, spriteH, sprite);
+	public DebugParticle(double x, double y, int maxLife, Sprite sprite) {
+		super(x, y, maxLife, sprite.getWidth(), sprite.getHeight(), sprite);
 		zIndex = 2;
 	}
 

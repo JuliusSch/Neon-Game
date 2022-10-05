@@ -1,6 +1,7 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -14,13 +15,17 @@ public class Tile {
 
 	public Sprite sprite;
 	public static List<Tile> tiles = new ArrayList<Tile>();
-	protected Renderer[] additionalRenderers;
+	protected List<Renderer> additionalRenderers;
 	public boolean castsShadow, isOutdoors = true, blocksProjectiles = true;
 	public int overlayCol;
 	protected int zIndex, colour;
 	protected boolean border = false;
 	protected Sprite[] dirtBaseSprites, borderSprites;
 
+	// Renderers
+	public static BorderRenderer edgeShadows = new BorderRenderer(Spritesheet.floorShadows.getSprites(), new int[] { 0xff6A654D, 0xff353535, 0xff00FF21, 0xff00AA19, 0xffFFBE00, 0xffFF00FF, 0xff3B871B,
+			0xff0026FF, 0xff298900, 0xff164C00, 0xff206B00, 0xff0FFFFC, 0xff0FFFFD, 0xff0FFFFE, 0xff0FFFFF, 0xffB6FF08, 0xffB6FF09, 0xffB6FF0A, 0xffB6FF0B, 0xff008E0E, 0xff0C151E });
+	
 	public static Tile voidTile = new voidTile(Sprite.wall);
 	
 	private static Sprite[] wallJoinSprites = { Sprite.wallPlain, Sprite.wallJoin1, Sprite.wallJoin2, Sprite.wallJoin3, Sprite.wallJoin4 };
@@ -34,12 +39,13 @@ public class Tile {
 	public static Tile wallJoinRight1 = new WallTile(Sprite.wallFrontRightEdge, 0xff3ED64D, false, null);
 	public static Tile wallHoriz = new RandomisedTileDecorator(new WallTile(Sprite.nullSprite, 0xff21211A, null), Spritesheet.wallHorizontalBars.getSprites(), null);
 	public static Tile wallHorizEdge = new WallTile(Sprite.wallHorizEdge, 0xff171912, false, null);
-	public static Tile solidTarmac = new FloorTile(Sprite.tarmac, 0xff7F6A00, null);
+	public static Tile solidTarmac = new RandomisedTileDecorator(new FloorTile(Sprite.nullSprite, 0xff7F6A00, null), Spritesheet.tarmac.getSprites(), null);//new FloorTile(Sprite.tarmac, 0xff7F6A00, null);
 	public static Tile tarmac2 = new FloorTile(Sprite.tarmac_1, 0xff702c00, null);
 	public static Tile tarmac3 = new FloorTile(Sprite.tarmac_2, 0xff66260F, null);
 	public static Tile tarmac4 = new FloorTile(Sprite.tarmac_3, 0xff2F2816, null);
 	public static Tile tarmac5 = new FloorTile(Sprite.tarmac_4, 0xff373319, null);
 	public static Tile tarmac6 = new FloorTile(Sprite.tarmac_5, 0xff5B232F, null);
+	public static Tile concrete = new RepeatingTileDecorator(new FloorTile(Sprite.nullSprite, 0xff352F2F, null), new Vec2i(3, 3), Spritesheet.concrete.getSprites(), null, true);
 	
 	// Floor tiles:
 	
@@ -82,14 +88,15 @@ public class Tile {
 	public static Tile barCarpetSteps5 = new FloorTile(Sprite.mirror(Sprite.barCarpetStepsRight), 0xff7A353D, null);
 	public static Tile barCarpetSteps6 = new FloorTile(Sprite.mirror(Sprite.barCarpetStepsTopRight), 0xff8E3E46, null);
 	public static Tile barCarpetSteps7 = new FloorTile(Sprite.mirror(Sprite.barCarpetStepsTopRight2), 0xff682E35, null);
+	public static Tile carpetPlankSteps = new StairTile(Sprite.carpetPlankSteps, 0xff91371B, StairTile.DOWN, null);
 	public static Tile woodPlanksSunset = new FloorTile(Sprite.woodPlanksSunset, 0xffB71F00, null);
 	public static Tile insideTiles = new FloorTile(Sprite.insideTiles, 0xff000E60, null);
 	
 	public static Tile blackStoneTile = new FloorTile(Sprite.blackStoneTile, 0xff232323, null);
 	public static Tile whiteStoneTile = new FloorTile(Sprite.whiteStoneTile, 0xffDCDCDC, null);
 	
-	public static Tile poshFloorBoards = new RepeatingTileDecorator(new FloorTile(Sprite.nullSprite, 0xff3D1805, null), new Vec2i(3, 3), Spritesheet.poshBoards, null);
-	public static Tile concrete = new FloorTile(Sprite.old_concrete, 0xff9DA7C6, null);
+	public static Tile poshFloorBoards = new RepeatingTileDecorator(new FloorTile(Sprite.nullSprite, 0xff3D1805, null), new Vec2i(3, 3), Spritesheet.poshBoards.getSprites(), null, false);
+	public static Tile old_concrete = new FloorTile(Sprite.old_concrete, 0xff9DA7C6, null);
 	public static Tile largeKitchenTile = new FloorTile(Sprite.large_kitchen_tile, 0xffC9D1FF, null);
 	
 	// Wall tiles:
@@ -105,6 +112,11 @@ public class Tile {
 	public static Tile corrugatedIronVert = new WallTile(Sprite.corrugatedIronVert, 0xff00443A, false, null);
 	public static Tile barBottleShelf = new WallTile(Sprite.barBottleShelf, 0xffDB005F, false, null);
 	public static Tile interiorPanelling = new WallTile(Sprite.interiorPanelling, 0xff932200, false, null);
+	public static Tile paperPanelling = new WallTile(Sprite.paperPanelling, 0xffFFBE00, false, null);
+//	public static Tile speakerPanelTop = new WallTile(Sprite.speakerPanelTop, 0xff610800, false, null);
+//	public static Tile speakerPanelBottom = new WallTile(Sprite.speakerPanelBottom, 0xff340800, false, null);
+	public static Tile slateTiles = new WallTile(Sprite.slateTiles, 0xff353535, false, null);
+	public static Tile slateTilesLight = new WallTile(Sprite.slateTilesLight, 0xff6A654D, false, null);
 
 	public static Tile japaneseNeonSign = new WallTile(Sprite.japaneseNeonSign, 0xff004170, false, null);
 	public static Tile pipes = new WallTile(Sprite.pipes, 0xff0026ff, false, null);
@@ -213,7 +225,14 @@ public class Tile {
 	public static Tile wallDiagTopRight = new DiagonalTile(Sprite.wallDiagTopRight, 0xff00157C, DiagDirection.TOPRIGHT, null);
 	public static Tile wallDiagBottomLeft = new DiagonalTile(Sprite.wallDiagBottomLeft, 0xff001555, DiagDirection.BOTTOMLEFT, null);
 	public static Tile wallDiagBottomRight = new DiagonalTile(Sprite.wallDiagBottomRight, 0xff001569, DiagDirection.BOTTOMRIGHT, null);
-
+	
+	public static Tile buildingSide1 = new LowerWallTile(Sprite.buildingSide1, 0xff25547C, false, null);
+	public static Tile buildingSide2 = new LowerWallTile(Sprite.buildingSide2, 0xff224D72, false, null);
+	public static Tile buildingSide3 = new LowerWallTile(Sprite.buildingSide3, 0xff1F4668, false, null);
+	public static Tile buildingSide4 = new LowerWallTile(Sprite.buildingSide4, 0xff1B3E5B, false, null);
+	public static Tile buildingSide5 = new LowerWallTile(Sprite.buildingSide5, 0xff193A54, false, null);
+	public static Tile lowerWall = new LowerWallTile(Sprite.wall, 0xff17364F, false, null);
+	
 	// wall floor tiles:
 	public static List<Tile> hiddenTiles = Tile.initHiddenTiles();
 	public static BorderRenderer wallEdges = new BorderRenderer(Spritesheet.wallTopBorder.getSprites(), new int[] {});
@@ -221,11 +240,11 @@ public class Tile {
 	// Water tiles:
 	public static Tile poolWater = new WaterTile(0xff2B8F9E, Sprite.poolWaterTop, Sprite.whitePoolTiles, WaterTile.FULL, null);
 	public static Tile poolEdge = new WaterTile(0xff2B8FCD, Sprite.poolWater, Sprite.smallPoolFloorTiles, WaterTile.TOP_EDGE, null);
-	public static Tile poolFloorTilesB = new FloorTile(Sprite.poolFloorTile, 0xffB2BDFF, new Renderer[] { new BorderRenderer(Spritesheet.poolGrateBorder.getSprites(), new int[] { 0xff2B8F9E, 0xff2B8FCD }), new ReflectionRenderer(true, 0.1)});
-	public static Tile whiteTiles = new FloorTile(Sprite.whitePoolTiles, 0xff001BB7, new Renderer[] { new ReflectionRenderer(true, 0.1)});
+	public static Tile poolFloorTilesB = new FloorTile(Sprite.poolFloorTile, 0xffB2BDFF, new ArrayList<Renderer>(Arrays.<Renderer>asList(new BorderRenderer(Spritesheet.poolGrateBorder.getSprites(), new int[] { 0xff2B8F9E, 0xff2B8FCD }), new ReflectionRenderer(true, 0.1))));
+	public static Tile whiteTiles = new FloorTile(Sprite.whitePoolTiles, 0xff001BB7, new ArrayList<Renderer>(Arrays.<Renderer>asList(new ReflectionRenderer(true, 0.1))));
 	
 	
-	public Tile(Sprite sprite, int colour, int zIndex, Renderer[] renderers) {
+	public Tile(Sprite sprite, int colour, int zIndex, List<Renderer> renderers) {
 		this.sprite = sprite;
 		this.colour = colour;
 		tiles.add(this);
@@ -233,7 +252,7 @@ public class Tile {
 		this.additionalRenderers = renderers;
 	}
 
-	public Tile(Sprite sprite, int zIndex, Renderer[] renderers) {
+	public Tile(Sprite sprite, int zIndex, List<Renderer> renderers) {
 		this(sprite, 0, zIndex, renderers);
 	}
 
@@ -277,14 +296,12 @@ public class Tile {
 	
 	public void renderOverlay(int x, int y, Screen screen, Level level, int spriteCol, Sprite borderSprite) {
 		overlayCol = spriteCol;		
-		renderOverlay(x, y, screen, level, Level.getTile(spriteCol).getSprite(), borderSprite);
+		renderOverlay(x, y, screen, level, Level.getTile(spriteCol).getSprite().overlay(borderSprite, 0, 0));
 	}
 	
-	public void renderOverlay(int x, int y, Screen screen, Level level, Sprite sprite, Sprite borderSprite) {
-		int xx = x << 4;
-		int yy = y << 4;
-		if (borderSprite != Sprite.nullSprite) sprite = sprite.overlay(borderSprite, 0, 0);					// Modified: translucency in horizontal block below player position
-		screen.renderTranslucentSprite(xx, yy, sprite, true);
+	public void renderOverlay(int x, int y, Screen screen, Level level, Sprite sprite) {
+//		if (borderSprite != Sprite.nullSprite) sprite = sprite.overlay(borderSprite, 0, 0);					// Modified: translucency in horizontal block below player position
+		screen.renderTranslucentSprite(x << 4, y << 4, sprite, true);
 	}
 
 	public Sprite getShadowSprite(Level level, int x, int y) {

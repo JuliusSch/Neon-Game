@@ -36,7 +36,7 @@ public abstract class SkillTreeNode implements MouseListener {
 		this.player = player;
 		font = new Font(Font.SIZE_5x5, 0xffBAFFDA, 1);
 		this.tree = tree;
-		description = "There isn't a\ndescription";
+		description = "There isn't a description";
 	}
 
 	public void update() {
@@ -52,17 +52,46 @@ public abstract class SkillTreeNode implements MouseListener {
 	}
 
 	public void activate() {
-		active = true;
+		if (!active && manager.availableSkillPoints > 0) {
+			active = true;
+			manager.availableSkillPoints--;
+		}
 	}
 
 	public void deactivate() {
-		active = false;
+		if (active) {
+			active = false;
+			manager.availableSkillPoints++;
+		}
 	}
 
 	public abstract void playerKilledEnemy();
 
 	protected abstract void updateSkill();
 
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+		if (!UIComp.ui.getGame().getState().equals(UIComp.ui.getGame().shopMenuState)) return;
+		double s = Game.getWindowScale();
+		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXBarsOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXBarsOffset()) {
+			if (Mouse.getY() > (yOffset + spritePositionY) * s && Mouse.getY() < (yOffset + spritePositionY + height) * s) {
+				if (e.getButton() == MouseEvent.BUTTON1) activate();
+				else if (e.getButton() == MouseEvent.BUTTON3) deactivate();
+			}
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+	
 	public void render(Screen screen, int xOffset, int yOffset) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
@@ -76,28 +105,4 @@ public abstract class SkillTreeNode implements MouseListener {
 			font.render(xOffset + spritePositionX + 3, yOffset + spritePositionY + 6, "0/1", screen, false);
 		}	
 	}
-
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	public void mouseExited(MouseEvent e) {
-	}
-
-	public void mousePressed(MouseEvent e) {
-		if (!UIComp.ui.getGame().getState().equals(UIComp.ui.getGame().pauseState)) return;
-		if (!(manager.selectedTree == tree)) return;
-		double s = Game.getWindowScale();
-		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXBarsOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXBarsOffset()) {
-			if (Mouse.getY() > (yOffset + spritePositionY) * s && Mouse.getY() < (yOffset + spritePositionY + height) * s) {
-				activate();
-			}
-		}
-	}
-
-	public void mouseReleased(MouseEvent e) {
-	}
-
 }

@@ -60,6 +60,9 @@ public class UIManager {
 			player.getFirstEmptySlot().addWeapon(weapon);
 			selectedItemSlot = selectSlot;
 			return true;
+		} else {
+			player.getSelectedSlot().removeWeapon();
+			player.getSelectedSlot().addWeapon(weapon);
 		}
 		return false;
 	}

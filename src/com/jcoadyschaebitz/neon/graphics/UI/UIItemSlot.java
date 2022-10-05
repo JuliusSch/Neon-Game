@@ -7,7 +7,7 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class UIItemSlot implements UIComp {
 
-	public PlayerWeapon weapon;
+	private PlayerWeapon weapon;
 	private static int slotNumber = 0;
 	public final int thisSlot;
 
@@ -52,6 +52,7 @@ public class UIItemSlot implements UIComp {
 	}
 
 	public void removeWeapon() {
+		this.weapon.disown();
 		this.weapon = null;
 		hasItem = false;
 	}

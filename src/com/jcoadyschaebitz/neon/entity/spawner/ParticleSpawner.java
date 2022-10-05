@@ -20,5 +20,4 @@ public class ParticleSpawner extends Spawner {
 		}
 		remove();
 	}
-
 }

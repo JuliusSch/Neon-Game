@@ -9,6 +9,6 @@ public class SkillsButton extends UIButton {
 	}
 
 	public void doFunction() {
-		Game.getUIManager().setMenu(Game.getUIManager().getGame().pauseSkillsMenu);
+		Game.getUIManager().setMenu(Game.getUIManager().getGame().shopMenu);
 	}
 }

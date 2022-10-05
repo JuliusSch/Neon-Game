@@ -11,7 +11,7 @@ public class SaveButton extends UIButton {
 
 	public void doFunction() {
 		Game.getUIManager().getGame().switchToGameState(Game.getUIManager().getGame().mainMenuState);
-		Game.getUIManager().loadGameMenu.saveToSelectedSlot();
+//		Game.getUIManager().loadGameMenu.saveToSelectedSlot();
 	}
 
 }

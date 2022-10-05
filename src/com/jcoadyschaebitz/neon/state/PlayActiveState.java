@@ -1,5 +1,6 @@
-package com.jcoadyschaebitz.neon;
+package com.jcoadyschaebitz.neon.state;
 
+import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
 import com.jcoadyschaebitz.neon.sound.SoundClip;
@@ -16,7 +17,7 @@ public class PlayActiveState implements GameState {
 
 	@Override
 	public void update() {
-		game.getKeyboard().update();
+		Game.getKeyboard().update();
 		game.getLevel().update();
 	}
 

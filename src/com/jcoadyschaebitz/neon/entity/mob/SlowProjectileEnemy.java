@@ -74,7 +74,7 @@ public class SlowProjectileEnemy extends ShootingEnemy {
 		if (time % 90 == 0 && random.nextInt(4) != 0) {
 			if (distanceP < viewRange && level.isSightline((int) x + 8, (int) y + 10, directionP, level.getPlayer())) {
 				if (weapon != null && health > 0 && damageDelay <= 0) {
-					weapon.attack(x, y, directionP, 1);
+					weapon.attack(getMidX(), getMidY(), directionP, 1);
 				}
 			}
 		}

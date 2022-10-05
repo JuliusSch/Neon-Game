@@ -3,19 +3,26 @@ package com.jcoadyschaebitz.neon.cutscene.events;
 import com.jcoadyschaebitz.neon.cutscene.Actor;
 import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.entity.particle.TextBubble;
+import com.jcoadyschaebitz.neon.graphics.Sprite;
 
-public class Mob_SpeakEvent extends Event {
+public class SpeakEvent extends Event {
 	
 	private static final int DEFAULT_DURATION = 180;
 	private TextBubble textBub;
 
-	public Mob_SpeakEvent(CutScene scene, int startTime, int duration, Actor actor, String text) {
+	public SpeakEvent(CutScene scene, int startTime, int duration, Actor actor, String text) {
 		super(scene, startTime, duration);
-		textBub = new TextBubble(startTime, duration, text, true, actor.getMob());
+		textBub = new TextBubble(startTime, duration, text, true, Sprite.oldManEye, actor.getMob());
 		scene.addTextBubble(textBub);
 	}
 	
-	public Mob_SpeakEvent(CutScene scene, int startTime, Actor actor, String text) {
+	public SpeakEvent(CutScene scene, int startTime, int duration, String text, Sprite speakerSprite) {
+		super(scene, startTime, duration);
+		textBub = new TextBubble(startTime, duration, text, true, speakerSprite);
+		scene.addTextBubble(textBub);
+	}
+	
+	public SpeakEvent(CutScene scene, int startTime, Actor actor, String text) {
 		this(scene, startTime, DEFAULT_DURATION, actor, text);
 	}
 

@@ -30,7 +30,7 @@ public class Level_1_Bar extends Level {
 
 	@Override
 	protected void initTransition() {
-		add(new LevelTransition(new Rect(19, 32, 1, 1), new Vec2i(28 * 16, 118 * 16), this, Level.level_1));
+		add(new LevelTransition(new Rect(19, 32, 1, 1), new Vec2i(92 * 16, 118 * 16), this, Level.level_1));
 		add(new LevelTransition(new Rect(6, 22, 1, 0), new Vec2i(27 * 16, 15 * 16), this, Level.level_0_menu));
 	}
 	
@@ -60,12 +60,13 @@ public class Level_1_Bar extends Level {
 		Soldier s2 = new Soldier(12, 15);
 		add(s2);
 		members[1] = s2;
-		add(new Scene_1_Bar(this, members, Game.getUIManager().getGame().getKeyboard()));
+		add(new Scene_1_Bar(this, members, Game.getKeyboard()));
 	}
 
 	@Override
 	protected void addItems() {
-		add(new Pistol(11, 13, 180));// normal			-9, -89 difference from level_1
+//		add(new Pistol(11, 13, 180));// normal			-9, -89 difference from level_1
+		add(new Pistol(19, 31, 180));
 		add(new HealthCase(19 * 16 - 7, 9 * 16 + 1, Orientation.DOWN));
 		
 		add(new BarCounter(9 * 16, 9 * 16));

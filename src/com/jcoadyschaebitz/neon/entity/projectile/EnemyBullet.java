@@ -3,17 +3,19 @@ package com.jcoadyschaebitz.neon.entity.projectile;
 import com.jcoadyschaebitz.neon.entity.Entity;
 import com.jcoadyschaebitz.neon.entity.spawner.ParticleSpawner;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class EnemyBullet extends Projectile {
 
-	public EnemyBullet(Entity source, double x, double y, double angle, double speed, int spriteNo) {
-		super(source, x, y, angle);
+	public EnemyBullet(Entity source, double x, double y, double angle, double speed, int spriteNo, Level level) {
+		super(source, x, y, angle, level);
 		isEnemyBullet = true;
 		range = 400;
 		damage = 4;
 		this.speed = speed;
 		spriteWidth = 5;
 		spriteHeight = 5;
+		this.level = level;
 		switch (spriteNo) {
 		case 1:
 			sprite = Sprite.enemy_bullet_1;
@@ -32,8 +34,8 @@ public class EnemyBullet extends Projectile {
 			break;
 		}
 
-		nx = Math.cos(angle) * speed;
-		ny = Math.sin(angle) * speed;
+		nx = Math.cos(angle) * this.speed;
+		ny = Math.sin(angle) * this.speed;
 	}
 
 	public void collide(int x, int y) {

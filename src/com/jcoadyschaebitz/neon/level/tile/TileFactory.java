@@ -1,5 +1,7 @@
 package com.jcoadyschaebitz.neon.level.tile;
 
+import java.util.List;
+
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class TileFactory {
@@ -12,7 +14,7 @@ public class TileFactory {
 		BLOCK_SIGHT, BLOCK_PROJECTILES, CASTS_SHADOW, IS_OUTDOORS
 	}
 
-	public static Tile createTile(int colour, Sprite sprite, TileType type, TileModifier[] modifiers, Renderer[] renderers) {
+	public static Tile createTile(int colour, Sprite sprite, TileType type, TileModifier[] modifiers, List<Renderer> renderers) {
 		Tile output = Tile.voidTile;
 		switch(type) {
 		case FLOOR:

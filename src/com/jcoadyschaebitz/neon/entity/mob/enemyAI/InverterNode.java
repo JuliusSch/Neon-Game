@@ -12,12 +12,16 @@ public class InverterNode extends DecoratorNode {
 		switch (node.currentState) {
 		case RUNNING:
 			currentState = NodeState.RUNNING;
+			break;
 		case SUCCESS:
 			currentState = NodeState.FAILURE;
+			break;
 		case FAILURE:
 			currentState = NodeState.SUCCESS;
+			break;
 		default:
 			currentState = NodeState.FAILURE;
+			break;
 		}
 	}
 

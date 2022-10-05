@@ -2,12 +2,13 @@ package com.jcoadyschaebitz.neon.entity.mob;
 
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AIBlackboard;
-import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AttackBehaviour;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AttackPlayer;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckAggro;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDistanceToPlayer;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.InverterNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SelectorNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SequencerNode;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SetState;
 import com.jcoadyschaebitz.neon.entity.projectile.Bolt;
 import com.jcoadyschaebitz.neon.entity.projectile.LaserBullet;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
@@ -132,7 +133,9 @@ public class SpearEnemy extends MeleeEnemy {
 		SelectorNode aggroBehaviours = new SelectorNode(bb, this);
 		SequencerNode simpleMeleeAttack = new SequencerNode(bb, this);
 		simpleMeleeAttack.addNode(new CheckDistanceToPlayer(bb, this, 60));
-		simpleMeleeAttack.addNode(new AttackBehaviour(bb, this));
+		simpleMeleeAttack.addNode(new SetState(bb, this, MobState.ATTACKING));
+		simpleMeleeAttack.addNode(new AttackPlayer(bb, this));
+		simpleMeleeAttack.addNode(new SetState(bb, this, MobState.IDLE));
 		aggroBehaviours.addNode(simpleMeleeAttack);
 		behaviours.addNode(aggroBehaviours);
 	}
@@ -259,8 +262,8 @@ public class SpearEnemy extends MeleeEnemy {
 	}
 
 	public void rangedAttack(double angle) {
-		level.add(new LaserBullet(this, x + 16, y + 8, angle - 0.1));
-		level.add(new LaserBullet(this, x + 16, y + 8, angle + 0.1));
+		level.add(new LaserBullet(this, x + 16, y + 8, angle - 0.1, level));
+		level.add(new LaserBullet(this, x + 16, y + 8, angle + 0.1, level));
 	}
 
 	public void randomMove() {

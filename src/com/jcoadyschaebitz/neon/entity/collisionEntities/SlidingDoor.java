@@ -10,12 +10,12 @@ public class SlidingDoor extends CollisionEntity {
 	private Sprite openSprite, closedSprite;
 	private CollisionBox openBounds, closedBounds, openCorners, closedCorners;
 	
-	public SlidingDoor(int x, int y, boolean open, boolean locked, Or_2D direction) {
+	public SlidingDoor(int x, int y, boolean open, boolean locked, Orientation2D direction) {
 		super(x, y);
 		this.open = open;
 		this.locked = locked;
 		if (locked) open = false;
-		if (direction == Or_2D.HORIZONTAL) {
+		if (direction == Orientation2D.HORIZONTAL) {
 			openSprite = Sprite.door_h_open;
 			closedSprite = Sprite.door_h_closed;
 			int[] xPoints = { 8, 16, 24, 32, 40, 8, 16, 24, 32, 40, 8, 40 };
@@ -49,7 +49,7 @@ public class SlidingDoor extends CollisionEntity {
 	public void update() {
 		time++;
 		if (time % 10 == 0 && !locked) {
-			if (level.isPlayerInRad(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, 48)) {
+			if (level.isPlayerInRad((int) (x + sprite.getWidth() / 2), (int) (y + sprite.getHeight() / 2), 48)) {
 				if (!open) open();
 			} else if (open) close();
 		}

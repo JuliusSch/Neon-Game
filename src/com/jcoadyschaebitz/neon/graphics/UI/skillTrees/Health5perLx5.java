@@ -14,18 +14,16 @@ public class Health5perLx5 extends LayeredSkillNode {
 	
 	public void activate() {
 		super.activate();
-		double newHealth;
-		double change = (prevLayer * 0.05) + 1;
-		newHealth = player.maxHealth / change;
-		newHealth = newHealth * ((layer * 0.05) + 1);
-		player.maxHealth = newHealth;
+//		double newHealth;
+//		double change = (prevLayer * 0.05) + 1;
+//		newHealth = player.maxHealth / change;
+//		newHealth = newHealth * ((layer * 0.05) + 1);
+//		player.maxHealth = newHealth;
 	}
 	
 	public void deactivate() {
 		super.deactivate();
-		player.maxHealth = player.maxHealth / layer;
-		layer = 0;
-		prevLayer = 0;
+//		player.maxHealth = player.maxHealth / layer;
 	}
 
 	public void playerKilledEnemy() {

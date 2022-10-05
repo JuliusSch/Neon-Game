@@ -23,12 +23,12 @@ public class CameraMoveEvent extends Event {
 		targetY = targY;
 		switch(t) {
 		case IN:
-			xa = (targX - scene.getXScroll()) / duration;
-			ya = (targY - scene.getYScroll()) / duration;
+			xa = (targX - scene.getXOffset()) / duration;
+			ya = (targY - scene.getYOffset()) / duration;
 			break;
 		case OUT:
-			xa = (scene.getXScroll() - targX) / duration;
-			ya = (scene.getYScroll() - targY) / duration;
+			xa = (scene.getXOffset() - targX) / duration;
+			ya = (scene.getYOffset() - targY) / duration;
 			break;
 		default:
 			xa = 0;
@@ -45,12 +45,12 @@ public class CameraMoveEvent extends Event {
 		time++;
 		switch(type) {
 		case IN:
-			xa = (targetX - scene.getXScroll()) / duration;
-			ya = (targetY - scene.getYScroll()) / duration;
+			xa = (targetX - scene.getXOffset()) / duration;
+			ya = (targetY - scene.getYOffset()) / duration;
 			break;
 		case OUT:
-			xa = (scene.getXScroll() - targetX) / duration;
-			ya = (scene.getYScroll() - targetY) / duration;
+			xa = (scene.getXOffset() - targetX) / duration;
+			ya = (scene.getYOffset() - targetY) / duration;
 			break;
 		default:
 			break;

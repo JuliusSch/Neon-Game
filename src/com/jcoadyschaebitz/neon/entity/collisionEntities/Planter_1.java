@@ -5,7 +5,7 @@ import com.jcoadyschaebitz.neon.graphics.Sprite;
 
 public class Planter_1 extends CollisionEntity {
 
-	public Planter_1(int x, int y, Or_2D or) {
+	public Planter_1(int x, int y, Orientation2D or) {
 		super(x, y);
 		int[] xPoints, yPoints, xCorners, yCorners;
 		switch (or) {

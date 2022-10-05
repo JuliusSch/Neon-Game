@@ -1,6 +1,7 @@
 package com.jcoadyschaebitz.neon.graphics.UI;
 
 import com.jcoadyschaebitz.neon.Game;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class PlayButton extends UIButton {
 
@@ -13,7 +14,8 @@ public class PlayButton extends UIButton {
 
 	@Override
 	public void doFunction() {
-		game.loadSelectedSave();
+		Level.refreshLevels(ui.getGame().getLevel().getPlayer());
+		game.loadDataFromSelectedSave();
 		game.switchToGameState(game.playState);
 	}
 }

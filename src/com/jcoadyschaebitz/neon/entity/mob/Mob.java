@@ -12,6 +12,7 @@ import com.jcoadyschaebitz.neon.entity.mob.enemyAI.BehaviourNode.NodeState;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SelectorNode;
 import com.jcoadyschaebitz.neon.entity.projectile.Bolt;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
+import com.jcoadyschaebitz.neon.entity.projectile.Ray;
 import com.jcoadyschaebitz.neon.entity.weapon.Weapon;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Font;
@@ -33,15 +34,16 @@ public abstract class Mob extends Entity implements DropsItems {
 	public int damageDelay = 0;
 	protected double knockbackX, knockbackY;
 	public double maxHealth;
-	protected Sprite deadSpriteRight = Sprite.blueGrass, deadSpriteLeft = Sprite.blueGrass;
+	protected Sprite deadSpriteRight = Sprite.blueGrass, deadSpriteLeft = Sprite.blueGrass, textBubbleSprite = Sprite.oldManEye;
 	protected boolean beingKnockedBack;
 	public boolean walking = false;
 	public Weapon weapon;
 	protected double knockbackResistance = 0.8;
 	protected double directionP, distanceP;
-	public boolean aggro, inCutscene = false;
+	public boolean aggro, immobilised = false;
 	protected SelectorNode behaviours;
-	protected AIBlackboard bb;
+	protected AIBlackboard blackboard;
+	protected double poise, maxPoise;
 
 	protected AnimatedSprite leftWalking, rightWalking, leftIdle, rightIdle;
 	protected AnimatedSprite leftDamage, rightDamage, leftDying, rightDying, currentAnim;
@@ -59,26 +61,32 @@ public abstract class Mob extends Entity implements DropsItems {
 		entityBounds = new CollisionBox(xCollisionValues, yCollisionValues);
 		maxHealth = 16;
 		health = maxHealth;
+		maxPoise = 5;
 
-		bb = new AIBlackboard();
-		behaviours = new SelectorNode(bb, this);
-		constructBehaviourTree(bb);
+		blackboard = new AIBlackboard();
+		behaviours = new SelectorNode(blackboard, this);
+		constructBehaviourTree(blackboard);
 	}
 
 	protected abstract void constructBehaviourTree(AIBlackboard bb);
 
 	public void setInSceneStatus(boolean status) {
-		inCutscene = status;
+		immobilised = status;
 	}
 
 	public void update() {
 		time++;
-		if (!bb.beenInitted) bb.init(level);
+		if (!blackboard.beenInitted) blackboard.init(level);
 		updateAnimSprites();
-		if (!inCutscene) {
+		if (!immobilised) {
 			if (behaviours.getState() == NodeState.SUCCESS || behaviours.getState() == NodeState.FAILURE) behaviours.softReset();
 			if (aggro) behaviours.update();
 		}
+		if (poise >= maxPoise) {
+			behaviours.hardReset();
+			poise = 0;
+		}
+		if (poise > 0) poise -= 0.05;
 		// How to separate behaviour and animation, should both be handled by tree?
 		if (damageDelay > 0) damageDelay--;
 		if (beingKnockedBack) {
@@ -91,6 +99,10 @@ public abstract class Mob extends Entity implements DropsItems {
 		updatePDistance();
 		updatePDirection();
 		checkIfDead();
+	}
+	
+	public Sprite getTextBubbleSprite() {
+		return textBubbleSprite;
 	}
 
 	private void updatePDistance() {
@@ -127,18 +139,18 @@ public abstract class Mob extends Entity implements DropsItems {
 		if (random.nextDouble() < healthDropChance) level.add(new HealthKit((int) x, (int) y));
 		for (int i = 0; i < level.getPlayer().slots.size(); i++) {
 			double percent;
-			if (level.getPlayer().slots.get(i).weapon != null) {
-				percent = level.getPlayer().slots.get(i).weapon.checkAmmoPercent();
+			if (level.getPlayer().slots.get(i).getWeapon() != null) {
+				percent = level.getPlayer().slots.get(i).getWeapon().checkAmmoPercent();
 			} else return;
-			if (percent >= 0.4) level.getPlayer().slots.get(i).weapon.checkAmmoDrop(0.05, x, y);
-			if (percent >= 0.2 && percent < 0.4) level.getPlayer().slots.get(i).weapon.checkAmmoDrop(0.1, x, y);
-			if (percent < 0.2) level.getPlayer().slots.get(i).weapon.checkAmmoDrop(0.25, x, y);
+			if (percent >= 0.4) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.05, x, y);
+			if (percent >= 0.2 && percent < 0.4) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.1, x, y);
+			if (percent < 0.2) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.25, x, y);
 		}
 	}
 	
-	public void goTo(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public void goTo(double x, double y) {
+		this.x = (int) x;
+		this.y = (int) y;
 	}
 
 	protected boolean playerSightline() {
@@ -162,7 +174,7 @@ public abstract class Mob extends Entity implements DropsItems {
 		currentAnim = anim;
 	}
 
-	public void move(double xa, double ya, boolean stairChange) {
+	public boolean move(double xa, double ya, boolean stairChange) {
 		Vec2d newVs = checkDiagCollision(xa, ya);
 		double xx = newVs.x;
 		double yy = newVs.y;
@@ -172,38 +184,36 @@ public abstract class Mob extends Entity implements DropsItems {
 			yy = StairTile.changeYa(level, xa, ya, (int) (x + 8), (int) (y + 20), standingTile.isStair());
 		}
 		if (xx != 0 && yy != 0) {
-			move(0, yy, false);
-			move(xx, 0, false);
-			return;
+			boolean moveX = move(xx, 0, false);
+			boolean moveY = move(0, yy, false);
+			return moveX && moveY;
 		}
+		boolean noCollision = true;
 
 		while (xx != 0) {
 			if (Math.abs(xx) > 1) {
-				if (!collision(abs(xx), yy) && !staticEntityCollision(abs(xx), yy)) {
-					this.x += abs(xx);
-				}
+				if (!collision(abs(xx), yy) && !staticEntityCollision(abs(xx), yy)) this.x += abs(xx);
+				else noCollision = false;
 				xx -= abs(xx);
 			} else {
-				if (!collision(abs(xx), yy) && !staticEntityCollision(abs(xx), yy)) {
-					this.x += xx;
-				}
+				if (!collision(abs(xx), yy) && !staticEntityCollision(abs(xx), yy)) this.x += xx;
+				else noCollision = false;
 				xx = 0;
 			}
 		}
 
 		while (yy != 0) {
 			if (Math.abs(yy) > 1) {
-				if (!collision(xx, abs(yy)) && !staticEntityCollision(xx, abs(yy))) {
-					this.y += abs(yy);
-				}
+				if (!collision(xx, abs(yy)) && !staticEntityCollision(xx, abs(yy))) this.y += abs(yy);
+				else noCollision = false;
 				yy -= abs(yy);
 			} else {
-				if (!collision(xx, abs(yy)) && !staticEntityCollision(xx, abs(yy))) {
-					this.y += yy;
-				}
+				if (!collision(xx, abs(yy)) && !staticEntityCollision(xx, abs(yy))) this.y += yy;
+				else noCollision = false;
 				yy = 0;
 			}
 		}
+		return noCollision;
 	}
 	
 	protected boolean collision(double xa, double ya) {
@@ -355,6 +365,10 @@ public abstract class Mob extends Entity implements DropsItems {
 	}
 
 	public void hitReceived(Projectile projectile) {
+		if (projectile instanceof Ray) {
+			blackboard.setTargeted(true);
+			return;
+		}
 		aggro = true;
 		if (health > 0) {
 			health -= projectile.getDamage();
@@ -367,8 +381,8 @@ public abstract class Mob extends Entity implements DropsItems {
 			} else {
 				if (projectile instanceof Bolt) ((Bolt) projectile).impaled(this);
 				state = MobState.TAKINGDAMAGE;
-				behaviours.hardReset();
-				knockback(projectile.angle, 2 * knockbackMultiplier);
+				addPoiseDamage(projectile.getDamage());
+				knockback(projectile.angle, 2 * knockbackMultiplier * projectile.getKnockbackMultiplier());
 				damageDelay = rightDamage.getTotalLength();
 			}
 			xa = 0;
@@ -380,17 +394,22 @@ public abstract class Mob extends Entity implements DropsItems {
 		}
 	}
 
+	public void addPoiseDamage(double amount) {
+		poise += amount;
+	}
+
 	public Sprite getDeadSprite() {
 		if (dir == Orientation.RIGHT) return deadSpriteRight;
 		else return deadSpriteLeft;
 	}
 
 	Font font = new Font(Font.SIZE_5x5, 0xffFF004E, 0.5);
+	
 	public void render(Screen screen) {
 		sprite = currentAnim.getSprite();
 		screen.renderTranslucentSprite((int) x - 3, (int) y + 3, Sprite.shadow, true, 0.6);
 		screen.renderSprite((int) x, (int) y, getSprite(), true);
 		if (weapon != null) weapon.renderOnOwner(screen, (currentAnim.getFrame() / 4) % 2);
-		font.render((int) x, (int) y, state.toString(), screen, true);
+//		font.render((int) x, (int) y, state.toString(), screen, true);
 	}
 }

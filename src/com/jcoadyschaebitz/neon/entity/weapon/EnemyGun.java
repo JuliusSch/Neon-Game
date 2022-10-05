@@ -28,7 +28,8 @@ public class EnemyGun extends Gun {
 	public void attack(double x, double y, double angle, double speed) {
 		double xp = Math.cos(angle) * 12;
 		double yp = Math.sin(angle) * 12;
-		Projectile p = new EnemyBullet(owner, x + xp, y + yp + 6, angle, speed, 1);
+		Projectile p = new EnemyBullet(owner, x, y + 6, angle, speed, 1, level);
+		p.move(owner, xp, yp);
 		level.add(p);
 		addFlash((int) x, (int) y, angle);
 	}

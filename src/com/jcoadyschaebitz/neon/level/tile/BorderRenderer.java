@@ -8,7 +8,7 @@ import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.level.Level;
 
-public class BorderRenderer  implements Renderer {
+public class BorderRenderer implements Renderer {
 	
 	private int[] spriteMap, adjTileCols;
 	private Level currentLevel;
@@ -27,7 +27,7 @@ public class BorderRenderer  implements Renderer {
 			spriteMap = updateSpriteMap(level.generateBorderMap(adjTileCols), level.getWidth(), level.getHeight());
 			currentLevel = level;
 		}
-		if (spriteMap[(x) + (y) * level.getWidth()] != -1) screen.renderSprite(x << 4, y << 4, sprites.get(spriteMap[x + y * level.getWidth()]), true);
+		if (spriteMap[(x) + (y) * level.getWidth()] != -1) screen.renderTranslucentSprite(x << 4, y << 4, sprites.get(spriteMap[x + y * level.getWidth()]), true);
 	}
 	
 	public static int[] updateSpriteMap(int[] inputMap, int width, int height) {

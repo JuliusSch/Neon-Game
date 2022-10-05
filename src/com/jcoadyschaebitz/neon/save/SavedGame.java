@@ -1,52 +1,73 @@
 package com.jcoadyschaebitz.neon.save;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.jcoadyschaebitz.neon.Game;
-import com.jcoadyschaebitz.neon.entity.mob.Player;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class SavedGame implements Serializable {
 	
 	private static final long serialVersionUID = -5212641408702701608L;
-	public String level;
 //	public TileCoordinate playerPos;
-//	public Player player;
-	public String saveName;
-	public String timeCreated;
 	public boolean selected = false;
+	public Map<String, String> saveData = new HashMap<String, String>();
 
-	public SavedGame(String level, Player player, String saveName) {
-		this.level = level;
-//		this.player = player;
-		this.saveName = saveName;
+	public SavedGame(int slot) {
+		populateNewFile(slot);
+	}
+	
+	public SavedGame(String saveName) {
+	}
+	
+	public void populateNewFile(int slot) {
+		saveData.put("TimeCreated", LocalDateTime.now().toString().replace("T", " ").substring(0, LocalDateTime.now().toString().length() - 4));
+		saveData.put("SaveName", "Save " + slot + ": created - " + saveData.get("TimeCreated"));
+		saveData.put("Level", "level_1");
+		saveData.put("PlayerPosition", Level.getLevelFromName(saveData.get("Level")).getDefaultPlayerSpawn().getString());
+	}
+	
+	private void saveCurrentState() {
+		saveData.put("Level", Game.getUIManager().getGame().getLevel().getLevelName());
+		saveData.putAll(Game.getUIManager().getGame().getLevel().getPlayer().getData());
 	}
 	
 	public void saveGame(String fileName) {
-		level = Game.getUIManager().getGame().getLevel().getLevelName();
-//		playerPos = Game.getUIManager().getGame().getLevel().getPlayerSpawn();
-		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get(fileName)))) {
-//			System.out.println(out.toString());
-			out.writeObject(this);
-		} catch (Exception e) {
+		saveCurrentState();
+		try {
+			List<String> lines = mapToStringArray(saveData);
+			Files.write(Paths.get(fileName), lines, StandardCharsets.UTF_8);
+		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Error: failed to save game - " + fileName);
 		}
 	}
 	
-	public static Object loadGame(String fileName) {
-		System.out.println(fileName);
-		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get(fileName)))) {
-			Object o = in.available();
-			System.out.println(o);
-			return in.readObject();
-		} catch (Exception e) {
-			System.err.println("Error: failed to load game - " + fileName);
+	public static SavedGame loadGame(String fileName) {
+		SavedGame loadedSave = new SavedGame(fileName);
+		try {
+			List<String> fileContents = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
+			for (String line : fileContents) {
+				String[] lineBits = line.split(" :: ");
+				loadedSave.saveData.put(lineBits[0], lineBits[1]);
+			}
+		} catch (IOException e) {
+			System.err.println("No file found");
 			return null;
 		}
+		return loadedSave;
 	}
 	
+	private List<String> mapToStringArray(Map<String, String> hashMap) {
+		List<String> result = new ArrayList<String>();
+		for (Map.Entry<String, String> entry : hashMap.entrySet()) result.add(entry.getKey() + " :: " + entry.getValue());
+		return result;
+	}
 }

@@ -3,15 +3,16 @@ package com.jcoadyschaebitz.neon.entity.projectile;
 import com.jcoadyschaebitz.neon.entity.Entity;
 import com.jcoadyschaebitz.neon.entity.spawner.ParticleSpawner;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.level.Level;
 
 public class SlowEnemyBullet extends Projectile {
 
-	public SlowEnemyBullet(Entity source, double x, double y, double angle) {
-		this(source, x, y, angle, 1);
+	public SlowEnemyBullet(Entity source, double x, double y, double angle, Level level) {
+		this(source, x, y, angle, 1, level);
 	}
 	
-	public SlowEnemyBullet(Entity source, double x, double y, double angle, double speed) {
-		super(source, x, y, angle);
+	public SlowEnemyBullet(Entity source, double x, double y, double angle, double speed, Level level) {
+		super(source, x, y, angle, level);
 		isEnemyBullet = true;
 		nx = Math.cos(angle) * speed;
 		ny = Math.sin(angle) * speed;

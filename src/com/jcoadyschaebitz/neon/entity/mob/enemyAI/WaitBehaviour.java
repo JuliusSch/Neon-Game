@@ -1,7 +1,6 @@
 package com.jcoadyschaebitz.neon.entity.mob.enemyAI;
 
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
-import com.jcoadyschaebitz.neon.entity.mob.Mob.MobState;
 
 public class WaitBehaviour extends BehaviourNode {
 	
@@ -15,7 +14,6 @@ public class WaitBehaviour extends BehaviourNode {
 	@Override
 	public void update() {
 		timer++;
-		mob.setState(MobState.IDLE);
 		if (timer > period) currentState = NodeState.SUCCESS;
 		else currentState = NodeState.RUNNING;
 	}
