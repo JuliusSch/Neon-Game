@@ -2,6 +2,7 @@ package com.jcoadyschaebitz.neon.entity.mob;
 
 import java.util.List;
 
+import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.DropsItems;
 import com.jcoadyschaebitz.neon.entity.Entity;
@@ -18,6 +19,7 @@ import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.graphics.UI.UIItemSlot;
 import com.jcoadyschaebitz.neon.level.tile.DiagonalTile;
 import com.jcoadyschaebitz.neon.level.tile.DiagonalTile.DiagDirection;
 import com.jcoadyschaebitz.neon.level.tile.StairTile;
@@ -106,16 +108,12 @@ public abstract class Mob extends Entity implements DropsItems {
 	}
 
 	private void updatePDistance() {
-		double px = level.getPlayer().getX();
-		double py = level.getPlayer().getY();
-		distanceP = Vec2i.getDistance(new Vec2i((int) px, (int) py), new Vec2i((int) x, (int) y));
+		distanceP = Vec2i.getDistance(new Vec2i(level.getPlayer().getMidX(), level.getPlayer().getMidY()), new Vec2i(getMidX(), getMidY()));
 	}
 
 	private void updatePDirection() {
-		double px = level.getPlayer().getX();
-		double py = level.getPlayer().getY();
-		double dx = px - x;
-		double dy = py - y;
+		double dx = level.getPlayer().getMidX() - getMidX();
+		double dy = level.getPlayer().getMidY() - getMidY();
 		directionP = Math.atan2(dy, dx);
 	}
 
@@ -133,18 +131,29 @@ public abstract class Mob extends Entity implements DropsItems {
 	public void checkForDrops() {
 		double healthPercent = level.getPlayer().health / level.getPlayer().maxHealth;
 		double healthDropChance = 0;
-		if (healthPercent <= 0.6) healthDropChance = 0.1;
-		if (healthPercent <= 0.4) healthDropChance = 0.2;
-		if (healthPercent <= 0.2) healthDropChance = 0.3;
-		if (random.nextDouble() < healthDropChance) level.add(new HealthKit((int) x, (int) y));
-		for (int i = 0; i < level.getPlayer().slots.size(); i++) {
+		if (healthPercent <= 0.6)
+			healthDropChance = 0.1;
+		if (healthPercent <= 0.4)
+			healthDropChance = 0.2;
+		if (healthPercent <= 0.2)
+			healthDropChance = 0.3;
+		if (random.nextDouble() < healthDropChance)
+			level.add(new HealthKit((int) x, (int) y));
+		
+		List<UIItemSlot> slots = Game.getUIManager().slots;
+		for (int i = 0; i < slots.size(); i++) {
 			double percent;
-			if (level.getPlayer().slots.get(i).getWeapon() != null) {
-				percent = level.getPlayer().slots.get(i).getWeapon().checkAmmoPercent();
-			} else return;
-			if (percent >= 0.4) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.05, x, y);
-			if (percent >= 0.2 && percent < 0.4) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.1, x, y);
-			if (percent < 0.2) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.25, x, y);
+			if (slots.get(i).getWeapon() != null)
+				percent = slots.get(i).getWeapon().checkAmmoPercent();
+			else
+				return;
+			
+			if (percent >= 0.4)
+				slots.get(i).getWeapon().checkAmmoDrop(0.05, x, y);
+			if (percent >= 0.2 && percent < 0.4)
+				slots.get(i).getWeapon().checkAmmoDrop(0.1, x, y);
+			if (percent < 0.2)
+				slots.get(i).getWeapon().checkAmmoDrop(0.25, x, y);
 		}
 	}
 	
@@ -406,9 +415,8 @@ public abstract class Mob extends Entity implements DropsItems {
 	Font font = new Font(Font.SIZE_5x5, 0xffFF004E, 0.5);
 	
 	public void render(Screen screen) {
-		sprite = currentAnim.getSprite();
 		screen.renderTranslucentSprite((int) x - 3, (int) y + 3, Sprite.shadow, true, 0.6);
-		screen.renderSprite((int) x, (int) y, getSprite(), true);
+		screen.renderSprite((int) x, (int) y, currentAnim.getSprite(), true);
 		if (weapon != null) weapon.renderOnOwner(screen, (currentAnim.getFrame() / 4) % 2);
 //		font.render((int) x, (int) y, state.toString(), screen, true);
 	}

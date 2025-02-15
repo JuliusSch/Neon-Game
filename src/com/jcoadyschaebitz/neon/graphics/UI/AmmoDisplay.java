@@ -36,5 +36,4 @@ public class AmmoDisplay implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-
 }

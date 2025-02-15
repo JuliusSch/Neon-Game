@@ -1,13 +1,14 @@
 package com.jcoadyschaebitz.neon.entity.weapon;
 
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
+import com.jcoadyschaebitz.neon.entity.mob.MultiAttackWeapon;
 import com.jcoadyschaebitz.neon.entity.projectile.LaserShot;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.entity.projectile.SwordSlash;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.sound.SoundClip;
 
-public class LaserSword extends MeleeWeapon {
+public class LaserSword extends MeleeWeapon implements MultiAttackWeapon {
 
 	public LaserSword(int x, int y) {
 		super(x, y, 48, 48, Sprite.laserSword);
@@ -44,6 +45,7 @@ public class LaserSword extends MeleeWeapon {
 		rotSprite = Sprite.rotateSprite(sprite, Math.abs(random.nextDouble() * 3), 32, 32);
 		rotSlashSprite = slashSprite;
 		attackBuildup = 10;
+		weaponLength = -16;
 	}
 	
 	public void secondaryAttack(double x, double y, double direction) {
@@ -54,6 +56,12 @@ public class LaserSword extends MeleeWeapon {
 			Projectile p = new LaserShot(owner, x + xp + 8, y + yp + 8, direction, 5, level);
 			level.add(p);
 		}
+	}
+
+	@Override
+	public void tertiaryAttack(double x, double y, double direction) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

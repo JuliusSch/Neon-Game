@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import com.jcoadyschaebitz.neon.Game;
+import com.jcoadyschaebitz.neon.input.InputManager.InputType;
 
 public class Keyboard implements KeyListener {
 	
@@ -13,8 +14,8 @@ public class Keyboard implements KeyListener {
 		this.game = game;
 	}
 
-	private boolean[] keys = new boolean[256];
-	public boolean up, down, left, right, F, esc, E;
+	private boolean[] keys = new boolean[512];
+	public boolean up, down, left, right, F, esc, E, tab;
 	public boolean[] numbers = new boolean[10];
 	public String[] numbersString = {"zero", "one", "two", "three", "four", "five", "six", "seven", "seven", "eight", "nine"};
 
@@ -24,7 +25,8 @@ public class Keyboard implements KeyListener {
 		left = keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_A];
 		right = keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D];
 		F = keys[KeyEvent.VK_F];
-		esc = keys[KeyEvent.VK_R];
+		esc = keys[KeyEvent.VK_ESCAPE];
+		tab = keys[KeyEvent.VK_TAB];
 		E = keys[KeyEvent.VK_E];
 		numbers[0] = keys[KeyEvent.VK_0];
 		numbers[1] = keys[KeyEvent.VK_1];
@@ -37,23 +39,25 @@ public class Keyboard implements KeyListener {
 		numbers[8] = keys[KeyEvent.VK_8];
 		numbers[9] = keys[KeyEvent.VK_9];
 	}
-
+	
 	public void keyPressed(KeyEvent e) {
-		keys[e.getKeyCode()] = true;
+		setKeyCodeValue(e.getKeyCode(), true);
+		Game.getInputManager().setLastUsed(InputType.KEYBOARD);		
+	}
+	
+	private void setKeyCodeValue(int code, boolean value) {
+		try {
+			keys[code] = value;
+		} catch (ArrayIndexOutOfBoundsException exception) {
+			System.err.println("Unexpected key code input given. Input was '" + code + "'.");
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
-		keys[e.getKeyCode()] = false;
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			game.togglePause();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_E) {
-			if (game.getState() == game.shopMenuState) game.switchToGameState(game.playState);
-		}
+		setKeyCodeValue(e.getKeyCode(), false);	
 	}
 
 	public void keyTyped(KeyEvent e) {
-
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.jcoadyschaebitz.neon.graphics.UI;
 
-import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.entity.weapon.PlayerWeapon;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -11,24 +10,22 @@ public class AmmoDisplayPaused implements UIComp {
 	private int x, y;
 	private Font font;
 	private PlayerWeapon weapon1, weapon2, weapon3, weapon4;
-	private Player player;
-
-	public AmmoDisplayPaused(int x, int y, Player player) {
+	
+	public AmmoDisplayPaused(int x, int y) {
 		this.x = x;
 		this.y = y;
 		font = new Font(Font.SIZE_8x8, 0xffBAFFDA, 1);
-		this.player = player;
-		weapon1 = player.slots.get(0).getWeapon();
-		weapon2 = player.slots.get(1).getWeapon();
-		weapon3 = player.slots.get(2).getWeapon();
-		weapon4 = player.slots.get(3).getWeapon();
+//		weapon1 = uiManager.slots.get(0).getWeapon();
+//		weapon2 = uiManager.slots.get(1).getWeapon();
+//		weapon3 = uiManager.slots.get(2).getWeapon();
+//		weapon4 = uiManager.slots.get(3).getWeapon();
 	}
 
 	public void update() {
-		weapon1 = player.slots.get(0).getWeapon();
-		weapon2 = player.slots.get(1).getWeapon();
-		weapon3 = player.slots.get(2).getWeapon();
-		weapon4 = player.slots.get(3).getWeapon();
+		weapon1 = uiManager.slots.get(0).getWeapon();
+		weapon2 = uiManager.slots.get(1).getWeapon();
+		weapon3 = uiManager.slots.get(2).getWeapon();
+		weapon4 = uiManager.slots.get(3).getWeapon();
 	}
 
 	public void render(Screen screen) {
@@ -61,5 +58,4 @@ public class AmmoDisplayPaused implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-
 }

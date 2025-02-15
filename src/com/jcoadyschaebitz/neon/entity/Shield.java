@@ -1,8 +1,5 @@
 package com.jcoadyschaebitz.neon.entity;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
@@ -10,8 +7,10 @@ import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
 import com.jcoadyschaebitz.neon.graphics.UI.skillTrees.ActionSkillDisplay;
+import com.jcoadyschaebitz.neon.input.IInputObserver;
+import com.jcoadyschaebitz.neon.input.InputManager.InputAction;
 
-public class Shield extends Entity implements MouseListener {
+public class Shield extends Entity implements IInputObserver {
 
 	protected double xa, ya, direction;
 	protected int boundingBoxOffsetX, boundingBoxOffsetY;
@@ -28,7 +27,7 @@ public class Shield extends Entity implements MouseListener {
 		ya = 16 * Math.sin(direction);
 		this.x = x + xa;
 		this.y = y + ya;
-		totalHealth = 3000; //120 //30
+		totalHealth = 30; //120 //30
 		health = totalHealth;
 		resetDelay = 180;
 		readyToActivate = true;
@@ -46,7 +45,8 @@ public class Shield extends Entity implements MouseListener {
 		boundingBoxOffsetX = -8;
 		boundingBoxOffsetY = -4;
 		((RotCollisionBox) entityBounds).rotatePoints(direction, 32, 32);
-		actionSkillDisplay = new ActionSkillDisplay(10, 190, Game.getUIManager());
+		actionSkillDisplay = new ActionSkillDisplay(10, Game.height - 30, Game.getUIManager());
+		Game.getInputManager().registerObserver(this);
 	}
 
 	public void update() {
@@ -89,25 +89,23 @@ public class Shield extends Entity implements MouseListener {
 		time += amount;
 	}
 
-	public void mouseClicked(MouseEvent e) {
-
+	@Override
+	public void InputReceived(InputAction input, double value) {
+		if (input == InputAction.SHIELD && readyToActivate && Game.getUIManager().getGame().getState() == Game.getUIManager().getGame().playState) {
+			if (value == 1f)
+				activate();
+			else
+				deactivate();
+		}
 	}
+	
+//	public void mousePressed(MouseEvent e) {
+//		if (e.getButton() == 3 && readyToActivate && Game.getUIManager().getGame().getState() == Game.getUIManager().getGame().playState) activate();
+//	}
 
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	public void mouseExited(MouseEvent e) {
-
-	}
-
-	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == 3 && readyToActivate && Game.getUIManager().getGame().getState() == Game.getUIManager().getGame().playState) activate();
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == 3) deactivate();
-	}
+//	public void mouseReleased(MouseEvent e) {
+//		if (e.getButton() == 3) deactivate();
+//	}
 
 	private void activate() {
 		active = true;

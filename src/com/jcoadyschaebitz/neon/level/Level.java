@@ -72,8 +72,11 @@ public abstract class Level {
 	public static Level level_1 = new Level_1("/levels/level1.png", "level_1", 448822856L);
 	public static Level level_1_bar = new Level_1_Bar("/levels/level_1_bar.png", "level_1_bar", 498619487L);
 	public static Level level_2 = new Level_2("/levels/level2.png", "level_2", 593057015L);
+	public static Level level_2_floor_1 = new Level_2_Floor_1("/levels/level2floor1.png", "level_2_floor_1", 947690035L);
 	public static Level level_3_chinatown = new Level_3_Chinatown("/levels/level_3_chinatown.png", "level_3_chinatown", 599271332L);
 	public static Level level_4_pool = new Level_4_Pool("/levels/level_pool.png", "level_4_pool", 387341236L);
+	
+	public static List<Level> levels;
 
 	public Level(String path, String overlaysPath, String levelName, long seed) {
 		this.seed = seed;
@@ -86,6 +89,8 @@ public abstract class Level {
 		loadOverlaysMap(overlaysPath);
 		loadBorderMap();
 		loadCollisionMap();
+		if (levels == null) levels = new ArrayList<Level>();
+		Level.levels.add(this);
 	}
 
 	public Level(int width, int height) {
@@ -95,6 +100,7 @@ public abstract class Level {
 		MAX_RECOIL_OFFSET = 12;
 		generateLevel();
 		playerSpawn = new TileCoordinate(1, 1);
+		levels.add(this);
 	}
 
 	public Vec2i getDefaultPlayerSpawn() {
@@ -109,11 +115,13 @@ public abstract class Level {
 	protected abstract void addItems();
 
 	public static void refreshLevels(Player player) {
+		levels = new ArrayList<Level>();
 		testLevel = new SpawnLevel("/levels/testLevel.png", "testLevel", 80387673L);
 		level_0_menu = new Level_0_Menu("/levels/level_0.png", "level_0_menu", 99010224L);
 		level_1 = new Level_1("/levels/level1.png", "level_1", 448822856L);
 		level_1_bar = new Level_1_Bar("/levels/level_1_bar.png", "level_1_bar", 498619487L);
 		level_2 = new Level_2("/levels/level2.png", "level_2", 593057015L);
+		level_2_floor_1 = new Level_2_Floor_1("/levels/level2floor1.png", "level_2_floor_1", 256737811L);
 		level_3_chinatown = new Level_3_Chinatown("/levels/level_3_chinatown.png", "level_3_chinatown", 599271332L);
 		level_4_pool = new Level_4_Pool("/levels/level_pool.png", "level_4_pool", 387341236L);
 		player.setHealth(player.maxHealth);
@@ -122,24 +130,8 @@ public abstract class Level {
 	}
 
 	public static Level getLevelFromName(String name) {
-		switch (name) {
-		case "testLevel":
-			return testLevel;
-		case "level_0_menu":
-			return level_0_menu;
-		case "level_1":
-			return level_1;
-		case "level_1_bar":
-			return level_1_bar;
-		case "level_2":
-			return level_2;
-		case "level_3_chinatown":
-			return level_3_chinatown;
-		case "level_4_pool":
-			return level_4_pool;
-		default:
-			return null;
-		}
+		for (Level level : levels) if (level.levelName.equals(name)) return level;
+		return null;
 	}
 	
 	public void loadPlayerWeaponsFromData(Map<String, String> data) {
@@ -156,23 +148,11 @@ public abstract class Level {
 	}
 
 	public static void addPlayerToLevels(Player player) {
-		testLevel.add(player);
-		level_0_menu.add(player);
-		level_1_bar.add(player);
-		level_1.add(player);
-		level_2.add(player);
-		level_3_chinatown.add(player);
-		level_4_pool.add(player);
+		for (Level level : levels) level.add(player);
 	}
 
 	public static void initiateLevelTransitions() {
-		testLevel.initTransition();
-		level_0_menu.initTransition();
-		level_1_bar.initTransition();
-		level_1.initTransition();
-		level_2.initTransition();
-		level_3_chinatown.initTransition();
-		level_4_pool.initTransition();
+		for (Level level : levels) level.initTransition();
 	}
 
 	public int getWidth() {
@@ -428,10 +408,10 @@ public abstract class Level {
 	public Vec2i castRay(Vec2i start, Vec2i target, boolean ignoreLowWalls) {
 		Vec2d directionVec = new Vec2d(target.x - start.x, target.y - start.y);
 		double distance = Math.sqrt((target.x - start.x) * (target.x - start.x) + (target.y - start.y) * (target.y - start.y));
-		return castRay(start, directionVec, distance, true, target, ignoreLowWalls);
+		return castRay(start, directionVec, distance, true, ignoreLowWalls);
 	}
 
-	public Vec2i castRay(Vec2i start, Vec2d directionVector, double maxDistance, boolean hasTarget, Vec2i target, boolean ignoreLowWalls) {
+	public Vec2i castRay(Vec2i start, Vec2d directionVector, double maxDistance, boolean hasTarget, boolean ignoreLowWalls) {  // Why is ignoreLowWalls not used?
 		Vec2d intraTileStartPos = new Vec2d((start.x % 16) / 16.0, (start.y % 16) / 16.0);
 		Vec2i rayPos_Tile = new Vec2i((int) ((double) start.x / 16), (int) ((double) start.y / 16));
 		Vec2d unitVec = directionVector.normalise();
@@ -469,7 +449,7 @@ public abstract class Level {
 				if (distanceCovered > maxDistance) distanceCovered = maxDistance;
 
 				// DEBUG:
-//				add(new DebugParticle(start.x + distanceCovered * unitVec.x, start.y + distanceCovered * unitVec.y, 30, 1, 1, Sprite.smallParticleCrimson));
+//				add(new DebugParticle(start.x + distanceCovered * unitVec.x, start.y + distanceCovered * unitVec.y, 30, Sprite.smallParticleCrimson));
 			} else {
 				rayPos_Tile.y = rayPos_Tile.y + stepPolarity.y;
 				distanceCovered = rayLength1D.y * 16;
@@ -477,7 +457,7 @@ public abstract class Level {
 				if (distanceCovered > maxDistance) distanceCovered = maxDistance;
 
 				// DEBUG:
-//				add(new DebugParticle(start.x + distanceCovered * unitVec.x, start.y + distanceCovered * unitVec.y, 30, 1, 1, Sprite.smallParticleYellow));
+//				add(new DebugParticle(start.x + distanceCovered * unitVec.x, start.y + distanceCovered * unitVec.y, 30, Sprite.smallParticleYellow));
 			}
 			int tileZ = getTileZ(rayPos_Tile.x, rayPos_Tile.y);
 			isSightline = tileZ == 0;
@@ -616,7 +596,7 @@ public abstract class Level {
 				if (eBottomY > y << 4 && eBottomY <= (y + 1) << 4) entities.get(i).render(screen);
 			}
 			for (int x = x0; x < x1; x++) {
-				if (getTileZ(x, y) == 1) getTile(x, y).render(x, y, screen, level, seed);
+				if (getTileZ(x, y) == 1 || getTileZ(x, y) == 2) getTile(x, y).render(x, y, screen, level, seed);
 			}
 		}
 		for (int i = 0; i < projectiles.size(); i++) {
@@ -657,7 +637,7 @@ public abstract class Level {
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				if (x < 0 || y < 0 || x >= width || y >= height) continue;
-				if (getTileZ(x, y) == 2) getTile(x, y).render(x, y, screen, level, seed);
+//				if (getTileZ(x, y) == 2) getTile(x, y).render(x, y, screen, level, seed);
 				Sprite borderSpr = Sprite.nullSprite;
 				int s = borderMap[y * width + x];
 				if (s != -1) borderSpr = Tile.wallEdges.getSprites().get(s);
@@ -842,7 +822,7 @@ public abstract class Level {
 			if (getDistanceToPlayer(e.getMidX(), e.getMidY()) <= radius) {
 				inRange.add(e);
 				((IInteractableItem) e).setShowPrompt(true);				
-			} else ((IInteractableItem) e).setShowPrompt(false);
+			} else ((IInteractableItem) e).setShowPrompt(false); // NEEDS REWORKING
 		}
 		if (inRange.size() > 1) Collections.sort(inRange, new Comparator<Entity>() {
 		    public int compare(Entity e1, Entity e2) {

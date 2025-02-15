@@ -18,7 +18,7 @@ public abstract class Weapon extends Entity {
 	protected int flashTimer, muzzleGlowTimer;
 	protected AnimatedSprite muzzleGlow;
 
-	public int getWeaponAttackBuildup(boolean isSecondaryAttack) {
+	public int getWeaponAttackBuildup() {
 		return attackBuildup;
 	}
 
@@ -67,7 +67,7 @@ public abstract class Weapon extends Entity {
 	public void renderOnOwner(Screen screen, int bob) {
 		double xp = Math.cos(direction);
 		double yp = Math.sin(direction);
-		screen.renderSprite((int) (x + xRenderOffset + xp * 4), (int) (y + yRenderOffset + yp * 4/* + bob */), rotSprite, true);
+		screen.renderTranslucentSprite((int) (x + xRenderOffset + xp * 4), (int) (y + yRenderOffset + yp * 4/* + bob */), rotSprite, true);
 		if (flashTimer > 0) screen.renderTranslucentSprite((int) (x + xp * 12), (int) (y + yp * 12), muzzleFlashSprite, true);
 		if (muzzleGlowTimer > 0) screen.renderTranslucentSprite((int) (x + xp * 12), (int) (y + yp * 12), Sprite.enemy_bullet_1, true, 1 - ((double) muzzleGlowTimer / (double) attackBuildup));
 	}
@@ -79,13 +79,10 @@ public abstract class Weapon extends Entity {
 
 	public abstract void attack(double x, double y, double direction, double speed);
 
-	public void secondaryAttack(double x, double y, double direction) {
-	}
-
 	public void updateSprite(double dir) {
 		direction = dir;
-		if (dir > 0 && dir <= Math.PI / 2) rotSprite = Sprite.rotateSprite(sprite, dir, spriteWidth, spriteHeight);
-		else if (dir > 0) rotSprite = Sprite.mirror(Sprite.rotateSprite(sprite, Math.PI - dir, spriteWidth, spriteHeight));
+		if (dir >= 0 && dir <= Math.PI / 2) rotSprite = Sprite.rotateSprite(sprite, dir, spriteWidth, spriteHeight);
+		else if (dir >= 0) rotSprite = Sprite.mirror(Sprite.rotateSprite(sprite, Math.PI - dir, spriteWidth, spriteHeight));
 		if (dir < 0 && dir >= Math.PI / -2) rotSprite = Sprite.rotateSprite(sprite, dir, spriteWidth, spriteHeight);
 		else if (dir < 0) rotSprite = Sprite.mirror(Sprite.rotateSprite(sprite, Math.PI - dir, spriteWidth, spriteHeight));
 	}

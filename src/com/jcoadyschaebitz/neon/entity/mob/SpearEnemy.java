@@ -2,24 +2,22 @@ package com.jcoadyschaebitz.neon.entity.mob;
 
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AIBlackboard;
-import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AttackPlayer;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.Attack;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckAggro;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDamageTaken;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDistanceToPlayer;
-import com.jcoadyschaebitz.neon.entity.mob.enemyAI.InverterNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SelectorNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SequencerNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SetState;
 import com.jcoadyschaebitz.neon.entity.projectile.Bolt;
 import com.jcoadyschaebitz.neon.entity.projectile.LaserBullet;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
-import com.jcoadyschaebitz.neon.entity.weapon.EnemySpear;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
-import com.jcoadyschaebitz.neon.util.Vec2i;
 
-public class SpearEnemy extends MeleeEnemy {
+public class SpearEnemy extends Mob {
 
 	private int dodgeDelay, tripleCounter, knockbackImmunity, attackCounter;
 	private boolean tripleDashing;
@@ -27,12 +25,12 @@ public class SpearEnemy extends MeleeEnemy {
 
 	public SpearEnemy(int x, int y) {
 		super(x, y);
-		leftWalking = new AnimatedSprite(Spritesheet.fastMeleeLeftWalking, 64, 64, 4, 3);
-		rightWalking = new AnimatedSprite(Spritesheet.fastMeleeRightWalking, 24, 24, 8, 3);
-		leftIdle = new AnimatedSprite(Spritesheet.fastMeleeLeftIdle, 64, 64, 4, 12);
-		rightIdle = new AnimatedSprite(Spritesheet.fastMeleeRightIdle, 64, 64, 4, 12);
-		leftDamage = new AnimatedSprite(Spritesheet.fastMeleeDamageLeft, 64, 64, 4, 3);
-		rightDamage = new AnimatedSprite(Spritesheet.fastMeleeDamageRight, 64, 64, 4, 3);
+		leftWalking = new AnimatedSprite(Spritesheet.fastMeleeLeftWalking, 32, 32, 4, 3);
+		rightWalking = new AnimatedSprite(Sprite.mirrorSprites(Spritesheet.fastMeleeLeftWalking.getSprites()), 32, 32, 8, 3);
+		leftIdle = new AnimatedSprite(Spritesheet.fastMeleeLeftIdle, 32, 32, 4, 12);
+		rightIdle = new AnimatedSprite(Sprite.mirrorSprites(Spritesheet.fastMeleeLeftIdle.getSprites()), 32, 32, 4, 12);
+		leftDamage = new AnimatedSprite(Spritesheet.fastMeleeDamageLeft, 32, 32, 4, 3);
+		rightDamage = new AnimatedSprite(Sprite.mirrorSprites(Spritesheet.fastMeleeDamageLeft.getSprites()), 32, 32, 4, 3);
 		leftDying = new AnimatedSprite(Spritesheet.swordEnemyLeftDying, 24, 24, 10, 3);
 		rightDying = new AnimatedSprite(Spritesheet.swordEnemyRightDying, 24, 24, 10, 3);
 		leftWindUp = new AnimatedSprite(Spritesheet.fastMeleeWindUpLeft, 64, 64, 10, 4);
@@ -41,10 +39,10 @@ public class SpearEnemy extends MeleeEnemy {
 		deadSpriteRight = Sprite.swordGuy_dead_right;
 		deadSpriteLeft = Sprite.swordGuy_dead_left;
 		sprite = rightWalking.getSprite();
-		int[] xCollisionValues = { 23, 41, 23, 41, 23, 41, 23, 41 };
-		int[] yCollisionValues = { 17, 17, 47, 47, 27, 27, 37, 37 };
-		int[] xTileCollisionValues = { 23, 41, 23, 41 };
-		int[] yTileCollisionValues = { 36, 36, 47, 47 };
+		int[] xCollisionValues = { 8, 26, 8, 26, 8, 26, 8, 26 };
+		int[] yCollisionValues = { 2, 2, 32, 32, 12, 12, 22, 22 };
+		int[] xTileCollisionValues = { 8, 26, 8, 26 };
+		int[] yTileCollisionValues = { 21, 21, 32, 32 };
 		corners = new CollisionBox(xTileCollisionValues, yTileCollisionValues);
 		entityBounds = new CollisionBox(xCollisionValues, yCollisionValues);
 		maxHealth = 72;
@@ -54,32 +52,32 @@ public class SpearEnemy extends MeleeEnemy {
 	}
 
 	public void update() {
-		if (weapon == null) level.add(new EnemySpear(this));		//add spear weapon with requisite attacks
-		else weapon.update();
-		time++;
-		updateAnimSprites();
-		checkIfDead();
-		if (xa != 0 || ya != 0) {
-			move(xa, ya, true);
+		super.update();
+//		if (weapon == null) level.add(new EliteRifle(this));		//add spear weapon with requisite attacks
+
+		if (damageDelay == 0) {
+			if (level.getPlayer().getMidX() < getMidX()) dir = Orientation.LEFT;
+			else dir = Orientation.RIGHT;
+			if (xa != 0 || ya != 0) {
+				move(xa, ya, true);
+				walking = true;
+			} else {
+				walking = false;
+			}
 		}
+		if (weapon != null) {
+			if (!immobilised && aggro) weapon.updateSprite(directionP);
+			if (!immobilised) weapon.update();
+		}
+		if (distanceP < 250 && playerSightline()) aggro = true;
+		
 		if (damageDelay > 0) damageDelay--;
 		if (dodgeDelay > 0) dodgeDelay--;
 		if (tripleCounter > 0) tripleCounter--;
 		if (knockbackImmunity > 0) knockbackImmunity--;
 		if (attackCounter > 1) attackCounter = 0;
-		double px = level.getPlayer().getX() + level.getPlayer().getSpriteW() / 2;
-		double py = level.getPlayer().getY() + level.getPlayer().getSpriteH() / 2;
-		double dx = px - (x + getSpriteW() / 2);
-		double dy = py - (y + getSpriteH() / 2);
-		directionP = Math.atan2(dy, dx);
-		distanceP = Vec2i.getDistance(new Vec2i((int) px, (int) py), new Vec2i((int) x, (int) y));
-		if (playerSightline() && distanceP < 400) aggro = true;
-		if (state == MobState.DYING) return;
-		if (px + level.getPlayer().getSpriteW() / 2 > x + sprite.getWidth() / 2) dir = Orientation.RIGHT;
-		if (px + level.getPlayer().getSpriteW() / 2 < x + sprite.getWidth() / 2) dir = Orientation.LEFT;
 
 //		updateTimedMoves(directionP);
-		if (!aggro) return;
 		
 //		if (moveDelay == 0 && !tripleDashing) {
 //			moveDelay = random.nextInt(10) + 60;
@@ -129,12 +127,14 @@ public class SpearEnemy extends MeleeEnemy {
 	
 	@Override
 	protected void constructBehaviourTree(AIBlackboard bb) {
-		behaviours.addNode(new InverterNode(new CheckAggro(bb, this)));
+		behaviours.addNode(new CheckAggro(bb, this));
+		behaviours.addNode(new CheckDamageTaken(bb, this));
+		
 		SelectorNode aggroBehaviours = new SelectorNode(bb, this);
 		SequencerNode simpleMeleeAttack = new SequencerNode(bb, this);
 		simpleMeleeAttack.addNode(new CheckDistanceToPlayer(bb, this, 60));
 		simpleMeleeAttack.addNode(new SetState(bb, this, MobState.ATTACKING));
-		simpleMeleeAttack.addNode(new AttackPlayer(bb, this));
+		simpleMeleeAttack.addNode(new Attack(bb, this));
 		simpleMeleeAttack.addNode(new SetState(bb, this, MobState.IDLE));
 		aggroBehaviours.addNode(simpleMeleeAttack);
 		behaviours.addNode(aggroBehaviours);
@@ -339,7 +339,7 @@ public class SpearEnemy extends MeleeEnemy {
 		}
 		sprite = currentAnim.getSprite();
 
-		screen.renderTranslucentSprite((int) x + 20, (int) y + 28, Sprite.shadowX32, true, 0.6);
+		screen.renderTranslucentSprite((int) x + 5, (int) y + 13, Sprite.shadowX32, true, 0.6);
 		screen.renderSprite((int) x, (int) y, getSprite(), true);
 		if (weapon != null) weapon.renderOnOwner(screen, (currentAnim.getFrame() / 4) % 2);
 		entityBounds.renderBounds(screen, 0xffff00ff, (int) x, (int) y); 

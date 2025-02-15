@@ -46,7 +46,7 @@ public class LevelTransition {
 		Vec2i newPlayerPos = new Vec2i(entryPoint.x + playerOffsetX, entryPoint.y + playerOffsetY);
 		levelFrom.getPlayer().game.switchToLevel(levelTo, newPlayerPos);
 		levelFrom.getPlayer().game.resetCameraOnPlayer();
-		Game.getUIManager().loadGameMenu.saveToSelectedSlot();
+		Game.getUIManager().loadGameSubMenu.saveToSelectedSlot();
 	}
 	
 	public void render(Screen screen) {

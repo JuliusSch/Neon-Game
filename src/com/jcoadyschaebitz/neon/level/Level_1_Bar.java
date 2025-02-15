@@ -60,7 +60,7 @@ public class Level_1_Bar extends Level {
 		Soldier s2 = new Soldier(12, 15);
 		add(s2);
 		members[1] = s2;
-		add(new Scene_1_Bar(this, members, Game.getKeyboard()));
+		add(new Scene_1_Bar(this, members, Game.getInputManager()));
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import com.jcoadyschaebitz.neon.entity.Shield;
 import com.jcoadyschaebitz.neon.entity.mob.MeleeEnemy;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.entity.mob.ShootingEnemy;
-import com.jcoadyschaebitz.neon.entity.particle.DebugParticle;
 import com.jcoadyschaebitz.neon.entity.spawner.ParticleSpawner;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
@@ -129,10 +128,10 @@ public abstract class Projectile extends Entity {
 				int my0 = e.getCollisionBounds().getYValues()[0] + e.getIntY();
 				int mx1 = e.getCollisionBounds().getXValues()[1] + e.getIntX();
 				int my1 = e.getCollisionBounds().getYValues()[2] + e.getIntY();
-				level.add(new DebugParticle(mx0, my0, 30, Sprite.smallParticleLime));
-				level.add(new DebugParticle(mx1, my0, 30, Sprite.smallParticleLime));
-				level.add(new DebugParticle(mx0, my1, 30, Sprite.smallParticleLime));
-				level.add(new DebugParticle(mx1, my1, 30, Sprite.smallParticleLime));
+//				level.add(new DebugParticle(mx0, my0, 30, Sprite.smallParticleLime));
+//				level.add(new DebugParticle(mx1, my0, 30, Sprite.smallParticleLime));
+//				level.add(new DebugParticle(mx0, my1, 30, Sprite.smallParticleLime));
+//				level.add(new DebugParticle(mx1, my1, 30, Sprite.smallParticleLime));
 				for (int i = 0; i < getCollisionBounds().getXValues().length; i++) {
 					int px = getCollisionBounds().getXValues()[i] + x;
 					int py = getCollisionBounds().getYValues()[i] + y;

@@ -102,13 +102,10 @@ public class Spritesheet {
 	public static Spritesheet heavyRightDying = new Spritesheet(x32, 4, 5, 4, 1, 32);
 	public static Spritesheet heavyLeftDying = new Spritesheet(x32, 0, 5, 4, 1, 32);
 	
-	public static Spritesheet fastMeleeLeftIdle = new Spritesheet(x64, 6, 4, 1, 4, 64, 64);
-	public static Spritesheet fastMeleeRightIdle = new Spritesheet(x64, 7, 4, 1, 4, 64, 64);
-	public static Spritesheet fastMeleeWindUpLeft = new Spritesheet(x64, 0, 0, 8, 2, 64, 64);
-	public static Spritesheet fastMeleeLeftWalking = new Spritesheet(x64, 0, 4, 4, 1, 64, 64);
-	public static Spritesheet fastMeleeRightWalking = new Spritesheet(x64, 0, 5, 4, 1, 64, 64);
-	public static Spritesheet fastMeleeDamageLeft = new Spritesheet(x64, 0, 6, 4, 1, 64, 64);
-	public static Spritesheet fastMeleeDamageRight = new Spritesheet(x64, 0, 7, 4, 1, 64, 64);
+	public static Spritesheet fastMeleeLeftIdle = new Spritesheet(x32, 0, 8, 1, 4, 32, 32);
+	public static Spritesheet fastMeleeWindUpLeft = new Spritesheet(x32, 1, 8, 10, 1, 32, 32);
+	public static Spritesheet fastMeleeLeftWalking = new Spritesheet(x32, 0, 4, 4, 1, 32, 32);
+	public static Spritesheet fastMeleeDamageLeft = new Spritesheet(x32, 0, 6, 4, 1, 32, 32);
 	
 	public static Spritesheet poolGangsterRightWalking = new Spritesheet(x24, 0, 12, 8, 1, 24);
 	public static Spritesheet poolGangsterLeftWalking = new Spritesheet(x24, 0, 13, 8, 1, 24);
@@ -118,6 +115,11 @@ public class Spritesheet {
 	public static Spritesheet poolGangsterLeftDamage = new Spritesheet(x24, 8, 13, 4, 1, 24);
 	public static Spritesheet poolGangsterRightDying = new Spritesheet(x24, 8, 12, 7, 1, 24);
 	public static Spritesheet poolGangsterLeftDying = new Spritesheet(x24, 8, 13, 7, 1, 24);
+	
+	public static Spritesheet eliteSoldierLeftIdle = new Spritesheet(x24, 0, 7, 4, 1, 24, 48);
+	public static Spritesheet eliteSoldierLeftWalking = new Spritesheet(x24, 0, 8, 8, 1, 24, 48);
+	public static Spritesheet eliteSoldierLeftDamage = new Spritesheet(x24, 4, 7, 4, 1, 24, 48);
+	public static Spritesheet eliteSoldierLeftDying = new Spritesheet(x24, 4, 7, 7, 1, 24, 48);
 	
 	
 	

@@ -105,5 +105,4 @@ public class SkillTreeManager implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-
 }

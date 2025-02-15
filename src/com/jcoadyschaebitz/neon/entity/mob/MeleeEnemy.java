@@ -2,7 +2,7 @@ package com.jcoadyschaebitz.neon.entity.mob;
 
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AIBlackboard;
-import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AttackPlayer;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.Attack;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckAggro;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDamageTaken;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CirclePlayer;
@@ -15,6 +15,7 @@ import com.jcoadyschaebitz.neon.entity.mob.enemyAI.IsPlayerInRange;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.MoveTo;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.PursuePlayer;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.RandomSelectorNode;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SecondaryAttack;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SelectorNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SequencerNode;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.SetDodgePosition;
@@ -70,8 +71,8 @@ public class MeleeEnemy extends Mob {
 			}
 		}
 		if (weapon != null) {
-			if (aggro) weapon.updateSprite(directionP);
-			weapon.update();
+			if (!immobilised && aggro) weapon.updateSprite(directionP);
+			if (!immobilised) weapon.update();
 		}
 		if (distanceP < 250 && playerSightline()) aggro = true;
 	}
@@ -102,6 +103,7 @@ public class MeleeEnemy extends Mob {
 		establishSightline.addNode(new FindNewPosition(bb, this, 48));
 		establishSightline.addNode(new SetState(bb, this, MobState.WALKING));
 		establishSightline.addNode(new MoveTo(bb, this));
+		establishSightline.addNode(new SetState(bb, this, MobState.IDLE));
 		aggroBehaviours.addNode(establishSightline);
 		
 		SelectorNode playerInSightBehaviours = new SelectorNode(bb, this);
@@ -111,7 +113,7 @@ public class MeleeEnemy extends Mob {
 		
 		SequencerNode closeRangeBehaviours = new SequencerNode(bb, this);
 		closeRangeBehaviours.addNode(new SetState(bb, this, MobState.ATTACKING));
-		closeRangeBehaviours.addNode(new AttackPlayer(bb, this));
+		closeRangeBehaviours.addNode(new Attack(bb, this));
 		closeRangeBehaviours.addNode(new SetState(bb, this, MobState.IDLE));
 		closeRangeBehaviours.addNode(new SetRetreatPosition(bb, this, 80));
 		closeRangeBehaviours.addNode(new SetState(bb, this, MobState.DASHING));
@@ -132,7 +134,7 @@ public class MeleeEnemy extends Mob {
 		circlePlayerThenAttack.addNode(new SetState(bb, this, MobState.DASHING));
 		circlePlayerThenAttack.addNode(new PursuePlayer(bb, this, 90, 2 * speed));
 		circlePlayerThenAttack.addNode(new SetState(bb, this, MobState.ATTACKING));
-		circlePlayerThenAttack.addNode(new AttackPlayer(bb, this));
+		circlePlayerThenAttack.addNode(new Attack(bb, this));
 		circlePlayerThenAttack.addNode(new SetState(bb, this, MobState.IDLE));
 		circlePlayerThenAttack.addNode(new SetRetreatPosition(bb, this, 80));
 		circlePlayerThenAttack.addNode(new SetState(bb, this, MobState.DASHING));
@@ -145,7 +147,7 @@ public class MeleeEnemy extends Mob {
 		attackFromMid.addNode(new SetState(bb, this, MobState.DASHING));
 		attackFromMid.addNode(new PursuePlayer(bb, this, 90, 2 * speed));
 		attackFromMid.addNode(new SetState(bb, this, MobState.ATTACKING));
-		attackFromMid.addNode(new AttackPlayer(bb, this));
+		attackFromMid.addNode(new Attack(bb, this));
 		attackFromMid.addNode(new SetState(bb, this, MobState.IDLE));
 		attackFromMid.addNode(new SetRetreatPosition(bb, this, 80));
 		attackFromMid.addNode(new SetState(bb, this, MobState.DASHING));
@@ -160,7 +162,7 @@ public class MeleeEnemy extends Mob {
 		retreatAndShoot.addNode(new SetState(bb, this, MobState.DASHING));
 		retreatAndShoot.addNode(new DirectMoveTo(bb, this, 2 * speed, false));
 		retreatAndShoot.addNode(new SetState(bb, this, MobState.ATTACKING));
-		retreatAndShoot.addNode(new AttackPlayer(bb, this, true));
+		retreatAndShoot.addNode(new SecondaryAttack(bb, this));
 		
 		midRangeBehaviours.addNode(retreatAndShoot, 0.3);
 		

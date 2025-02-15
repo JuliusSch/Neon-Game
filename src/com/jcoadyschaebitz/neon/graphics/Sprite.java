@@ -36,15 +36,16 @@ public class Sprite {
 	public static Sprite steps_base_left = new Sprite(16, 6, 9, Spritesheet.x16);
 
 	public static Sprite stepsDown = new Sprite(16, 11, 0, Spritesheet.x16);
+	public static Sprite stepsUp = new Sprite(16, 16, 8, Spritesheet.x16);
 	public static Sprite stepsRightTop = new Sprite(16, 1, 6, Spritesheet.x16);
 	public static Sprite stepsRight = new Sprite(16, 1, 7, Spritesheet.x16);
 	public static Sprite stepsRightBottom = new Sprite(16, 1, 8, Spritesheet.x16);
 	public static Sprite stepsLeftTop = Sprite.mirror(stepsRightTop);
 	public static Sprite stepsLeft = Sprite.mirror(stepsRight);
 	public static Sprite stepsLeftBottom = Sprite.mirror(stepsRightBottom);
-	public static Sprite steps_up = new Sprite(16, 2, 3, Spritesheet.x16);
 
 	public static Sprite insideStepsDown = new Sprite(16, 13, 0, Spritesheet.x16);
+	public static Sprite insideStepsUp = new Sprite(16, 17, 8, Spritesheet.x16);
 	public static Sprite insideStepsRightTop = new Sprite(16, 2, 6, Spritesheet.x16);
 	public static Sprite insideStepsRight = new Sprite(16, 2, 7, Spritesheet.x16);
 	public static Sprite insideStepsRightBottom = new Sprite(16, 2, 8, Spritesheet.x16);
@@ -72,6 +73,8 @@ public class Sprite {
 	public static Sprite whiteStoneTile = new Sprite(16, 15, 16, Spritesheet.x16);
 	public static Sprite poolWater = new Sprite(16, 8, 16, Spritesheet.x16);
 	public static Sprite poolWaterTop = new Sprite(16, 8, 17, Spritesheet.x16);
+	
+	public static Sprite floatingRailFloor = new Sprite(16, 16, 7, Spritesheet.x16);
 
 //	wall sprites: 
 	public static Sprite wall = new Sprite(16, 5, 0, Spritesheet.x16);
@@ -263,6 +266,9 @@ public class Sprite {
 	public static Sprite divider_1_h = new Sprite(48, 32, 6, 0, Spritesheet.x16);
 	public static Sprite divider_2_h_base = new Sprite(16, 16, 17, 3, Spritesheet.x16);
 	public static Sprite divider_2_h_window = new Sprite(16, 48, 17, 0, Spritesheet.x16);
+	public static Sprite railingHoriz = new Sprite(16, 21, 0, Spritesheet.x16);
+	public static Sprite railingVert = new Sprite(16, 32, 22, 0, Spritesheet.x16);
+	public static Sprite railingVert2 = new Sprite(16, 32, 23, 0, Spritesheet.x16);
 
 	public static Sprite planter_1_h = new Sprite(64, 32, 9, 0, Spritesheet.x32);
 	public static Sprite planter_1_v = new Sprite(32, 64, 20, 0, Spritesheet.x32);
@@ -314,6 +320,7 @@ public class Sprite {
 	public static Sprite fastBulletBlueGlow = new Sprite(24, 8, 2, Spritesheet.x24);
 	public static Sprite silverBullet = new Sprite(16, 3, 16, Spritesheet.x16);
 	public static Sprite laserShot = new Sprite(16, 9, 16, Spritesheet.x16);
+	public static Sprite eliteRifleBullet = Sprite.extendSprite(new Sprite(48, 24, 9, 7, Spritesheet.x24), 0, 0, 12, 12, 0);
 
 //	particle sprites:
 	public static Sprite particleBlue = new Sprite(2, 0xff96FFFF);
@@ -352,6 +359,8 @@ public class Sprite {
 	public static Sprite miniGun = new Sprite(32, 6, 0, Spritesheet.x32);
 	public static Sprite laserSword = new Sprite(48, 8, 2, Spritesheet.x24);
 	public static Sprite doublePistols = new Sprite(32, 6, 7, Spritesheet.x32);
+	public static Sprite energySpear = Sprite.extendSprite(new Sprite(72, 24, 5, 6, Spritesheet.x24), 0, 0, 24, 24, 0);
+	public static Sprite eliteRifle = Sprite.extendSprite(new Sprite(48, 24, 9, 6, Spritesheet.x24), 0, 0, 12, 12, 0);
 	
 	public static Sprite pistol = new Sprite(24, 0, 24, Spritesheet.x24);
 	public static Sprite shotgun = new Sprite(24, 1, 24, Spritesheet.x24);
@@ -463,6 +472,12 @@ public class Sprite {
 			}
 		}
 		return new Sprite(tempPixels, sprite.width, sprite.height);
+	}
+	
+	public static Sprite[] mirrorSprites(Sprite[] sprites) {
+		Sprite[] result = new Sprite[sprites.length];
+		for (int i = 0; i < sprites.length; i++) result[i] = Sprite.mirror(sprites[i]);
+		return result;
 	}
 
 	public static Sprite mirrorVert(Sprite sprite) {

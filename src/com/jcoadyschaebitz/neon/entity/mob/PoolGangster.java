@@ -2,7 +2,7 @@ package com.jcoadyschaebitz.neon.entity.mob;
 
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AIBlackboard;
-import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AttackPlayer;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.Attack;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckAggro;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDamageTaken;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.FindNewPosition;
@@ -72,8 +72,8 @@ public class PoolGangster extends ShootingEnemy {
 		shootPlayer.addNode(new FindSightline(bb, this));
 		shootPlayer.addNode(new WaitBehaviour(bb, this, 60));
 		shootPlayer.addNode(new SetState(bb, this, MobState.ATTACKING));
-		shootPlayer.addNode(new AttackPlayer(bb, this));
-		shootPlayer.addNode(new AttackPlayer(bb, this));
+		shootPlayer.addNode(new Attack(bb, this));
+		shootPlayer.addNode(new Attack(bb, this));
 		shootPlayer.addNode(new SetState(bb, this, MobState.IDLE));
 		SequencerNode getNewSightline = new SequencerNode(bb, this);
 		getNewSightline.addNode(new FindNewPosition(bb, this, 128));

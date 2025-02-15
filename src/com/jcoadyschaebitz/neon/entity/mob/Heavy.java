@@ -1,9 +1,12 @@
 package com.jcoadyschaebitz.neon.entity.mob;
 
+import java.util.List;
+
+import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.entity.CollisionBox;
 import com.jcoadyschaebitz.neon.entity.Item.HealthKit;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AIBlackboard;
-import com.jcoadyschaebitz.neon.entity.mob.enemyAI.AttackPlayer;
+import com.jcoadyschaebitz.neon.entity.mob.enemyAI.Attack;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckAggro;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDamageTaken;
 import com.jcoadyschaebitz.neon.entity.mob.enemyAI.CheckDistanceToPlayer;
@@ -21,6 +24,7 @@ import com.jcoadyschaebitz.neon.entity.weapon.MiniGun;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.graphics.UI.UIItemSlot;
 
 public class Heavy extends ShootingEnemy {
 
@@ -79,18 +83,29 @@ public class Heavy extends ShootingEnemy {
 	public void checkForDrops() {
 		double healthPercent = level.getPlayer().getHealth() / level.getPlayer().maxHealth;
 		double healthDropChance = 0;
-		if (healthPercent <= 0.6) healthDropChance = 0.2;
-		if (healthPercent <= 0.4) healthDropChance = 0.3;
-		if (healthPercent <= 0.2) healthDropChance = 0.4;
-		if (random.nextDouble() < healthDropChance) level.add(new HealthKit((int) x, (int) y));
-		for (int i = 0; i < level.getPlayer().slots.size(); i++) {
+		if (healthPercent <= 0.6)
+			healthDropChance = 0.2;
+		if (healthPercent <= 0.4)
+			healthDropChance = 0.3;
+		if (healthPercent <= 0.2)
+			healthDropChance = 0.4;
+		if (random.nextDouble() < healthDropChance)
+			level.add(new HealthKit((int) x, (int) y));
+		
+		List<UIItemSlot> slots = Game.getUIManager().slots;
+		for (int i = 0; i < slots.size(); i++) {
 			double percent;
-			if (level.getPlayer().slots.get(i).getWeapon() != null) {
-				percent = level.getPlayer().slots.get(i).getWeapon().checkAmmoPercent();
-			} else return;
-			if (percent >= 0.4 && percent < 0.6) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.1, x, y);
-			if (percent >= 0.2 && percent < 0.4) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.2, x, y);
-			if (percent < 0.2) level.getPlayer().slots.get(i).getWeapon().checkAmmoDrop(0.35, x, y);
+			if (slots.get(i).getWeapon() != null)
+				percent = slots.get(i).getWeapon().checkAmmoPercent();
+			else
+				return;
+			
+			if (percent >= 0.4 && percent < 0.6)
+				slots.get(i).getWeapon().checkAmmoDrop(0.1, x, y);
+			if (percent >= 0.2 && percent < 0.4)
+				slots.get(i).getWeapon().checkAmmoDrop(0.2, x, y);
+			if (percent < 0.2)
+				slots.get(i).getWeapon().checkAmmoDrop(0.35, x, y);
 		}
 	}
 
@@ -102,7 +117,7 @@ public class Heavy extends ShootingEnemy {
 		
 		SequencerNode attack = new SequencerNode(bb, this);
 		attack.addNode(new SetState(bb, this, MobState.ATTACKING));
-		attack.addNode(new AttackPlayer(bb, this));
+		attack.addNode(new Attack(bb, this));
 		attack.addNode(new SetState(bb, this, MobState.IDLE));
 		
 		shootPlayer.addNode(new FindSightline(bb, this));
@@ -112,7 +127,7 @@ public class Heavy extends ShootingEnemy {
 
 		SequencerNode attack2 = new SequencerNode(bb, this);
 		attack2.addNode(new SetState(bb, this, MobState.ATTACKING));
-		attack2.addNode(new AttackPlayer(bb, this));
+		attack2.addNode(new Attack(bb, this));
 		attack2.addNode(new SetState(bb, this, MobState.IDLE));
 		attack2.addNode(new WaitBehaviour(bb, this, 10));
 		

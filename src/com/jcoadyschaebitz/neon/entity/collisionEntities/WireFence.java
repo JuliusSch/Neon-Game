@@ -37,8 +37,8 @@ public class WireFence extends CollisionEntity {
 		int i = (int) (random.nextDouble() * x * y) % sprites.length;
 		sprite = sprites[i];
 		shadowSprite = Sprite.wireFenceHozShadow;
-		int[] xPoints = { 1, 15, 1, 15 };
-		int[] yPoints = { 44, 44, 48, 48 };
+		int[] xPoints = { 1, 8, 15, 1, 8, 15 };
+		int[] yPoints = { 44, 44, 44, 48, 48, 48 };
 		int[] xCorners = { 1, 15, 1, 15 };
 		int[] yCorners = { 40, 40, 52, 52 };
 		xRenderShadowOffset = 0;

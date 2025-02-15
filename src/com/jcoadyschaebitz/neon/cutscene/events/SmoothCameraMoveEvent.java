@@ -3,13 +3,14 @@ package com.jcoadyschaebitz.neon.cutscene.events;
 import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.cutscene.events.CameraMoveEvent.Transition;
-import com.jcoadyschaebitz.neon.input.Mouse;
+import com.jcoadyschaebitz.neon.input.InputManager;
 import com.jcoadyschaebitz.neon.util.Vec2d;
 
 public class SmoothCameraMoveEvent extends Event {
 
 	private double startX, startY, targetX, targetY, distance, direction;
 	private int mouseX, mouseY;
+	private InputManager input;
 	private Transition type = Transition.NULL;
 	
 	public SmoothCameraMoveEvent(CutScene scene, int startTime, int duration) {
@@ -19,6 +20,7 @@ public class SmoothCameraMoveEvent extends Event {
 	public SmoothCameraMoveEvent(CutScene scene, int startTime, int duration, Transition t) {
 		super(scene, startTime, duration);
 		type = t;
+		input = Game.getInputManager();
 	}
 	
 	public void init() {
@@ -28,16 +30,16 @@ public class SmoothCameraMoveEvent extends Event {
 			startY = scene.getYOffset();
 			targetX = scene.currentScreenX;
 			targetY = scene.currentScreenY;
-			mouseX = Mouse.getX();
-			mouseY = Mouse.getY();
+			mouseX = input.mouseX();
+			mouseY = input.mouseY();
 			break;
 		case OUT:
 			targetX = Game.getUIManager().getGame().getCameraPos().x;
 			targetY = Game.getUIManager().getGame().getCameraPos().y;
 			startX = scene.currentScreenX;
 			startY = scene.currentScreenY;
-			mouseX = Mouse.getX();
-			mouseY = Mouse.getY();
+			mouseX = input.mouseX();
+			mouseY = input.mouseY();
 			break;
 		default:
 			break;
@@ -48,7 +50,7 @@ public class SmoothCameraMoveEvent extends Event {
 	
 	public void update() {
 		if (time == duration) {
-			Mouse.move(mouseX, mouseY);
+			input.setMousePos(mouseX, mouseY);
 			Game.getUIManager().getGame().resetCameraOnPlayer();
 			endEvent();
 			return;

@@ -9,6 +9,7 @@ import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.input.InputManager.InputAction;
 
 public abstract class PlayerWeapon extends Weapon implements IInteractableItem {
 
@@ -65,7 +66,7 @@ public abstract class PlayerWeapon extends Weapon implements IInteractableItem {
 		owner = player;
 	}
 	
-	public void onInteract(String key) {
+	public void onInteract(InputAction action) {
 		owned = true;
 		rotSprite = sprite;
 		player = level.getPlayer();

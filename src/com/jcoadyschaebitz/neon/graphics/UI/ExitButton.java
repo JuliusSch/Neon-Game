@@ -10,7 +10,12 @@ public class ExitButton extends UIButton {
 
 	@Override
 	public void doFunction() {
-		Game.getUIManager().loadGameMenu.saveState();
+		Game.getUIManager().loadGameSubMenu.saveState();
 		System.exit(0);
+	}
+
+	@Override
+	public String getId() {
+		return "exitButton";
 	}
 }

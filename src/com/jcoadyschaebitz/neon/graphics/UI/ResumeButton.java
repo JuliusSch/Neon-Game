@@ -7,7 +7,11 @@ public class ResumeButton extends UIButton {
 	}
 
 	public void doFunction() {
-			ui.getGame().togglePause();
+			uiManager.getGame().togglePause();
 	}
 
+	@Override
+	public String getId() {
+		return "resumeButton";
+	}
 }

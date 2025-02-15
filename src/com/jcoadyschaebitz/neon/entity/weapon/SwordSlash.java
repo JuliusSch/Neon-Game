@@ -20,8 +20,8 @@ public class SwordSlash extends Entity {
 	public SwordSlash(Mob origin, MeleeWeapon weapon, double x, double y, double direction, AnimatedSprite animSprite) {
 		this.x = x;
 		this.y = y;
-//		xa = Math.cos(direction) * 3;
-//		ya = Math.sin(direction) * 3;
+		xa = Math.cos(direction) * 1;
+		ya = Math.sin(direction) * 1;
 		this.direction = direction;
 		this.weapon = weapon;
 		flash = animSprite;			
@@ -43,6 +43,7 @@ public class SwordSlash extends Entity {
 		xa -= 0.1 * xa;
 		ya -= 0.1 * ya;
 		if (!hit) {
+			
 		}
 	}
 

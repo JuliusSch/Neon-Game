@@ -7,18 +7,16 @@ import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
 
 public class MainMenuState implements GameState {
 	
-	Game game;
-	UIManager ui;
+	UIManager uiManager;
 	
 	public MainMenuState(Game game) {
-		this.game = game;
-		ui = Game.getUIManager();
+		uiManager = Game.getUIManager();
 	}
 
 	@Override
 	public void update() {
-		ui.update();
-		Game.getKeyboard().update();
+		uiManager.update();
+		Game.getInputManager().update();
 	}
 
 	@Override
@@ -33,10 +31,12 @@ public class MainMenuState implements GameState {
 
 	@Override
 	public void enterState() {
-		Game.getUIManager().setMenu(game.mainMenu);
+		uiManager.setMenu(uiManager.mainMenu);
+		Game.getInputManager().setInMenu(true);
 	}
 
 	@Override
 	public void exitState() {
+		Game.getInputManager().setInMenu(false);
 	}
 }

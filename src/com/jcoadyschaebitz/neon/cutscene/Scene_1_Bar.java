@@ -5,19 +5,19 @@ import com.jcoadyschaebitz.neon.cutscene.events.CameraMoveEvent.Transition;
 import com.jcoadyschaebitz.neon.cutscene.events.EndSceneEvent;
 import com.jcoadyschaebitz.neon.cutscene.events.Mob_GoToEvent;
 import com.jcoadyschaebitz.neon.cutscene.events.Mob_RenderGun;
-import com.jcoadyschaebitz.neon.cutscene.events.SpeakEvent;
 import com.jcoadyschaebitz.neon.cutscene.events.Mob_SwitchFacingEvent;
 import com.jcoadyschaebitz.neon.cutscene.events.SmoothCameraMoveEvent;
+import com.jcoadyschaebitz.neon.cutscene.events.SpeakEvent;
 import com.jcoadyschaebitz.neon.cutscene.events.WaitEvent;
 import com.jcoadyschaebitz.neon.entity.mob.Mob;
 import com.jcoadyschaebitz.neon.entity.mob.Mob.Orientation;
-import com.jcoadyschaebitz.neon.input.Keyboard;
+import com.jcoadyschaebitz.neon.input.InputManager;
 import com.jcoadyschaebitz.neon.level.Level;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public class Scene_1_Bar extends CutScene {
 
-	public Scene_1_Bar(Level level, Mob[] members, Keyboard input) {
+	public Scene_1_Bar(Level level, Mob[] members, InputManager input) {
 		super(new Vec2i(5, -2), new Vec2i(15, 10), 5 * 16, 5 * 16, level, members, input);
 		script = loadTextFileArray("/scripts/bar.txt");
 	}

@@ -16,6 +16,11 @@ public class SaveSlot extends UIButton {
 		this.slotNumber = slotNumber;
 		this.label = "--blank--";
 	}
+	
+	@Override
+	public String getId() {
+		return "saveSlot" + slotNumber;
+	}
 
 	public SavedGame getSave() {
 		return savedGame;
@@ -29,7 +34,7 @@ public class SaveSlot extends UIButton {
 
 	private void createSaveGame() {
 		empty = false;
-		Game.getUIManager().loadGameMenu.setSelectedSlot(slotNumber);
+		Game.getUIManager().loadGameSubMenu.setSelectedSlot(slotNumber);
 		savedGame = new SavedGame(slotNumber);
 		label = savedGame.saveData.get("SaveName");
 		setSelected();
@@ -51,7 +56,7 @@ public class SaveSlot extends UIButton {
 	}
 
 	private void setSelected() {
-		Game.getUIManager().loadGameMenu.setSelectedSlot(slotNumber);
+		Game.getUIManager().loadGameSubMenu.setSelectedSlot(slotNumber);
 		savedGame.selected = true;
 	}
 

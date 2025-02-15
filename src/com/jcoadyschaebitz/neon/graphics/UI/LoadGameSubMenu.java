@@ -13,6 +13,7 @@ import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
+import com.jcoadyschaebitz.neon.graphics.UI.INavigableMenu.NavigableButton;
 import com.jcoadyschaebitz.neon.level.Level;
 import com.jcoadyschaebitz.neon.save.SavedGame;
 
@@ -20,29 +21,25 @@ public class LoadGameSubMenu implements UIComp {
 
 	private int x, y;
 	private List<SaveSlot> saveSlots;
-	private int selectedSlot; 
+	private int selectedSlot, noOfSlots = 5;
 	private boolean compActive;
 
 	public LoadGameSubMenu(int x, int y, Player player, Level level) {
 		this.x = x;
 		this.y = y;
 		saveSlots = new ArrayList<SaveSlot>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < noOfSlots; i++) {
 			SaveSlot slot = new SaveSlot(x + 4, y + 4 + i * 32, 236, 32, "Empty save", 0xffADFFFF, i);
 			saveSlots.add(slot);
 			slot.tryLoadSave(i);
-			Game.getUIManager().getGame().loadMenu.addComp(slot);
-			Game.getUIManager().setLoadMenu(this);
+			Game.getUIManager().loadMenu.addComps(slot);
 		}
+		Game.getUIManager().setLoadMenu(this);
 		loadState();
 	}
 	
 	public SavedGame getSelectedSave() {
 		return saveSlots.get(selectedSlot).getSavedGame();
-	}
-	
-	public List<SaveSlot> getSlots() {
-		return saveSlots;
 	}
 	
 	public void saveState() {
@@ -70,6 +67,18 @@ public class LoadGameSubMenu implements UIComp {
 		for (SaveSlot slot : saveSlots) if (slot.savedGame != null && slot.slotNumber != selectedSlot) slot.savedGame.selected = false;
 	}
 
+	public void initialiseButtonNavigation(UIButton playButton, UIButton mainMenuButton, UIMenu loadMenu) {
+		loadMenu.addNavigableButtons(
+			new NavigableButton(playButton, playButton.getId(), loadMenu.getId(), null, mainMenuButton.getId(), saveSlots.get(0).getId(), mainMenuButton.getId()),
+			new NavigableButton(mainMenuButton, mainMenuButton.getId(), loadMenu.getId(), null, playButton.getId(), saveSlots.get(0).getId(), playButton.getId()),
+			new NavigableButton(saveSlots.get(0), saveSlots.get(0).getId(), loadMenu.getId(), playButton.getId(), null, null, saveSlots.get(1).getId()),
+			new NavigableButton(saveSlots.get(1), saveSlots.get(1).getId(), loadMenu.getId(), playButton.getId(), saveSlots.get(0).getId(), null, saveSlots.get(2).getId()),
+			new NavigableButton(saveSlots.get(2), saveSlots.get(2).getId(), loadMenu.getId(), playButton.getId(), saveSlots.get(1).getId(), null, saveSlots.get(3).getId()),
+			new NavigableButton(saveSlots.get(3), saveSlots.get(3).getId(), loadMenu.getId(), playButton.getId(), saveSlots.get(2).getId(), null, saveSlots.get(4).getId()),
+			new NavigableButton(saveSlots.get(4), saveSlots.get(4).getId(), loadMenu.getId(), playButton.getId(), saveSlots.get(3).getId(), null, null)
+		);
+	}
+	
 	@Override
 	public void update() {
 	}
@@ -96,5 +105,4 @@ public class LoadGameSubMenu implements UIComp {
 		compActive = false;
 		for (int i = 0; i < saveSlots.size(); i++) saveSlots.get(i).buttonActive = false;
 	}
-
 }

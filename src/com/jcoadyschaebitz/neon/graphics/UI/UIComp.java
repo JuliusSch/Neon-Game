@@ -2,10 +2,13 @@ package com.jcoadyschaebitz.neon.graphics.UI;
 
 import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.graphics.Screen;
+import com.jcoadyschaebitz.neon.input.InputManager;
 
 public interface UIComp {
 	
-	public UIManager ui = Game.getUIManager();
+	public UIManager uiManager = Game.getUIManager();
+	
+	public InputManager inputManager = Game.getInputManager();
 
 	public abstract void update();
 
@@ -15,4 +18,5 @@ public interface UIComp {
 	
 	public abstract void deactivate();
 	
+//	public void inputTypeChanged(InputType type);
 }

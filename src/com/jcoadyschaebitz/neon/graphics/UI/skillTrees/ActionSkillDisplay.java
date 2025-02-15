@@ -41,5 +41,4 @@ public class ActionSkillDisplay implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-
 }

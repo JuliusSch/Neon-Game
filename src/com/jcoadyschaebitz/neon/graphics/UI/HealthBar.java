@@ -53,5 +53,4 @@ public class HealthBar implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-
 }

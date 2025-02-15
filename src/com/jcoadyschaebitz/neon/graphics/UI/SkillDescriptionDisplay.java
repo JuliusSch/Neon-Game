@@ -40,5 +40,4 @@ public class SkillDescriptionDisplay implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-
 }

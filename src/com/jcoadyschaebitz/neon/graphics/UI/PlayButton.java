@@ -14,8 +14,13 @@ public class PlayButton extends UIButton {
 
 	@Override
 	public void doFunction() {
-		Level.refreshLevels(ui.getGame().getLevel().getPlayer());
+		Level.refreshLevels(uiManager.getGame().getLevel().getPlayer());
 		game.loadDataFromSelectedSave();
 		game.switchToGameState(game.playState);
+	}
+	
+	@Override
+	public String getId() {
+		return "playButton";
 	}
 }

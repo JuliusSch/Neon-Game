@@ -1,10 +1,7 @@
 package com.jcoadyschaebitz.neon.entity;
 
-import com.jcoadyschaebitz.neon.Game;
-import com.jcoadyschaebitz.neon.entity.particle.DebugParticle;
 import com.jcoadyschaebitz.neon.entity.projectile.Projectile;
 import com.jcoadyschaebitz.neon.graphics.Screen;
-import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
 public class RotCollisionBox extends CollisionBox {
@@ -57,6 +54,7 @@ public class RotCollisionBox extends CollisionBox {
 			py0 = p.entityBounds.getYValues()[0] + y;
 			py1 = p.entityBounds.getYValues()[2] + y;
 			for (int i = 0; i < rotXValues.length; i++) {
+//				Game.getUIManager().getGame().getLevel().add(new DebugParticle(rotXValues[i] + e.getIntX(), rotYValues[i] + e.getIntY(), 300, Sprite.smallParticleLime));
 				if ((rotXValues[i] + e.getIntX()) > px0 && (rotXValues[i] + e.getIntX()) < px1) {
 					if ((rotYValues[i] + e.getIntY()) > py0 && (rotYValues[i] + e.getIntY()) < py1) {
 						return true;
@@ -74,7 +72,7 @@ public class RotCollisionBox extends CollisionBox {
 			Vec2i rotateAround = (new Vec2i(x + p.getSpriteW() / 2, y + p.getSpriteH() / 2).subtract(e.getPos())).add(e.getSpriteW() / 2, e.getSpriteH() / 2);
 			for (int i = 0; i < rotXValues.length; i++) {
 				Vec2i rotPoint = rotatePoint(rotateAround, p.angle * -1, new Vec2i(rotXValues[i], rotYValues[i]));
-				Game.getUIManager().getGame().getLevel().add(new DebugParticle((rotPoint.x + e.getIntX()), rotPoint.y + e.getIntY(), 300, Sprite.smallParticleLime));
+//				Game.getUIManager().getGame().getLevel().add(new DebugParticle((rotPoint.x + e.getIntX()), rotPoint.y + e.getIntY(), 300, Sprite.smallParticleLime));
 				if ((rotPoint.x + e.getIntX()) > px0 && (rotPoint.x + e.getIntX()) < px1) {
 					if ((rotPoint.y + e.getIntY()) > py0 && (rotPoint.y + e.getIntY()) < py1) {
 						return true;
@@ -88,7 +86,7 @@ public class RotCollisionBox extends CollisionBox {
 	public void renderBounds(Screen screen, int colour, int x, int y) {
 		for (int i = 0; i < rotXValues.length; i++) {
 			screen.renderPixel(rotXValues[i] + x, rotYValues[i] + y, colour);
-			Game.getUIManager().getGame().getLevel().add(new DebugParticle(origXValues[i] + x, origYValues[i] + y, 300, Sprite.smallParticleCrimson));
+//			Game.getUIManager().getGame().getLevel().add(new DebugParticle(origXValues[i] + x, origYValues[i] + y, 300, Sprite.smallParticleCrimson));
 		}
 	}
 }

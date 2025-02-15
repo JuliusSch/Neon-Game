@@ -8,7 +8,6 @@ import com.jcoadyschaebitz.neon.entity.mob.Player;
 import com.jcoadyschaebitz.neon.graphics.Font;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
-import com.jcoadyschaebitz.neon.graphics.UI.UIButton;
 import com.jcoadyschaebitz.neon.graphics.UI.UIComp;
 import com.jcoadyschaebitz.neon.input.Mouse;
 
@@ -16,7 +15,6 @@ public abstract class SkillTreeNode implements MouseListener {
 
 	protected boolean active, mouseInBounds;
 	protected Sprite inactiveSprite, activeSprite, hoverSprite;
-	protected UIButton button;
 	protected int spritePositionX, spritePositionY, width, height, xOffset, yOffset;
 	public final int tree;
 	public String description;
@@ -79,7 +77,7 @@ public abstract class SkillTreeNode implements MouseListener {
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (!UIComp.ui.getGame().getState().equals(UIComp.ui.getGame().shopMenuState)) return;
+		if (!UIComp.uiManager.getGame().getState().equals(UIComp.uiManager.getGame().shopMenuState)) return;
 		double s = Game.getWindowScale();
 		if (Mouse.getX() > (xOffset + spritePositionX) * s + Game.getXBarsOffset() && Mouse.getX() < (xOffset + spritePositionX + width) * s + Game.getXBarsOffset()) {
 			if (Mouse.getY() > (yOffset + spritePositionY) * s && Mouse.getY() < (yOffset + spritePositionY + height) * s) {

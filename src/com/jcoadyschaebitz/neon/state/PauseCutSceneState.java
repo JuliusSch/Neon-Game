@@ -9,12 +9,12 @@ import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
 public class PauseCutSceneState implements GameState {
 
 	Game game;
-	UIManager ui;
+	UIManager uiManager;
 	CutScene currentScene;
 	
 	public PauseCutSceneState(Game game) {
 		this.game = game;
-		ui = Game.getUIManager();
+		uiManager = Game.getUIManager();
 	}
 	
 	public void setScene(CutScene scene) {
@@ -28,8 +28,8 @@ public class PauseCutSceneState implements GameState {
 
 	@Override
 	public void update() {
-		ui.update();
-		Game.getKeyboard().update();
+		uiManager.update();
+		Game.getInputManager().update();
 	}
 
 	@Override
@@ -41,11 +41,13 @@ public class PauseCutSceneState implements GameState {
 
 	@Override
 	public void enterState() {
-		ui.setMenu(game.pauseSettingsMenu);
+		uiManager.setMenu(uiManager.pauseSettingsMenu);
+		Game.getInputManager().setInMenu(true);
 	}
 
 	@Override
 	public void exitState() {
+		Game.getInputManager().setInMenu(false);
 	}
 
 }

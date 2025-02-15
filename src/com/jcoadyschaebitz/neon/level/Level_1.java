@@ -27,7 +27,6 @@ import com.jcoadyschaebitz.neon.entity.mob.OpeningTrain;
 import com.jcoadyschaebitz.neon.entity.mob.SlowProjectileEnemy;
 import com.jcoadyschaebitz.neon.entity.mob.Soldier;
 import com.jcoadyschaebitz.neon.entity.spawner.RainSpawner;
-import com.jcoadyschaebitz.neon.entity.weapon.AssaultRifle;
 import com.jcoadyschaebitz.neon.entity.weapon.Shotgun;
 import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
@@ -39,7 +38,7 @@ import com.jcoadyschaebitz.neon.util.Vec2i;
 public class Level_1 extends Level {
 
 	private int x, y;
-	
+
 	public Level_1(String path, String levelName, long seed) {
 		super(path, "/levels/overlays/lvl_1.png", levelName, seed);
 		playerSpawn = new TileCoordinate(x - 16, y + 136);
@@ -74,7 +73,7 @@ public class Level_1 extends Level {
 	protected void addMobs() {
 		Mob[] sceneActors = new Mob[1];
 		sceneActors[0] = player;
-		
+
 //		add(new Soldier(16 + x, 116 + y));
 //		add(new Soldier(10 + x, 96 + y));
 		add(new Soldier(7 + x, 88 + y));
@@ -86,7 +85,6 @@ public class Level_1 extends Level {
 		add(new Soldier(6 + x, 73 + y));
 		add(new Soldier(5 + x, 77 + y));
 		add(new Soldier(4 + x, 74 + y));
-		
 
 //		add(new MeleeEnemy(43 + x, 85 + y));
 		add(new Soldier(42 + x, 83 + y));
@@ -131,12 +129,12 @@ public class Level_1 extends Level {
 //		add(new MeleeEnemy(105 + x, 35 + y));
 //		add(new MeleeEnemy(108 + x, 37 + y));
 
-		add(new SlowProjectileEnemy(82 + x, 61 + y));
-		add(new Soldier(80 + x, 59 + y));
-		add(new Soldier(85 + x, 59 + y));
+//		add(new SlowProjectileEnemy(82 + x, 61 + y));
+//		add(new Soldier(80 + x, 59 + y));
+//		add(new Soldier(85 + x, 59 + y));
 
-		add(new SlowProjectileEnemy(70 + x, 50 + y));
-		add(new SlowProjectileEnemy(70 + x, 55 + y));
+//		add(new SlowProjectileEnemy(70 + x, 50 + y));
+//		add(new SlowProjectileEnemy(70 + x, 55 + y));
 //		add(new MeleeEnemy(61 + x, 50 + y));
 //		add(new MeleeEnemy(61 + x, 55 + y));
 		add(new Soldier(46 + x, 48 + y));
@@ -170,7 +168,7 @@ public class Level_1 extends Level {
 		add(new SlowProjectileEnemy(74 + x, 19 + y));
 		add(new Heavy(81 + x, 11 + y));
 		add(new Heavy(81 + x, 19 + y));
-		add(new Scene_0_Train(this, sceneActors, Game.getKeyboard()));
+		add(new Scene_0_Train(this, sceneActors, Game.getInputManager()));
 		add(new OpeningTrain(37, 135));
 	}
 
@@ -202,7 +200,7 @@ public class Level_1 extends Level {
 
 //		add(new Pistol(20 + x, 102 + y, 180));// normal
 		add(new Shotgun(104 + x, 107 + y, 48));
-		add(new AssaultRifle(51 + x, 31 + y, 240));
+//		add(new AssaultRifle(51 + x, 31 + y, 240));				This will be in the nightclub level
 
 		add(new HealthKit((67 + x) * 16, (97 + y) * 16));
 		add(new HealthKit((42 + x) * 16, (116 + y) * 16));
@@ -214,11 +212,11 @@ public class Level_1 extends Level {
 		add(new Bin((1 + x) * 16 + 12, (81 + y) * 16 + 2, Orientation.RIGHT));
 		add(new Bin((16 + x) * 16 + 12, (81 + y) * 16 + 2, Orientation.DOWN));
 //		add(new Bin((66 + x) * 16 + 4, (95 + y) * 16 + 2, Orientation.DOWN));
-		
+
 		add(new Bin((80 + x) * 16 + 4, (115 + y) * 16 + 2, Orientation.DOWN));
 		add(new Bin((85 + x) * 16 + 2, (118 + y) * 16 + 2, Orientation.DOWN));
 		add(new ParkedCar((85 + x) * 16, (116 + y) * 16, Orientation.LEFT));
-		
+
 		add(new Bin((102 + x) * 16 + 4, (103 + y) * 16 + 2, Orientation.DOWN));
 //		add(new Bin((53 + x) * 16, (81 + y) * 16 + 2, Orientation.DOWN));
 		add(new Bin((96 + x) * 16, (85 + y) * 16 + 2, Orientation.DOWN));
@@ -226,16 +224,18 @@ public class Level_1 extends Level {
 //		add(new Bin((48 + x) * 16 - 7, (89 + y) * 16, Orientation.LEFT));
 //		add(new Bin((48 + x) * 16 - 7, (92 + y) * 16, Orientation.LEFT));
 		add(new Bin((111 + x) * 16 - 7, (66 + y) * 16, Orientation.LEFT));
-		add(new Bin((91 + x) * 16 - 8, (80 + y) * 16 - 8, Orientation.RIGHT));
+		add(new Bin((89 + x) * 16, (83 + y) * 16, Orientation.LEFT));
 //		add(new Bin((41 + x) * 16 - 1, (97 + y) * 16, Orientation.RIGHT));
 //		add(new Bin((41 + x) * 16 - 1, (102 + y) * 16, Orientation.RIGHT));
 		add(new Bin((35 + x) * 16 - 1, (85 + y) * 16, Orientation.RIGHT));
-		
-		add(new Bin((23 + x) * 16, (118 + y) * 16, Orientation.DOWN));	//bar alley bin
+
+		add(new Bin((23 + x) * 16, (118 + y) * 16, Orientation.DOWN)); // bar alley bin
 
 		add(new Vent((105 + x) * 16, (100 + y) * 16, 0.02));
-		add(new AnimatedDecoration((18 + x) * 16 + 4, (78 + y) * 16, 0.5, new AnimatedSprite(Spritesheet.ventSteam, 32, 32, 6, 10)));
-		add(new AnimatedDecoration((20 + x) * 16 + 4, (117 + y) * 16, 0.5, new AnimatedSprite(Spritesheet.ventSteam, 32, 32, 6, 10)));
+		add(new AnimatedDecoration((18 + x) * 16 + 4, (78 + y) * 16, 0.5,
+				new AnimatedSprite(Spritesheet.ventSteam, 32, 32, 6, 10)));
+		add(new AnimatedDecoration((20 + x) * 16 + 4, (117 + y) * 16, 0.5,
+				new AnimatedSprite(Spritesheet.ventSteam, 32, 32, 6, 10)));
 
 		add(new ParkedCar((5 + x) * 16, (92 + y) * 16, Orientation.DOWN));
 		add(new ParkedCar((11 + x) * 16, (107 + y) * 16, Orientation.DOWN));
@@ -258,16 +258,16 @@ public class Level_1 extends Level {
 //		add(new WireFence((67 + x) * 16, (93 + y) * 16, Orientation2D.HORIZONTAL));
 //		add(new WireFence((68 + x) * 16, (93 + y) * 16, Orientation2D.HORIZONTAL));
 
-		add(new WireFence((90 + x) * 16, (78 + y) * 16, Orientation2D.VERTICAL));
-		add(new WireFence((90 + x) * 16, (79 + y) * 16, Orientation2D.VERTICAL));
-		add(new WireFence((90 + x) * 16, (80 + y) * 16, Orientation2D.VERTICAL));
+//		add(new WireFence((90 + x) * 16, (78 + y) * 16, Orientation2D.VERTICAL));
+		add(new WireFence((90 + x) * 16, (82 + y) * 16, Orientation2D.VERTICAL));
+		add(new WireFence((90 + x) * 16, (83 + y) * 16, Orientation2D.VERTICAL));
 
 		add(new WireFence((49 + x) * 16, (84 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((49 + x) * 16, (85 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((49 + x) * 16, (86 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((49 + x) * 16, (87 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((49 + x) * 16, (88 + y) * 16, Orientation2D.VERTICAL));
-		
+
 		add(new WireFence((31 + x) * 16, (117 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((31 + x) * 16, (118 + y) * 16, Orientation2D.VERTICAL));	//bar alley fence
 
@@ -285,21 +285,21 @@ public class Level_1 extends Level {
 		add(new Decoration((5 + x) * 16, (86 + y) * 16, Sprite.cable2));
 		add(new Decoration((5 + x) * 16, (86 + y) * 16, Sprite.cable3));
 		add(new Decoration((5 + x) * 16, (108 + y) * 16, Sprite.cable2));
-		
+
 		add(new ParkedCar((84 + x) * 16, (12 + y) * 16, Orientation.LEFT));
+		add(new Bin((77 + x) * 16 - 7, (71 + y) * 16, Orientation.LEFT));
 		add(new Bin((77 + x) * 16 - 7, (73 + y) * 16, Orientation.LEFT));
-		add(new Bin((77 + x) * 16 - 7, (75 + y) * 16, Orientation.LEFT));
-		
+
 		add(new CrowdBarrier((104 + x) * 16, (118 + y) * 16, Orientation2D.VERTICAL));
 		add(new CrowdBarrier((104 + x) * 16 - 2, (120 + y) * 16, Orientation2D.VERTICAL));
 		add(new CrowdBarrier((104 + x) * 16 - 4, (122 + y) * 16, Orientation2D.VERTICAL));
-		
+
 		add(new WireFence((1 + x) * 16, (80 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((1 + x) * 16, (81 + y) * 16, Orientation2D.VERTICAL));
-		
+
 		add(new WireFence((32 + x) * 16, (80 + y) * 16, Orientation2D.VERTICAL));
 		add(new WireFence((32 + x) * 16, (81 + y) * 16, Orientation2D.VERTICAL));
-		
+
 		add(new Shop((109 + x) * 16, (109 + y) * 16));
 	}
 

@@ -56,9 +56,13 @@ public class Vec2d {
 	}
 	
 	public Vec2d normalise() {
-		double magnitude = Math.sqrt(x * x + y * y);
+		double magnitude = magnitude();
 		if (magnitude == 0) return new Vec2d(0, 0);
 		else return new Vec2d(x / magnitude, y / magnitude);
+	}
+
+	public double magnitude() {
+		return Math.sqrt(x * x + y * y);
 	}
 	
 	public double dot(Vec2d v2) {

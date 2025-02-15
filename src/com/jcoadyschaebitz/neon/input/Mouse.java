@@ -9,10 +9,14 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import com.jcoadyschaebitz.neon.Game;
+import com.jcoadyschaebitz.neon.input.InputManager.InputType;
 
 public class Mouse implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-	public Mouse(Game game) {
+	private InputManager inputManager;
+	
+	public Mouse(InputManager inputManager) {
+		this.inputManager = inputManager;
 	}
 
 	private static int mouseX = -1;
@@ -20,6 +24,23 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	private static int mouseB = -1;
 	private static int mouseWheelRotNo;
 
+	public static int GetXWithinBars() {
+		int newX = mouseX - Game.getXBarsOffset();
+		return Math.max(Math.min(newX, 0), Game.getWindowWidth() - Game.getXBarsOffset());
+	}
+	
+	public static int GetYWithinBars() {
+		return mouseY;
+	}
+	
+	public static int GetXRelCentre() {
+		return GetXWithinBars() - (Game.getWindowWidth() - Game.getXBarsOffset() * 2) / 2;
+	}
+	
+	public static int GetYRelCentre() {
+		return GetYWithinBars() - Game.getWindowHeight() / 2;
+	}
+	
 	public static int getX() {
 		return mouseX;
 	}
@@ -37,16 +58,22 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	}
 
 	public void mouseDragged(MouseEvent e) {
+		Game.getInputManager().setLastUsed(InputType.KEYBOARD);
 		mouseX = e.getX();
 		mouseY = e.getY();
 	}
 
 	public void mouseMoved(MouseEvent e) {
+//		if (Math.abs(mouseX - e.getX()) > 1 || Math.abs(mouseY - e.getY()) > 1)
+//			Game.getInputManager().setLastUsed(InputType.KEYBOARD);
+		
 		mouseX = e.getX();
 		mouseY = e.getY();
+//		inputManager.setMousePos(mouseX, mouseY);
 	}
 
 	public void mouseClicked(MouseEvent e) {
+		Game.getInputManager().setLastUsed(InputType.KEYBOARD);
 		mouseB = -2;
 	}
 
@@ -57,10 +84,12 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	}
 
 	public void mousePressed(MouseEvent e) {
+		Game.getInputManager().setLastUsed(InputType.KEYBOARD);
 		mouseB = e.getButton();
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		Game.getInputManager().setLastUsed(InputType.KEYBOARD);
 		mouseB = -1;
 	}
 	
@@ -68,35 +97,14 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 		try {
 			Robot bot = new Robot();
 			bot.mouseMove(x, y);
+			
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}
 	}
 
-//	public static boolean clicked(int x, int y, int width, int height) {
-//		double s = Game.getWindowScale();
-//		if (Mouse.getX() > (x * s) && Mouse.getX() < (x + width) * s) {
-//			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
-//				if (Mouse.getB() == 1) return true;
-//			}
-//		}
-//		return false;
-//	}
-//
-//	public static boolean clickedAndReleased(int x, int y, int width, int height) {
-//		double s = Game.getWindowScale();
-//		if (Mouse.getX() > (x * s) && Mouse.getX() < (x + width) * s) {
-//			if (Mouse.getY() > (y * s) && Mouse.getY() < (y + height) * s) {
-//				if (Mouse.getB() == -2) {
-//					mouseB = -1;
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		Game.getInputManager().setLastUsed(InputType.KEYBOARD);
 		mouseWheelRotNo = e.getWheelRotation();
 		Game.getUIManager().scrollItemSlots(mouseWheelRotNo);
 		mouseWheelRotNo = 0;

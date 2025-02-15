@@ -1,8 +1,10 @@
 package com.jcoadyschaebitz.neon.entity;
 
+import com.jcoadyschaebitz.neon.input.InputManager.InputAction;
+
 public interface IInteractableItem {
 	
-	void onInteract(String key);
+	void onInteract(InputAction action);
 	
 	void setShowPrompt(boolean val);
 	

@@ -8,18 +8,18 @@ import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
 public class PauseMenuState implements GameState {
 
 	Game game;
-	UIManager ui;
+	UIManager uiManager;
 //	public int lastMouseX, lastMouseY;
 
 	public PauseMenuState(Game game) {
 		this.game = game;
-		ui = Game.getUIManager();
+		uiManager = Game.getUIManager();
 	}
 
 	@Override
 	public void update() {
-		ui.update();
-		Game.getKeyboard().update();
+		uiManager.update();
+		Game.getInputManager().update();
 	}
 
 //	public void recordMouse(int x, int y) {
@@ -42,13 +42,15 @@ public class PauseMenuState implements GameState {
 
 	@Override
 	public void enterState() {
-		ui.setMenu(game.pauseSettingsMenu);
+		uiManager.setMenu(uiManager.pauseSettingsMenu);
 //		pauseState.recordMouse(Mouse.getX(), Mouse.getY());
+		Game.getInputManager().setInMenu(true);
 	}
 
 	@Override
 	public void exitState() {
 //		Mouse.move(pauseState.lastMouseX, pauseState.lastMouseY);
+		Game.getInputManager().setInMenu(false);
 	}
 
 }

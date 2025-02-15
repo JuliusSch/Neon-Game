@@ -27,7 +27,7 @@ public class UIItemSlot implements UIComp {
 	}
 	
 	public void update() {
-		if (ui.selectedItemSlot == thisSlot) {
+		if (uiManager.selectedItemSlot == thisSlot) {
 			selected = true;
 			player.setGun(weapon);
 		} else selected = false;

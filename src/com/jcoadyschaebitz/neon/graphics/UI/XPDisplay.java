@@ -37,5 +37,4 @@ public class XPDisplay implements UIComp {
 	@Override
 	public void deactivate() {
 	}
-	
 }

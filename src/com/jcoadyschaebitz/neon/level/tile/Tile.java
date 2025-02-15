@@ -24,7 +24,7 @@ public class Tile {
 
 	// Renderers
 	public static BorderRenderer edgeShadows = new BorderRenderer(Spritesheet.floorShadows.getSprites(), new int[] { 0xff6A654D, 0xff353535, 0xff00FF21, 0xff00AA19, 0xffFFBE00, 0xffFF00FF, 0xff3B871B,
-			0xff0026FF, 0xff298900, 0xff164C00, 0xff206B00, 0xff0FFFFC, 0xff0FFFFD, 0xff0FFFFE, 0xff0FFFFF, 0xffB6FF08, 0xffB6FF09, 0xffB6FF0A, 0xffB6FF0B, 0xff008E0E, 0xff0C151E });
+			0xff0026FF, 0xff298900, 0xff164C00, 0xff206B00, 0xff0FFFFC, 0xff0FFFFD, 0xff0FFFFE, 0xff0FFFFF, 0xffB6FF08, 0xffB6FF09, 0xffB6FF0A, 0xffB6FF0B, 0xff008E0E, 0xff0C151E, 0xff00D819 });
 	
 	public static Tile voidTile = new voidTile(Sprite.wall);
 	
@@ -56,8 +56,9 @@ public class Tile {
 	
 	public static Tile stairsDown = new StairTile(Sprite.stepsDown, 0xff3D1800, StairTile.DOWN, null);
 	public static Tile stairsInsideDown = new StairTile(Sprite.insideStepsDown, 0xff000C51, StairTile.DOWN, null);
+	public static Tile stairsInsideUp = new StairTile(Sprite.insideStepsUp, 0xff001487, StairTile.UP, null);
 	
-	public static Tile stepsUp = new FloorTile(Sprite.steps_up, 0xff, null);
+	public static Tile stepsUp = new StairTile(Sprite.stepsUp, 0xff, StairTile.UP, null);
 	public static Tile stepsRight = new FloorTile(Sprite.stepsRight, 0xff331417, null);
 	public static Tile stepsLeft = new FloorTile(Sprite.stepsLeft, 0xff3D181C, null);
 	
@@ -68,11 +69,11 @@ public class Tile {
 	public static Tile outsideStairsUpRightTop = new StairTile(Sprite.stepsLeftTop, 0xff4C1100, StairTile.LEFT, null);
 	public static Tile outsideStairsUpRightBottom = new StairTile(Sprite.stepsLeftBottom, 0xff380D00, StairTile.LEFT, null);
 	public static Tile insideStairsDownRight = new StairTile(Sprite.insideStepsRight, 0xff001177, StairTile.RIGHT, null);
-	public static Tile insideStairsUpRight = new StairTile(Sprite.insideStepsLeft, 0xff, StairTile.LEFT, null);
+	public static Tile insideStairsUpRight = new StairTile(Sprite.insideStepsLeft, 0xff132482, StairTile.LEFT, null);
 	public static Tile insideStairsDownRightTop = new StairTile(Sprite.insideStepsRTPanel_1, 0xff001382, StairTile.RIGHT, null);
 	public static Tile insideStairsDownRightBottom = new StairTile(Sprite.insideStepsRightBottom, 0xff001489, StairTile.RIGHT, null);
-	public static Tile insideStairsUpRightTop = new StairTile(Sprite.insideStepsLeftTop, 0xff, StairTile.LEFT, null);
-	public static Tile insideStairsUpRightBottom = new StairTile(Sprite.insideStepsLeftBottom, 0xff, StairTile.LEFT, null);
+	public static Tile insideStairsUpRightTop = new StairTile(Sprite.insideStepsLeftTop, 0xff192EA8, StairTile.LEFT, null);
+	public static Tile insideStairsUpRightBottom = new StairTile(Sprite.insideStepsLeftBottom, 0xff1D35C1, StairTile.LEFT, null);
 	
 	public static Tile insideDownRightPanel = new WallTile(Sprite.insideStepsRTPanel_2, 0xff009769, null);
 	
@@ -91,6 +92,7 @@ public class Tile {
 	public static Tile carpetPlankSteps = new StairTile(Sprite.carpetPlankSteps, 0xff91371B, StairTile.DOWN, null);
 	public static Tile woodPlanksSunset = new FloorTile(Sprite.woodPlanksSunset, 0xffB71F00, null);
 	public static Tile insideTiles = new FloorTile(Sprite.insideTiles, 0xff000E60, null);
+	public static Tile floatingRailFloor = new FloorTile(Sprite.floatingRailFloor, 0xff35444F, null);
 	
 	public static Tile blackStoneTile = new FloorTile(Sprite.blackStoneTile, 0xff232323, null);
 	public static Tile whiteStoneTile = new FloorTile(Sprite.whiteStoneTile, 0xffDCDCDC, null);

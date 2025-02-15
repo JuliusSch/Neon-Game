@@ -27,7 +27,6 @@ public class SlowEnemyGun extends Gun {
 
 	public void attack(double x, double y, double angle) {
 		attack(x, y, angle, 1);
-		addFlash((int) x, (int) y, angle);
 	}
 
 	public void attack(double x, double y, double angle, double speed) {

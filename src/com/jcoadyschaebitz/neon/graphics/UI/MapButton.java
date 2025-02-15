@@ -9,5 +9,9 @@ public class MapButton extends UIButton {
 	public void doFunction() {
 		
 	}
-
+	
+	@Override
+	public String getId() {
+		return "mapButton";
+	}
 }

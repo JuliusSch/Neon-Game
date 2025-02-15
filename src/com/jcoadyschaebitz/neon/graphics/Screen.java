@@ -234,8 +234,14 @@ public class Screen {
 	}
 
 	public void renderPixel(int x, int y, int colour) {
-		x -= xOffset;
-		y -= yOffset;
+		renderPixel(x, y, colour, true);
+	}
+	
+	public void renderPixel(int x, int y, int colour, boolean fixed) {
+		if (fixed) {
+			x -= xOffset;
+			y -= yOffset;			
+		}
 		if (x < 0 || x >= width || y < 0 || y >= height) return;
 		screenPixels[x + y * width] = colour;
 	}

@@ -38,9 +38,9 @@ public class AssaultRifle extends PlayerWeapon {
 
 	public void attack(double x, double y, double direction) {
 		SoundClip.pistol_shot.play();
-		double xp = Math.cos(direction) * 25;
-		double yp = Math.sin(direction) * 25;
-		Projectile p = new AssaultRifleBullet(owner, x + xp, y + yp + 6, direction, level);
+		double xp = Math.cos(direction) * 16;
+		double yp = Math.sin(direction) * 16;
+		Projectile p = new AssaultRifleBullet(owner, x + xp - 3, y + yp + 2, direction, level);
 		level.add(p);
 		shotsFired++;
 		magCount--;

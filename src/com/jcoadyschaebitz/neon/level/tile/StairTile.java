@@ -42,7 +42,7 @@ public class StairTile extends FloorTile {
 	public static double changeYa(Level level, double xa, double ya, int x, int y, int dir) {
 		switch (dir) {
 		case UP:
-			return ya * 0.7;
+			return ya * 0.4;
 		case DOWN:
 			return ya * 0.7;
 		case RIGHT:

@@ -14,7 +14,8 @@ import com.jcoadyschaebitz.neon.entity.mob.Mob;
 import com.jcoadyschaebitz.neon.entity.particle.TextBubble;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
-import com.jcoadyschaebitz.neon.input.Keyboard;
+import com.jcoadyschaebitz.neon.input.InputManager;
+import com.jcoadyschaebitz.neon.input.InputManager.InputAction;
 import com.jcoadyschaebitz.neon.level.Level;
 import com.jcoadyschaebitz.neon.util.Vec2i;
 
@@ -28,12 +29,12 @@ public abstract class CutScene {
 	protected Level level;
 	protected int trigX1, trigY1, trigX2, trigY2; 
 	protected Actor[] actors;
-	protected Keyboard input;
+	protected InputManager input;
 	protected String[] script;
 	protected LinkedList<TextBubble> bubbles = new LinkedList<TextBubble>();
 	protected TextBubble currentTextBubble;
 	
-	public CutScene(Vec2i screenLockCentre, Vec2i triggerTopLeft, int triggerW, int triggerH, Level level, Mob[] members, Keyboard input) {
+	public CutScene(Vec2i screenLockCentre, Vec2i triggerTopLeft, int triggerW, int triggerH, Level level, Mob[] members, InputManager input) {
 		this.currentScreenX = screenLockCentre.x << 4;
 		this.currentScreenY = screenLockCentre.y << 4;
 		trigX1 = triggerTopLeft.x << 4;
@@ -124,8 +125,8 @@ public abstract class CutScene {
 			if (time >= e.getStartTime() && !e.timeElapsed) e.update();
 		}
 		for (Actor a : actors) a.update();
-		if (!input.F) skipCounter = 0;
-		if (input.F) skipCounter++;
+		if (!input.isInput(InputAction.SECONDARY_ACTION)) skipCounter = 0;
+		if (input.isInput(InputAction.SECONDARY_ACTION)) skipCounter++;
 		if (skipCounter > 60) exitScene();
 		time++;
 	}

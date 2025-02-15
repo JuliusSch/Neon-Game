@@ -5,7 +5,6 @@ import com.jcoadyschaebitz.neon.cutscene.CutScene;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.UI.UIManager;
 import com.jcoadyschaebitz.neon.sound.SoundClip;
-import com.jcoadyschaebitz.neon.util.Vec2d;
 
 public class CutSceneState implements GameState {
 	
@@ -29,7 +28,7 @@ public class CutSceneState implements GameState {
 
 	@Override
 	public void update() {
-		Game.getKeyboard().update();
+		Game.getInputManager().update();
 		game.getLevel().update();
 		ui.update();
 	}
@@ -44,7 +43,8 @@ public class CutSceneState implements GameState {
 		for (SoundClip clip : SoundClip.allClips) {
 			clip.resume();
 		}
-		ui.setMenu(game.cutSceneUI);
+		ui.setMenu(Game.getUIManager().cutSceneUI);
+		Game.getInputManager().setInMenu(true);
 	}
 
 	@Override
@@ -52,6 +52,7 @@ public class CutSceneState implements GameState {
 		for (SoundClip clip : SoundClip.allClips) {
 			clip.pause();
 		}
+		Game.getInputManager().setInMenu(false);
 	}
 
 }

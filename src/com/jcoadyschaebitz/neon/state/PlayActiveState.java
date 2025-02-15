@@ -8,16 +8,16 @@ import com.jcoadyschaebitz.neon.sound.SoundClip;
 public class PlayActiveState implements GameState {
 	
 	Game game;
-	UIManager ui;
+	UIManager uiManager;
 	
 	public PlayActiveState(Game game) {
 		this.game = game;
-		ui = Game.getUIManager();
+		uiManager = Game.getUIManager();
 	}
 
 	@Override
 	public void update() {
-		Game.getKeyboard().update();
+		Game.getInputManager().update();
 		game.getLevel().update();
 	}
 
@@ -33,7 +33,7 @@ public class PlayActiveState implements GameState {
 
 	@Override
 	public void enterState() {
-		ui.setMenu(game.gamePlayUI);
+		uiManager.setMenu(uiManager.gamePlayUI);
 		for (SoundClip clip : SoundClip.allClips) {
 			clip.resume();
 		}
