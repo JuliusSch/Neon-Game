@@ -16,7 +16,6 @@ import com.jcoadyschaebitz.neon.entity.mob.EliteSoldier;
 import com.jcoadyschaebitz.neon.entity.mob.Mob.Orientation;
 import com.jcoadyschaebitz.neon.entity.mob.SlowProjectileEnemy;
 import com.jcoadyschaebitz.neon.entity.mob.Soldier;
-import com.jcoadyschaebitz.neon.entity.mob.SpearEnemy;
 import com.jcoadyschaebitz.neon.entity.spawner.RainSpawner;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.sound.SoundClip;

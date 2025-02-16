@@ -13,10 +13,7 @@ import com.jcoadyschaebitz.neon.input.InputManager.InputType;
 
 public class Mouse implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-	private InputManager inputManager;
-	
-	public Mouse(InputManager inputManager) {
-		this.inputManager = inputManager;
+	public Mouse() {
 	}
 
 	private static int mouseX = -1;

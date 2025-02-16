@@ -8,6 +8,7 @@ import com.jcoadyschaebitz.neon.graphics.AnimatedSprite;
 import com.jcoadyschaebitz.neon.graphics.Screen;
 import com.jcoadyschaebitz.neon.graphics.Sprite;
 import com.jcoadyschaebitz.neon.graphics.Spritesheet;
+import com.jcoadyschaebitz.neon.input.InputManager.InputAction;
 import com.jcoadyschaebitz.neon.input.InputManager.InputType;
 import com.jcoadyschaebitz.neon.sound.SoundClip;
 import com.jcoadyschaebitz.neon.util.Vec2d;
@@ -71,7 +72,7 @@ public class Crossbow extends PlayerWeapon {
 				Vec2i targetPoint = level.castRay(new Vec2i((int) (x + 8), (int) (y + 14)), new Vec2d(xx, yy), 360, false, false);
 				screen.renderLine((int) (x + 8), (int) (y + 14), targetPoint.x, targetPoint.y, 0x88FF002F, 0.5);				
 			} else {
-				Vec2d dir = Game.getInputManager().getLastJoystickDirectionVector();
+				Vec2d dir = new Vec2d(Game.getInputManager().getInput(InputAction.LOOK_DIRECTION_X), Game.getInputManager().getInput(InputAction.LOOK_DIRECTION_Y));
 				Vec2i targetPoint = level.castRay(new Vec2i((int) (x + 8), (int) (y + 14)), dir, 360, false, false);
 				screen.renderLine((int) (x + 8), (int) (y + 14), targetPoint.x, targetPoint.y, 0x88FF002F, 0.5);				
 			}

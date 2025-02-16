@@ -101,9 +101,8 @@ public class Game extends Canvas implements Runnable {
 		Level.addPlayerToLevels(player);
 		level.initPlayer(player);
 
-		Mouse mouse = new Mouse(inputManager);
+		Mouse mouse = new Mouse();
 		addMouseListener(mouse);
-//		addMouseListener(player.getShield());
 		addMouseMotionListener(mouse);
 		addMouseWheelListener(mouse);
 	}
@@ -219,7 +218,6 @@ public class Game extends Canvas implements Runnable {
 				updates++;
 				delta--;
 			}
-			inputManager.updateControllers(deltaDiff);
 			render();
 			frames++;
 
