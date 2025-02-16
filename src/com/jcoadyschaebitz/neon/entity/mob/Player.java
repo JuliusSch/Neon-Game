@@ -162,9 +162,9 @@ public class Player extends Mob implements IInputObserver {
 			if (inputManager.getMouseXRelMidWithBars() >= 0)
 				dir = Orientation.RIGHT;
 			else
-				dir = Orientation.LEFT;	
+				dir = Orientation.LEFT;
 		} else {
-			direction = inputManager.getLastJoystickDirection();
+			direction = inputManager.getInput(InputAction.LOOK_DIRECTION);
 			if (Math.abs(direction) <=  Math.PI / 2)
 				dir = Orientation.RIGHT;
 			else

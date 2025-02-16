@@ -164,12 +164,12 @@ public class UIManager implements IInputObserver {
 
 	public void update() {
 		currentMenu.update();
-		
-		if (getCurrentInputType() == InputType.KEYBOARD) {
-			for (int i = 0; i < Game.getInputManager().keyboard.numbers.length; i++) {
-				if (Game.getInputManager().keyboard.numbers[i] && slots.get(i - 1).hasItem) selectedItemSlot = i - 1;
-			}
-		}
+//		
+//		if (getCurrentInputType() == InputType.KEYBOARD) {
+//			for (int i = 0; i < Game.getInputManager().keyboard.numbers.length; i++) {
+//				if (Game.getInputManager().keyboard.numbers[i] && slots.get(i - 1).hasItem) selectedItemSlot = i - 1;
+//			}
+//		}
 	}
 
 	public void render(Screen screen) {
@@ -251,7 +251,7 @@ public class UIManager implements IInputObserver {
 				scrollItemSlots(-1);
 			else if (input == InputAction.CYCLE_ITEM_RIGHT)
 				scrollItemSlots(1);
-		}		
+		}
 	}
 	
 	public Map<String, String> getSaveData() {

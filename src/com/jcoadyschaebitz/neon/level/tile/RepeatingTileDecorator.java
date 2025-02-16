@@ -10,8 +10,8 @@ import com.jcoadyschaebitz.neon.util.Vec2i;
 public class RepeatingTileDecorator extends Tile {
 	
 	private int repeatAfterW, repeatAfterH;
-	private Sprite[] sprites, sprites1, sprites2, sprites3;
-	private boolean rotateRandomly;
+	private Sprite[] sprites; //sprites1, sprites2, sprites3;
+//	private boolean rotateRandomly;
 	
 	public RepeatingTileDecorator(Tile tile, Vec2i repeatAfter, Sprite[] sprites, List<Renderer> renderers, boolean rotateRandomly) {
 		super(sprites[0], tile.getColour(), tile.getZ(), renderers);
@@ -24,7 +24,7 @@ public class RepeatingTileDecorator extends Tile {
 		blocksProjectiles = tile.blocksProjectiles;
 		isOutdoors = tile.isOutdoors;
 		castsShadow = tile.castsShadow;
-		this.rotateRandomly = rotateRandomly;
+//		this.rotateRandomly = rotateRandomly;
 		if (rotateRandomly) {
 			
 		}

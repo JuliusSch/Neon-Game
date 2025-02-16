@@ -26,11 +26,30 @@ public class InputManager implements WindowFocusListener {
 	}
 	
 	public enum InputAction {
-		PRIMARY_ACTION, SECONDARY_ACTION, MOVE_LEFT, MOVE_UP, MOVE_RIGHT, MOVE_DOWN, LOOK_LEFT, LOOK_UP, LOOK_RIGHT, LOOK_DOWN, LOOK_DIRECTION_X, LOOK_DIRECTION_Y, PAUSE, SHIELD, MENU_LEFT, MENU_UP, MENU_RIGHT, MENU_DOWN, MENU_SELECT, CYCLE_ITEM_LEFT, CYCLE_ITEM_RIGHT
+		PRIMARY_ACTION,
+		SECONDARY_ACTION,
+		MOVE_LEFT, MOVE_UP,
+		MOVE_RIGHT,
+		MOVE_DOWN,
+		LOOK_LEFT,
+		LOOK_UP,
+		LOOK_RIGHT,
+		LOOK_DOWN,
+		LOOK_DIRECTION_X,
+		LOOK_DIRECTION_Y,
+		LOOK_DIRECTION,
+		PAUSE,
+		SHIELD,
+		MENU_LEFT,
+		MENU_UP,
+		MENU_RIGHT,
+		MENU_DOWN,
+		MENU_SELECT,
+		CYCLE_ITEM_LEFT,
+		CYCLE_ITEM_RIGHT
 	}
 	
-//	private Mouse mouse;
-	public Keyboard keyboard; // make private
+	private Keyboard keyboard;
 	private Gamepad gamepad;
 	private List<IInputObserver> inputObservers;
 	private double[] inputValues;
@@ -56,16 +75,19 @@ public class InputManager implements WindowFocusListener {
 	
 	public void update() {
 		keyboard.update();
+		gamepad.update();
 		updateInputs();
 		notifyObservers();
 		
-		if (lastUsedInputType == InputType.GAMEPAD && gamepad.getInput(InputId.JOYSTICK_RIGHT_X) == 0 && gamepad.getInput(InputId.JOYSTICK_RIGHT_Y) == 0)
+		// Should probably be somewhere else
+		if (lastUsedInputType == InputType.KEYBOARD) {
+			for (int i = 0; i < Game.getInputManager().keyboard.numbers.length; i++) {
+				if (keyboard.numbers[i] && Game.getUIManager().slots.get(i - 1).hasItem) Game.getUIManager().selectedItemSlot = i - 1;
+			}
+		}
+		
+		if (lastUsedInputType == InputType.GAMEPAD && !gamepad.getButtonInput(InputId.JOYSTICK_RIGHT_ACTIVE))
 			lerpGamepadCursorToCentre();
-	}
-	
-	public void updateControllers(double deltaTime)
-	{			
-		gamepad.update(deltaTime);
 	}
 	
 	public int mouseX() {
@@ -86,14 +108,6 @@ public class InputManager implements WindowFocusListener {
 	
 	public double getMouseYRelMid() {
 		return (mouseY - (Game.getWindowHeight() / 2));
-	}
-
-	public double getLastJoystickDirection() {
-		return gamepad.getLastJoystickDirection();
-	}
-	
-	public Vec2d getLastJoystickDirectionVector() {
-		return gamepad.getLastJoystickDirectionVector();
 	}
 
 	public boolean isInput(InputAction action) {
@@ -147,13 +161,13 @@ public class InputManager implements WindowFocusListener {
 	}
 	
 	private void updateInputs() {
-		updateValue(InputAction.SECONDARY_ACTION, keyboard.E ? 1f : gamepad.getInput(InputId.BUTTON_3));
-		updateValue(InputAction.PRIMARY_ACTION, Math.max(Mouse.getB(), gamepad.getInput(InputId.BUTTON_5)));
-		updateValue(InputAction.PAUSE, keyboard.esc ? 1f : gamepad.getInput(InputId.BUTTON_9));
-		updateValue(InputAction.SHIELD, keyboard.F ? 1f : gamepad.getInput(InputId.BUTTON_4));
+		updateValue(InputAction.SECONDARY_ACTION, keyboard.E ? 1f : gamepad.getButtonInputNum(InputId.BUTTON_Y));
+		updateValue(InputAction.PRIMARY_ACTION, Math.max(Mouse.getB(), gamepad.getButtonInputNum(InputId.BUTTON_R1)));
+		updateValue(InputAction.PAUSE, keyboard.esc ? 1f : gamepad.getButtonInputNum(InputId.BUTTON_9));
+		updateValue(InputAction.SHIELD, keyboard.F ? 1f : gamepad.getButtonInputNum(InputId.BUTTON_L1));
 		updateMoveInputs();
 		
-		if (lastUsedInputType == InputType.GAMEPAD) {
+		if (lastUsedInputType == InputType.GAMEPAD && gamepad.getButtonInput(InputId.JOYSTICK_RIGHT_ACTIVE)) {
 			double newX = mouseX + gamepad.getInput(InputId.JOYSTICK_RIGHT_X) * 10;
 			double newY = mouseY + gamepad.getInput(InputId.JOYSTICK_RIGHT_Y) * 10;
 			setMousePos((int) newX, (int) newY);
@@ -164,12 +178,12 @@ public class InputManager implements WindowFocusListener {
 		}
 		
 		// Combine menu and move axes at some point?
-		updateValue(InputAction.MENU_LEFT, gamepad.getInput(InputId.DPAD_LEFT));
-		updateValue(InputAction.MENU_UP, gamepad.getInput(InputId.DPAD_UP));
-		updateValue(InputAction.MENU_RIGHT, gamepad.getInput(InputId.DPAD_RIGHT));
-		updateValue(InputAction.MENU_DOWN, gamepad.getInput(InputId.DPAD_DOWN));
+		updateValue(InputAction.MENU_LEFT, gamepad.getButtonInputNum(InputId.DPAD_LEFT));
+		updateValue(InputAction.MENU_UP, gamepad.getButtonInputNum(InputId.DPAD_UP));
+		updateValue(InputAction.MENU_RIGHT, gamepad.getButtonInputNum(InputId.DPAD_RIGHT));
+		updateValue(InputAction.MENU_DOWN, gamepad.getButtonInputNum(InputId.DPAD_DOWN));
 		
-		updateValue(InputAction.MENU_SELECT, gamepad.getInput(InputId.BUTTON_1));
+		updateValue(InputAction.MENU_SELECT, gamepad.getButtonInputNum(InputId.BUTTON_A));
 
 		updateValue(InputAction.LOOK_LEFT, Math.min(mouseX, 0));
 		updateValue(InputAction.LOOK_UP, Math.min(mouseY, 0));
@@ -178,9 +192,10 @@ public class InputManager implements WindowFocusListener {
 		
 		updateValue(InputAction.LOOK_DIRECTION_X, gamepad.getInput(InputId.JOYSTICK_RIGHT_X));
 		updateValue(InputAction.LOOK_DIRECTION_Y, gamepad.getInput(InputId.JOYSTICK_RIGHT_Y));
+		updateValue(InputAction.LOOK_DIRECTION, -gamepad.getInput(InputId.JOYSTICK_RIGHT_ANGLE));
 
-		updateValue(InputAction.CYCLE_ITEM_LEFT, gamepad.getInput(InputId.BUTTON_6));
-		updateValue(InputAction.CYCLE_ITEM_RIGHT, gamepad.getInput(InputId.BUTTON_7));
+		updateValue(InputAction.CYCLE_ITEM_LEFT, gamepad.getButtonInputNum(InputId.BUTTON_L2));
+		updateValue(InputAction.CYCLE_ITEM_RIGHT, gamepad.getButtonInputNum(InputId.BUTTON_R2));
 	}
 	
 	private void updateMoveInputs() {
@@ -248,22 +263,24 @@ public class InputManager implements WindowFocusListener {
 	}
 	
 	private void setCursor(CursorType type) {
-		if (type == CursorType.GAMEPAD)
-			return;
+//		if (type == CursorType.GAMEPAD)
+//			return;
 		game.setCursor(cursors.get(type));
 	}
 	
-	private void lerpGamepadCursorToCentre() { // This isn't great
-//		Vec2d position = new Vec2d(getMouseXRelMidWithBars(), getMouseYRelMid());
-//		double distance = Math.sqrt(position.x * position.x + position.y * position.y);
-//        if (distance < 10)
-//        	return;
-//
-//        double panFactor = 0.99;
-//        
-//	    int finalX = (int) (Game.getWindowWidth() * 0.5 + Game.getXBarsOffset() + position.x * panFactor);
-//	    int finalY = (int) (Game.getWindowHeight() * 0.5 + position.y * panFactor);
-//
-//	    setMousePos(finalX, finalY);
+	private void lerpGamepadCursorToCentre() {
+
+		Vec2d position = new Vec2d(getMouseXRelMidWithBars() / 0.95, getMouseYRelMid());
+		double distance = Math.sqrt(position.x * position.x + position.y * position.y);
+		
+        if (distance < 128) // range from player
+        	return;
+		
+		double panFactor = 0.98;
+
+	    int finalX = (int) (Game.getWindowWidth() * 0.5 + Game.getXBarsOffset() + 0.5 + position.x * panFactor);
+	    int finalY = (int) (Game.getWindowHeight() * 0.5 + 0.5 + position.y * panFactor);
+
+	    setMousePos(finalX, finalY);
 	}
 }

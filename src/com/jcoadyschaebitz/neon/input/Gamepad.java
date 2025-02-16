@@ -1,58 +1,52 @@
 package com.jcoadyschaebitz.neon.input;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.input.InputManager.InputType;
-import com.jcoadyschaebitz.neon.util.Vec2d;
-
-import net.java.games.input.Component;
-import net.java.games.input.Component.Identifier;
-import net.java.games.input.Component.Identifier.Axis;
-import net.java.games.input.Component.Identifier.Button;
-import net.java.games.input.Controller;
-import net.java.games.input.Controller.Type;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Event;
-import net.java.games.input.EventQueue;
+import com.studiohartman.jamepad.ControllerIndex;
+import com.studiohartman.jamepad.ControllerManager;
+import com.studiohartman.jamepad.ControllerState;
 
 public class Gamepad {
 	
-	private final float deadZone = 0.1f; 		// This should probably be a slider in game settings
-	private double lastJoystickMagnitude = 0, lastJoystickDirection = 0;
-	private Vec2d lastJoystickDirectionVector = new Vec2d();
-	
-	private List<Controller> gamepads;
+	private final float deadZone = 0.1f, lookDeadZone = 0.3f; 		// This should probably be a slider in game settings
+	private Map<InputId, Boolean> buttonInputs;
 	private Map<InputId, Double> inputs;
 	
+	ControllerManager controllerManager;
+	ControllerIndex currentController;
+	
 	public enum InputId {
-		BUTTON_0,			//	SQUARE
-		BUTTON_1,			//	X
-		BUTTON_2,			//	CIRCLE
-		BUTTON_3,			//	TRIANGLE
-		BUTTON_4,			//	L1
-		BUTTON_5,			//	R1
-		BUTTON_6,			//	L2
-		BUTTON_7,			//	R2
-		BUTTON_8,			//	SHARE
-		BUTTON_9,			//	OPTIONS
-		BUTTON_10,			//	LEFT STICK
-		BUTTON_11,			//	RIGHT STICK
-		BUTTON_12,			//	PS BUTTON
-		BUTTON_13,			//	TOUCHPAD
-		BUTTON_14,			//	
-		BUTTON_15,			//	
-		DPAD_UP,			//	
-		DPAD_DOWN,			//	
-		DPAD_LEFT,			//	
-		DPAD_RIGHT,			//	
-		JOYSTICK_LEFT_X,	//	
-		JOYSTICK_LEFT_Y,	//	
-		JOYSTICK_RIGHT_X,	//	
-		JOYSTICK_RIGHT_Y;	//	
+		BUTTON_X,				//	SQUARE		A
+		BUTTON_A,				//	X			X
+		BUTTON_B,				//	CIRCLE		B
+		BUTTON_Y,				//	TRIANGLE	Y
+		BUTTON_L1,				//	L1
+		BUTTON_R1,				//	R1
+		BUTTON_L2,				//	L2
+		BUTTON_R2,				//	R2
+		BUTTON_8,				//	SHARE
+		BUTTON_9,				//	OPTIONS
+		BUTTON_L_STICK,			//	LEFT STICK
+		BUTTON_R_STICK,			//	RIGHT STICK
+		BUTTON_12,				//	PS BUTTON
+		BUTTON_13,				//	TOUCHPAD
+		BUTTON_14,				//	
+		BUTTON_15,				//	
+		DPAD_UP,				//	
+		DPAD_DOWN,				//	
+		DPAD_LEFT,				//	
+		DPAD_RIGHT,				//	
+		JOYSTICK_LEFT_X,		//	
+		JOYSTICK_LEFT_Y,		//	
+		JOYSTICK_RIGHT_X,		//	
+		JOYSTICK_RIGHT_Y,		//	
+//		JOYSTICK_LEFT_ANGLE,	//
+		JOYSTICK_RIGHT_ANGLE,	//
+		JOYSTICK_LEFT_ACTIVE,	//
+		JOYSTICK_RIGHT_ACTIVE;	//
 		
 		public static InputId fromString(String value) {
 	        try {
@@ -65,33 +59,31 @@ public class Gamepad {
 
 	public Gamepad() {
 		inputs = new HashMap<InputId, Double>();
+		buttonInputs = new HashMap<InputId, Boolean>();
 		
 		for (InputId id : InputId.values()) {
 			inputs.put(id, 0.0);
+			buttonInputs.put(id,  false);
 		}
+
+		controllerManager = new ControllerManager();
+		controllerManager.initSDLGamepad();
 		
-		gamepads = new ArrayList<Controller>();
-		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
-		for (Controller controller : controllers) {
-			if (controller.getType() == Type.GAMEPAD)
-				gamepads.add(controller);
-			
-//            System.out.println("Controller: " + controller.getName() + " - Type: " + controller.getType());
-        }
+		currentController = controllerManager.getControllerIndex(0);
 	}
 	
 	public double getInput(InputId id) {
 		return inputs.get(id);
 	}
 	
-	public double getLastJoystickDirection() {
-		return lastJoystickDirection;
+	public boolean getButtonInput(InputId id) {
+		return buttonInputs.get(id);
 	}
 	
-	public Vec2d getLastJoystickDirectionVector() {
-		return lastJoystickDirectionVector;
+	public double getButtonInputNum(InputId id) {
+		return buttonInputs.get(id) ? 1.0 : 0.0;
 	}
-		
+
 	private void updateInput(InputId id, double value) {
 		if (value != 0 && Game.getUIManager().getCurrentInputType() != InputType.GAMEPAD)
 			Game.getInputManager().setLastUsed(InputType.GAMEPAD);
@@ -99,87 +91,63 @@ public class Gamepad {
 			inputs.put(id, value);
 	}
 	
-	public void update(double deltaTime) {
-		// Perhaps recheck for controllers periodically to detect newly inserted controllers
-		
-		Event event = new Event();
-		for (Controller gamepad : gamepads) {
-			gamepad.poll();
-			
-			EventQueue queue = gamepad.getEventQueue();
-
-			while (queue.getNextEvent(event)) {
-				Component comp = event.getComponent();
-				Identifier componentIdentifier = comp.getIdentifier();
-				
-				// BUTTON
-				if (componentIdentifier instanceof Button) {
-					InputId id = InputId.fromString(comp.toString());
-					if (id != null) {
-						updateInput(id, comp.getPollData());
-					}
-					
-				// D-PAD
-				} else if (componentIdentifier == Axis.POV) {
-					float value = comp.getPollData();
-					if (value == 0.25f)
-						updateInput(InputId.DPAD_UP, 1f);
-					else if (value == 0.5f)
-						updateInput(InputId.DPAD_RIGHT, 1f);
-					else if (value == 0.75f)
-						updateInput(InputId.DPAD_DOWN, 1f);
-					else if (value == 1.0f)
-						updateInput(InputId.DPAD_LEFT, 1f);
-					else {
-						updateInput(InputId.DPAD_UP, 0f);
-						updateInput(InputId.DPAD_DOWN, 0f);
-						updateInput(InputId.DPAD_LEFT, 0f);
-						updateInput(InputId.DPAD_RIGHT, 0f);
-					}
-				// JOYSTICK
-				} else if (comp.isAnalog()) {
-					String id = comp.getIdentifier().toString().toUpperCase();
-					float putValue = 0f;
-
-					if (Math.abs(comp.getPollData()) > deadZone)
-						putValue = comp.getPollData();
-					
-					switch (id) {
-					case "X":
-						updateInput(InputId.JOYSTICK_LEFT_X, putValue);
-						break;
-					case "Y":
-						updateInput(InputId.JOYSTICK_LEFT_Y, putValue);
-						break;
-					case "Z":
-						updateInput(InputId.JOYSTICK_RIGHT_X, putValue);
-						break;
-					case "RZ":
-						updateInput(InputId.JOYSTICK_RIGHT_Y, putValue);
-						break;
-					}
-				}
-			}
-			
-			setJoystickDirection(deltaTime);
-		}
+	private void updateButtonInput(InputId id, boolean value) {
+		if (value && Game.getUIManager().getCurrentInputType() != InputType.GAMEPAD)
+			Game.getInputManager().setLastUsed(InputType.GAMEPAD);
+		else
+			buttonInputs.put(id, value);
 	}
 	
-	private void setJoystickDirection(double deltaTime) {
-//		Vec2d dirVec = new Vec2d(getInput(InputId.JOYSTICK_RIGHT_X), getInput(InputId.JOYSTICK_RIGHT_Y));
-//		double magnitude = dirVec.magnitude();
-//		
-//		if (magnitude > lastJoystickMagnitude) {
-//			
-//			double smoothingFactor = 0.2 /* / (5 * deltaTime) */; // Lower = smoother, higher = more responsive
-//			Vec2d smoothedDirection = new Vec2d(
-//			    lastJoystickDirectionVector.x * (1 - smoothingFactor) + dirVec.x * smoothingFactor,
-//			    lastJoystickDirectionVector.y * (1 - smoothingFactor) + dirVec.y * smoothingFactor
-//			);
-//	
-//			lastJoystickDirectionVector = smoothedDirection;
-//			lastJoystickDirection = Math.atan2(lastJoystickDirectionVector.y, lastJoystickDirectionVector.x);
-//		}
-//		lastJoystickMagnitude = magnitude;
+	public void update() {
+		// Perhaps recheck for controllers periodically to detect newly inserted controllers
+		
+		// Add management and checking of multiple controllers or if one plugged in
+		
+
+		
+		ControllerState currentState = controllerManager.getState(0);
+		
+		if (!currentState.isConnected) {
+			System.out.println("Gamepad disconnected");
+			// do something
+		}
+		
+		updateButtonInput(InputId.BUTTON_A, currentState.a);
+		updateButtonInput(InputId.BUTTON_B, currentState.b);
+		updateButtonInput(InputId.BUTTON_X, currentState.x);
+		updateButtonInput(InputId.BUTTON_Y, currentState.y);
+		
+		updateButtonInput(InputId.BUTTON_L1, currentState.lb);
+		updateButtonInput(InputId.BUTTON_R1, currentState.rb);
+		updateButtonInput(InputId.BUTTON_L2, currentState.leftTrigger > deadZone);
+		updateButtonInput(InputId.BUTTON_R2, currentState.rightTrigger > deadZone);
+		
+		updateButtonInput(InputId.DPAD_LEFT, currentState.dpadLeft);
+		updateButtonInput(InputId.DPAD_UP, currentState.dpadUp);
+		updateButtonInput(InputId.DPAD_RIGHT, currentState.dpadRight);
+		updateButtonInput(InputId.DPAD_DOWN, currentState.dpadDown);
+		
+		updateButtonInput(InputId.BUTTON_9, currentState.start);
+		
+		if (currentState.leftStickMagnitude > deadZone) {
+			updateButtonInput(InputId.JOYSTICK_LEFT_ACTIVE, true);
+//			updateInput(InputId.JOYSTICK_LEFT_ANGLE, Math.toRadians(currentState.leftStickAngle));
+			updateInput(InputId.JOYSTICK_LEFT_X, currentState.leftStickX);
+			updateInput(InputId.JOYSTICK_LEFT_Y, -currentState.leftStickY);
+		} else {
+			updateButtonInput(InputId.JOYSTICK_LEFT_ACTIVE, false);
+			updateInput(InputId.JOYSTICK_LEFT_X, 0);
+			updateInput(InputId.JOYSTICK_LEFT_Y, 0);
+		}
+		if (currentState.rightStickMagnitude > lookDeadZone) {
+			updateButtonInput(InputId.JOYSTICK_RIGHT_ACTIVE, true);
+			updateInput(InputId.JOYSTICK_RIGHT_ANGLE, Math.toRadians(currentState.rightStickAngle));
+			updateInput(InputId.JOYSTICK_RIGHT_X, currentState.rightStickX);
+			updateInput(InputId.JOYSTICK_RIGHT_Y, -currentState.rightStickY);
+		} else {
+			updateButtonInput(InputId.JOYSTICK_RIGHT_ACTIVE, false);
+//			updateInput(InputId.JOYSTICK_RIGHT_X, 0);
+//			updateInput(InputId.JOYSTICK_RIGHT_Y, 0);
+		}
 	}
 }
