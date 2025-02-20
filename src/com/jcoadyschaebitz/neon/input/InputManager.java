@@ -62,9 +62,8 @@ public class InputManager implements WindowFocusListener {
 	private Map<CursorType, Cursor> cursors = new HashMap<CursorType, Cursor>();
 	
 	public InputManager(Game game) {
-		keyboard = new Keyboard(game);
-//		mouse = new Mouse(game);
-		gamepad = new Gamepad();
+		keyboard = new Keyboard(this);
+		gamepad = new Gamepad(this);
 		this.game = game;
 		inputObservers = new ArrayList<IInputObserver>();
 		inputValues = new double[InputAction.values().length];
@@ -81,8 +80,9 @@ public class InputManager implements WindowFocusListener {
 		
 		// Should probably be somewhere else
 		if (lastUsedInputType == InputType.KEYBOARD) {
-			for (int i = 0; i < Game.getInputManager().keyboard.numbers.length; i++) {
-				if (keyboard.numbers[i] && Game.getUIManager().slots.get(i - 1).hasItem) Game.getUIManager().selectedItemSlot = i - 1;
+			for (int i = 0; i < keyboard.numbers.length; i++) {
+				if (keyboard.numbers[i] && Game.getUIManager().slots.get(i - 1).hasItem)
+					Game.getUIManager().selectedItemSlot = i - 1;
 			}
 		}
 		
@@ -138,6 +138,7 @@ public class InputManager implements WindowFocusListener {
 	}
 	
 	private void updateValue(InputAction action, double value) {
+//		if (lastUsedInputType == InputType.KEYBOARD)
 		int i = action.ordinal();
 		if (inputValues[i] != value) {
 			if (value == 0 && (action == InputAction.LOOK_UP || action == InputAction.LOOK_DOWN || action == InputAction.LOOK_LEFT || action == InputAction.LOOK_RIGHT))
@@ -163,7 +164,7 @@ public class InputManager implements WindowFocusListener {
 	private void updateInputs() {
 		updateValue(InputAction.SECONDARY_ACTION, keyboard.E ? 1f : gamepad.getButtonInputNum(InputId.BUTTON_Y));
 		updateValue(InputAction.PRIMARY_ACTION, Math.max(Mouse.getB(), gamepad.getButtonInputNum(InputId.BUTTON_R1)));
-		updateValue(InputAction.PAUSE, keyboard.esc ? 1f : gamepad.getButtonInputNum(InputId.BUTTON_9));
+		updateValue(InputAction.PAUSE, keyboard.esc ? 1f : gamepad.getButtonInputNum(InputId.START));
 		updateValue(InputAction.SHIELD, keyboard.F ? 1f : gamepad.getButtonInputNum(InputId.BUTTON_L1));
 		updateMoveInputs();
 		
@@ -192,10 +193,10 @@ public class InputManager implements WindowFocusListener {
 		
 		updateValue(InputAction.LOOK_DIRECTION_X, gamepad.getInput(InputId.JOYSTICK_RIGHT_X));
 		updateValue(InputAction.LOOK_DIRECTION_Y, gamepad.getInput(InputId.JOYSTICK_RIGHT_Y));
-		updateValue(InputAction.LOOK_DIRECTION, -gamepad.getInput(InputId.JOYSTICK_RIGHT_ANGLE));
+		updateValue(InputAction.LOOK_DIRECTION, gamepad.getInput(InputId.JOYSTICK_RIGHT_ANGLE));
 
-		updateValue(InputAction.CYCLE_ITEM_LEFT, gamepad.getButtonInputNum(InputId.BUTTON_L2));
-		updateValue(InputAction.CYCLE_ITEM_RIGHT, gamepad.getButtonInputNum(InputId.BUTTON_R2));
+		updateValue(InputAction.CYCLE_ITEM_LEFT, gamepad.getButtonInputNum(InputId.DPAD_LEFT));
+		updateValue(InputAction.CYCLE_ITEM_RIGHT, gamepad.getButtonInputNum(InputId.DPAD_RIGHT));
 	}
 	
 	private void updateMoveInputs() {

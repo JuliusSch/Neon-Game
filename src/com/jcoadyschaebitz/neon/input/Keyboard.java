@@ -3,15 +3,14 @@ package com.jcoadyschaebitz.neon.input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import com.jcoadyschaebitz.neon.Game;
 import com.jcoadyschaebitz.neon.input.InputManager.InputType;
 
 public class Keyboard implements KeyListener {
 	
-	public Game game;
+	public InputManager inputManager;
 	
-	public Keyboard(Game game) {
-		this.game = game;
+	public Keyboard(InputManager manager) {
+		inputManager = manager;
 	}
 
 	private boolean[] keys = new boolean[512];
@@ -42,7 +41,7 @@ public class Keyboard implements KeyListener {
 	
 	public void keyPressed(KeyEvent e) {
 		setKeyCodeValue(e.getKeyCode(), true);
-		Game.getInputManager().setLastUsed(InputType.KEYBOARD);		
+		inputManager.setLastUsed(InputType.KEYBOARD);		
 	}
 	
 	private void setKeyCodeValue(int code, boolean value) {

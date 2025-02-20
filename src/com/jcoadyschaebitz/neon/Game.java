@@ -238,8 +238,6 @@ public class Game extends Canvas implements Runnable {
 	public void update() {
 		time++;
 		gameState.update();
-		uiManager.update();
-		inputManager.update();
 	}
 
 	public void switchToGameState(GameState newState) {

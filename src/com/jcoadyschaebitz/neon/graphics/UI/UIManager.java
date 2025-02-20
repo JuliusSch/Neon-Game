@@ -164,12 +164,6 @@ public class UIManager implements IInputObserver {
 
 	public void update() {
 		currentMenu.update();
-//		
-//		if (getCurrentInputType() == InputType.KEYBOARD) {
-//			for (int i = 0; i < Game.getInputManager().keyboard.numbers.length; i++) {
-//				if (Game.getInputManager().keyboard.numbers[i] && slots.get(i - 1).hasItem) selectedItemSlot = i - 1;
-//			}
-//		}
 	}
 
 	public void render(Screen screen) {
@@ -194,9 +188,8 @@ public class UIManager implements IInputObserver {
 	public boolean addWeapon(PlayerWeapon weapon) {
 		UIItemSlot slot = getFirstEmptySlot();
 		if (slot != null) {
-			int selectSlot = slot.thisSlot;
 			slot.addWeapon(weapon);
-			selectedItemSlot = selectSlot;
+			selectedItemSlot = slot.thisSlot;
 			return true;
 		} else {
 			getSelectedSlot().removeWeapon();
@@ -215,7 +208,8 @@ public class UIManager implements IInputObserver {
 	
 	private UIItemSlot getSelectedSlot() {
 		for (int i = 0; i < slots.size(); i++) {
-			if (slots.get(i).selected) return slots.get(i);
+			if (slots.get(i).selected)
+				return slots.get(i);
 		}
 		return slots.get(0);
 	}
@@ -232,10 +226,10 @@ public class UIManager implements IInputObserver {
 	public void scrollItemSlots(int amount) {
 		int n = 0;
 		do {
+			n++;
 			if (game.getState().canScrollWeapons()) selectedItemSlot += amount;
 			if ((selectedItemSlot + amount) > 4) selectedItemSlot = 0;
 			if ((selectedItemSlot + amount) < -1) selectedItemSlot = 3;
-			n++;
 		} while (!slots.get(selectedItemSlot).hasItem && n < slots.size());
 	}
 

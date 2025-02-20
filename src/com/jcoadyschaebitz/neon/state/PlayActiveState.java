@@ -17,6 +17,7 @@ public class PlayActiveState implements GameState {
 
 	@Override
 	public void update() {
+		uiManager.update();
 		Game.getInputManager().update();
 		game.getLevel().update();
 	}
