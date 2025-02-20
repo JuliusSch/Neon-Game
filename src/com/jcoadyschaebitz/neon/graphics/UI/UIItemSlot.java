@@ -35,7 +35,8 @@ public class UIItemSlot implements UIComp {
 
 	public void render(Screen screen) {
 		screen.renderSprite(x, y, sprite, false);
-		if (hasItem) screen.renderSprite(x, y, weapon.slotSprite, false);
+		if (hasItem)
+			screen.renderSprite(x, y, weapon.slotSprite, false);
 		if (selected) {
 			screen.renderSprite(x, y, Sprite.item_slot_outline, false);
 			screen.renderTranslucentSprite(x, y, Sprite.item_slot_glow, false, 0.2);
